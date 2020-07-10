@@ -1,0 +1,6 @@
+subdirs(
+    primitives 
+    core
+)
+
+
