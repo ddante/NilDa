@@ -1,5 +1,6 @@
 add_library(nn                
                 layer.cpp
+                inputLayer.cpp
                 denseLayer.cpp
                 neuralNetwork.cpp)
 

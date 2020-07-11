@@ -6,6 +6,8 @@
 #include "primitives/Scalar.h"
 #include "layer.h"
 
+// --------------------------------------------------------------------------- 
+
 namespace NilDa
 {
 
@@ -13,45 +15,37 @@ namespace NilDa
 class neuralNetwork
 {
 
- private: 
+ private:
 
-     std::vector<layer*> layers;
+     // List of all the layer in the neural network
+     std::vector<layer*> layers_;
+
+     // Total number of layers (input + hidden + output)
+     int numberOfLayers_;
 
 public:
-
+    
+    // Constructor 
+    
     //neuralNetwork() = delete;
 
-    neuralNetwork(const std::vector<layer*>& vectorLayer):
-        layers(vectorLayer)
-    {
-         // The first layer is the input layer and 
-         // it might depend only on the second layer
-         //layers[0].init( layers[1] );
-
-         // The hidden and output layers depend on the previous layer
-         const int nLayers(layers.size());
-
-         for(int i =1; i < nLayers ; ++i)
-         {
-             layers[i]->init(layers[i-1]);
-         }
-    }
+    neuralNetwork(const std::vector<layer*>& vectorLayer);
 
     //void addLayer(const layer singleLayer);
 
+    // Destructor
+
     ~neuralNetwork() 
     {
-        const int nLayers(layers.size());
-
-        for(int i =1; i < nLayers ; ++i)
+        for(int i =1; i < numberOfLayers_; ++i)
         {
-             delete layers[i];
+             delete layers_[i];
         }
     };
 
 };
       
 
-}
+} // namespace
 
 #endif

@@ -19,32 +19,25 @@ class denseLayer: public layer
 private:    
 
     // Number of neurons of the current layer
-    int layerSize;
-
-private:
+    int layerSize_;
 
     // Linear output and activation 
-    Matrix linearOutput;
-    Matrix Activation;
+    Matrix linearOutput_;
+    Matrix Activation_;
 
     // Weigh matrix and derivative of the weights
-    Matrix Weights;
-    Matrix dWeights;
+    Matrix Weights_;
+    Matrix dWeights_;
 
     // Bias vector and derivative of the bias 
-    Vector biaes;
-    Vector dbiases;
+    Vector biaes_;
+    Vector dbiases_;
 
 public:
 
     // Constructor
 
-    denseLayer(const int inSize):
-        layerSize(inSize)       
-    {
-        layerType = DENSE;
-        assert(inSize > 0);
-    }
+    denseLayer(const int inSize);
 
     // Destructor 
 
@@ -56,9 +49,15 @@ public:
     
     int size() const override 
     {
-        return layerSize;
+        return layerSize_;
     }
 
+    void size(std::array<int, 3>& sizes)  const override
+    {
+         std::cerr << "A dense layer cannot call multi-D size function" << std::endl;
+
+        assert(false);
+    }
 };
 
 
