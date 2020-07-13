@@ -8,9 +8,9 @@ inputLayer::inputLayer(const int inSize):
     inputSize_(inSize),
     flattenLayer_(true)
 {
-    type_ = LAYER_TYPE_INPUT;
+    type_ = layerTypes::input;
 
-    assert(inputSize_ > 0);        
+    assert(inputSize_ > 0);     
 }
 
 inputLayer::inputLayer(const std::array<int,3>& inSize):
@@ -19,7 +19,7 @@ inputLayer::inputLayer(const std::array<int,3>& inSize):
     inputChannels_(inSize[3]),
     flattenLayer_(false)
 {    
-    type_ = LAYER_TYPE_INPUT;
+    type_ = layerTypes::input;
 
     assert(inputRows_ >0);
     assert(inputCols_ > 0);

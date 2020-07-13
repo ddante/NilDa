@@ -4,16 +4,19 @@
 #include <assert.h>
 #include <array>
 
+#include "primitives/Matrix.h"
+#include "primitives/Vector.h"
+
 // --------------------------------------------------------------------------- 
 
 namespace NilDa
 {
 
-enum LayerTypes {
-    LAYER_TYPE_INPUT, 
-    LAYER_TYPE_DENSE, 
-    LAYER_TYPE_DROPOUT, 
-    LAYER_TYPE_FLATTEN
+enum class layerTypes {
+    input, 
+    dense,
+    dropout, 
+    flatten
 };
 
 class layer
@@ -21,7 +24,7 @@ class layer
 
 protected:
 
-    LayerTypes type_;
+    layerTypes type_;
 
 public:
 
@@ -32,45 +35,44 @@ public:
     // Member functions
     virtual void init(const layer* previousLayer) = 0;
    
+    virtual void forwardPropagation(const Matrix& data)  = 0;
+
+    //virtual void backwardPropagation() = 0;
+
     virtual int size() const = 0;
 
     virtual void size(std::array<int, 3>& sizes) const = 0;
 
-    //virtual void forwardPropagation()  = 0;
-
-    //virtual void backwardPropagation() = 0;
-
     //virtual void update() = 0;    
-    LayerTypes layerType()  const
+    layerTypes layerType()  const
     {
         return type_;
     }
 
-    std::string layerName(const LayerTypes inLayerType) const
+    // Return the string name of the type layer from the enum name
+    std::string layerName(const layerTypes inLayerType) const
     {
         std::string name;
 
-        if (inLayerType == LAYER_TYPE_INPUT)
+        if (inLayerType == layerTypes::input)
         {
             name = "input";
         }
-        else if (inLayerType == LAYER_TYPE_DENSE)
+        else if (inLayerType == layerTypes::dense)
         {
             name = "dense";
         }
-        else if (inLayerType == LAYER_TYPE_DROPOUT)
+        else if (inLayerType == layerTypes::dropout)
         {
             name = "drop out";
         }
-        else if (inLayerType == LAYER_TYPE_FLATTEN)
+        else if (inLayerType == layerTypes::flatten)
         {
             name = "flatten";
         }
         else
         {
-            std::cerr << "Uknown layer type code " 
-                        << inLayerType 
-                        << "." << std::endl;
+            std::cerr << "Unknown layer type code." << std::endl;
             assert(false);
         }
 
@@ -78,7 +80,7 @@ public:
     }
 
     // Destructor
-    virtual ~layer() {}
+    virtual ~layer() = default;
 };
 
 

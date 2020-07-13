@@ -4,6 +4,9 @@
 #include <vector>
 
 #include "primitives/Scalar.h"
+#include "primitives/Vector.h"
+#include "primitives/Matrix.h"
+
 #include "layer.h"
 
 // --------------------------------------------------------------------------- 
@@ -27,11 +30,13 @@ public:
     
     // Constructor 
     
-    //neuralNetwork() = delete;
+    neuralNetwork() = delete;
 
     neuralNetwork(const std::vector<layer*>& vectorLayer);
 
     //void addLayer(const layer singleLayer);
+
+    void forwardPropagation(const Matrix& trainingData);
 
     // Destructor
 

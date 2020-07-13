@@ -2,9 +2,12 @@
 #define DENSE_LAYER_H
 
 #include <iostream>
+#include <memory>
 
 #include "primitives/Vector.h"
 #include "primitives/Matrix.h"
+
+#include "activationFunction.h"
 
 #include "layer.h"
 
@@ -13,13 +16,15 @@
 namespace NilDa
 {
 
-class denseLayer: public layer
+class denseLayer : public layer
 {
 
 private:    
 
     // Number of neurons of the current layer
     int layerSize_;
+
+    std::unique_ptr<activationFunction> activation;
 
     // Linear output and activation 
     Matrix linearOutput_;
@@ -37,16 +42,21 @@ public:
 
     // Constructor
 
-    denseLayer(const int inSize);
+    denseLayer(
+                    const int inSize, 
+                    const std::string activationNam
+                   );
 
     // Destructor 
 
-    ~denseLayer() {}
+    //~denseLayer();
 
     // Member functions
 
     void init(const layer* previousLayer) override;
-    
+
+    void forwardPropagation(const Matrix& inputData)  override;
+
     int size() const override 
     {
         return layerSize_;

@@ -1,5 +1,8 @@
-add_library(nn                
-                layer.cpp
+add_library(nn
+                identity.cpp
+                sigmoid.cpp
+                softmax.cpp
+                relu.cpp                
                 inputLayer.cpp
                 denseLayer.cpp
                 neuralNetwork.cpp)

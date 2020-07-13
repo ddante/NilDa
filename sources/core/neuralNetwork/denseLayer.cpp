@@ -1,15 +1,46 @@
-#include "denseLayer.h"
 #include <iostream>
+
+#include "denseLayer.h"
+
+#include "activationFunctionUtils.h"
+
+#include "identity.h"
+#include "sigmoid.h"
+#include "relu.h"
+#include "softmax.h"
 
 // --------------------------------------------------------------------------- 
 
 namespace NilDa
 {
-
-denseLayer::denseLayer(const int inSize):
-    layerSize_(inSize) 
+denseLayer::denseLayer(
+                                 const int inSize, 
+                                 const std::string activationName):
+    layerSize_(inSize)
 {
-    type_ = LAYER_TYPE_DENSE;
+    
+    type_ = layerTypes::dense;
+
+    switch (activationFunctionCode(activationName))
+    {
+        case activationFucntions::identity :
+            activation = std::make_unique<identity>();
+            break;
+        case activationFucntions::sigmoid :
+            activation = std::make_unique<sigmoid>();            
+            break;
+       case activationFucntions::relu :
+            activation = std::make_unique<relu>();
+            break;            
+       case activationFucntions::softmax :
+            activation = std::make_unique<softmax>();
+            break; 
+       default :
+           std::cerr << "Unknown activation function name " 
+                       << activationName
+                       << "." << std::endl;
+           assert(false);
+    }
 
     assert(layerSize_ > 0);
 }
@@ -20,10 +51,10 @@ void denseLayer::init(const layer* previousLayer)
     // with the current layer
    if
    (
-       previousLayer->layerType() != LAYER_TYPE_INPUT &&
-       previousLayer->layerType() != LAYER_TYPE_DENSE && 
-       previousLayer->layerType() != LAYER_TYPE_DROPOUT &&
-       previousLayer->layerType() != LAYER_TYPE_FLATTEN
+       previousLayer->layerType() != layerTypes::input &&
+       previousLayer->layerType() != layerTypes::dense && 
+       previousLayer->layerType() != layerTypes::dropout &&
+       previousLayer->layerType() != layerTypes::flatten
    )
    {
          std::cerr << "Previous layer of type " 
@@ -49,5 +80,12 @@ void denseLayer::init(const layer* previousLayer)
     dbiases_.setZero(layerSize_);
 }
 
+void denseLayer::forwardPropagation(
+                                                 const Matrix& data, 
+                                                 const layer* previousLayer
+                                                ) 
+{
+
+}
 
 } // namespace

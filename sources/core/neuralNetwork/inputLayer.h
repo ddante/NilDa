@@ -14,7 +14,7 @@
 namespace NilDa
 {
 
-class inputLayer: public layer
+class inputLayer : public layer
 {
 
 private:    
@@ -45,7 +45,14 @@ public:
     // Member functions
     void init(const layer* previousLayer) override
     {
-        std::cerr << "An input layer cannot call the init function." << std::endl;
+        std::cerr << "An input layer cannot call the init." << std::endl;
+
+        assert(false);
+    }
+
+    void forwardPropagation(const Matrix& inputData) override
+    {
+        std::cerr << "An input layer cannot call forwardPropagation." << std::endl;
 
         assert(false);
     }
