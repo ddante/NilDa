@@ -2,12 +2,12 @@
 
 #include "denseLayer.h"
 
-#include "activationFunctionUtils.h"
+#include "activationFunctions/activationFunctionUtils.h"
 
-#include "identity.h"
-#include "sigmoid.h"
-#include "relu.h"
-#include "softmax.h"
+#include "activationFunctions/identity.h"
+#include "activationFunctions/sigmoid.h"
+#include "activationFunctions/relu.h"
+#include "activationFunctions/softmax.h"
 
 // --------------------------------------------------------------------------- 
 

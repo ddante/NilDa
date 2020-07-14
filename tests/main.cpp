@@ -1,8 +1,10 @@
 #include <iostream>
 #include <vector>
 
-#include "core/neuralNetwork/inputLayer.h"
-#include "core/neuralNetwork/denseLayer.h"
+//#include "core/neuralNetwork/coreNilDa.h"
+
+#include "core/neuralNetwork/layers/inputLayer.h"
+#include "core/neuralNetwork/layers/denseLayer.h"
 #include "core/neuralNetwork/neuralNetwork.h"
 
 int main(int argc, char const *argv[])

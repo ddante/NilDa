@@ -7,7 +7,7 @@
 #include "primitives/Vector.h"
 #include "primitives/Matrix.h"
 
-#include "activationFunction.h"
+#include "activationFunctions/activationFunction.h"
 
 #include "layer.h"
 

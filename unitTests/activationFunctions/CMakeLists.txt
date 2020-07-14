@@ -1,4 +1,4 @@
-project(tests)
+project(unitTests_activationFunctions)
 
 # Create the executable
 add_executable(${PROJECT_NAME} main.cpp)

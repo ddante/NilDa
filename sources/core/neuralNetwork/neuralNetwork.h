@@ -7,7 +7,7 @@
 #include "primitives/Vector.h"
 #include "primitives/Matrix.h"
 
-#include "layer.h"
+#include "layers/layer.h"
 
 // --------------------------------------------------------------------------- 
 

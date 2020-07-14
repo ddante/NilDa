@@ -41,3 +41,4 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 
 add_subdirectory(sources)
 add_subdirectory(tests)
+add_subdirectory(unitTests/activationFunctions)
