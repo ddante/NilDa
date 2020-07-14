@@ -26,5 +26,37 @@ inputLayer::inputLayer(const std::array<int,3>& inSize):
     assert(inputChannels_ >0);
 }
 
+void inputLayer::checkInputSize(const Matrix& inputData)
+{
+    if (flattenLayer_)
+    {
+        if (inputSize_ != inputData.rows())
+        {
+            std::cerr << "Size of the input data " 
+                        << "(" << inputData.rows() << ") "
+                        << " not consistent with the input layer size" 
+                        << "(" << inputSize_ << ") "
+                        << std::endl;
+
+            assert(false);
+        }
+    }
+    else
+    {
+        const int channelSize = inputRows_*inputCols_;
+
+        if (channelSize  != inputData.rows())
+        {
+            std::cerr << "ISize of the input data " 
+                        << "(" << inputData.rows() << ") "
+                        << " not consistent with the input layer size" 
+                        << "(" << channelSize << ") "
+                        << std::endl;            
+        }
+
+        // TODO: how to check if the number of channels is correct?
+    }
+}
+
 
 } // namespace

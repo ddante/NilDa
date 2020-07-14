@@ -42,7 +42,7 @@ public:
 
     ~neuralNetwork() 
     {
-        for(int i =1; i < numberOfLayers_; ++i)
+        for(int i =0; i < numberOfLayers_; ++i)
         {
              delete layers_[i];
         }

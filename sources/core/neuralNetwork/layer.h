@@ -35,9 +35,13 @@ public:
     // Member functions
     virtual void init(const layer* previousLayer) = 0;
    
-    virtual void forwardPropagation(const Matrix& data)  = 0;
+    virtual void checkInputSize(const Matrix& inputData) = 0;
+
+    virtual void forwardPropagation(const Matrix& inputData)  = 0;
 
     //virtual void backwardPropagation() = 0;
+
+    virtual Matrix output() = 0;
 
     virtual int size() const = 0;
 
@@ -80,7 +84,7 @@ public:
     }
 
     // Destructor
-    virtual ~layer() = default;
+    virtual ~layer()  = default;
 };
 
 

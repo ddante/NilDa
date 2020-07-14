@@ -24,11 +24,11 @@ private:
     // Number of neurons of the current layer
     int layerSize_;
 
-    std::unique_ptr<activationFunction> activation;
+    std::shared_ptr<activationFunction> activationFunction_;
 
     // Linear output and activation 
     Matrix linearOutput_;
-    Matrix Activation_;
+    Matrix activation_;
 
     // Weigh matrix and derivative of the weights
     Matrix Weights_;
@@ -49,13 +49,20 @@ public:
 
     // Destructor 
 
-    //~denseLayer();
+    ~denseLayer()  = default;
 
     // Member functions
 
     void init(const layer* previousLayer) override;
+    
+    void checkInputSize(const Matrix& inputData) override;
 
     void forwardPropagation(const Matrix& inputData)  override;
+
+    inline Matrix output() override
+    {
+        return activation_;
+    }
 
     int size() const override 
     {

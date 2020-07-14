@@ -31,7 +31,7 @@ public:
 
     // Destructor
 
-    virtual ~activationFunction() {};
+    virtual ~activationFunction() = default;
     
 };
  

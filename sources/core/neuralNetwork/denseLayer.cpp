@@ -24,16 +24,16 @@ denseLayer::denseLayer(
     switch (activationFunctionCode(activationName))
     {
         case activationFucntions::identity :
-            activation = std::make_unique<identity>();
+            activationFunction_ = std::make_shared<identity>();
             break;
         case activationFucntions::sigmoid :
-            activation = std::make_unique<sigmoid>();            
+            activationFunction_ = std::make_shared<sigmoid>();            
             break;
        case activationFucntions::relu :
-            activation = std::make_unique<relu>();
+            activationFunction_ = std::make_shared<relu>();
             break;            
        case activationFucntions::softmax :
-            activation = std::make_unique<softmax>();
+            activationFunction_ = std::make_shared<softmax>();
             break; 
        default :
            std::cerr << "Unknown activation function name " 
@@ -41,7 +41,7 @@ denseLayer::denseLayer(
                        << "." << std::endl;
            assert(false);
     }
-
+    
     assert(layerSize_ > 0);
 }
 
@@ -80,12 +80,41 @@ void denseLayer::init(const layer* previousLayer)
     dbiases_.setZero(layerSize_);
 }
 
-void denseLayer::forwardPropagation(
-                                                 const Matrix& data, 
-                                                 const layer* previousLayer
-                                                ) 
+void denseLayer::checkInputSize(const Matrix& inputData)
 {
+    if (layerSize_ != inputData.rows())
+    {
+        std::cerr << "Size of the input data "
+        << "(" << inputData.rows() << ") "
+        << " not consistent with the input layer size" 
+        << "(" << layerSize_ << ") "
+        << std::endl;
 
+        assert(false);
+    }
+}
+
+void denseLayer::forwardPropagation(const Matrix& inputData) 
+{    
+    linearOutput_.resize(
+                                Weights_.rows(), 
+                                inputData.cols()
+                               );
+
+    // Apply the weights of the layer to the input
+    linearOutput_.noalias() = Weights_ * inputData;
+
+    // Add the biases 
+    linearOutput_.colwise() += biaes_;
+
+    activation_.resize(
+                             linearOutput_.rows(), 
+                             linearOutput_.cols()
+                            );
+
+    // Apply the activation function
+    activation_ = 
+        activationFunction_->applyForward(linearOutput_);
 }
 
 } // namespace

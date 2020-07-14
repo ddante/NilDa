@@ -40,7 +40,7 @@ public:
 
     // Destructor 
 
-    ~inputLayer() {}
+    ~inputLayer()  = default;
 
     // Member functions
     void init(const layer* previousLayer) override
@@ -50,9 +50,18 @@ public:
         assert(false);
     }
 
+    void checkInputSize(const Matrix& inputData) override;
+
     void forwardPropagation(const Matrix& inputData) override
     {
         std::cerr << "An input layer cannot call forwardPropagation." << std::endl;
+
+        assert(false);
+    }
+
+    inline Matrix output() override
+    {
+        std::cerr << "An input layer cannot call output." << std::endl;
 
         assert(false);
     }

@@ -26,9 +26,11 @@ neuralNetwork::neuralNetwork(const std::vector<layer*>& vLayers):
 }
 
 void neuralNetwork::forwardPropagation(const Matrix& trainingData)
-{
-    
-    // The first layer is just the input layer: nothing to do
+{    
+    // The first layer is an input layer, just check that
+    // the size of the input data is consistent with the 
+    // input layer size 
+    layers_[0]->checkInputSize(trainingData);
 
     // The second layer takes in directly the input data
     layers_[1]->forwardPropagation(trainingData);
