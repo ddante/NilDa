@@ -15,9 +15,16 @@ public:
 
     relu() = default;
 
-    Matrix applyForward(const Matrix& linearInput) override;
+    void applyForward(
+                            const Matrix& linearInput,
+                            Matrix& output
+                           ) override;
 
-    Matrix applyBackward(const Matrix& linearInput, const Matrix& G) override;
+    void applyBackward(
+                             const Matrix& linearInput, 
+                             const Matrix& G,
+                             Matrix& output
+                            ) override;
 
     ~relu()  = default;
 };

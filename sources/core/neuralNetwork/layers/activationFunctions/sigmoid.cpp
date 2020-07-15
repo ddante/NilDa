@@ -6,25 +6,30 @@ namespace NilDa
 {
 
 
-Matrix sigmoid::applyForward(const Matrix& linearInput)
+void sigmoid::applyForward(
+                                   const Matrix& linearInput,
+                                   Matrix& output
+                                  )
 {
-    Matrix activation;
-
-    activation.array() = 1.0/(1.0 + (-linearInput.array()).exp());
-
-    return activation; 
+    output.array() = 1.0/(1.0 + (-linearInput.array()).exp());
 }
 
-Matrix sigmoid::applyBackward(const Matrix& linearInput, const Matrix& G)
+void sigmoid::applyBackward(
+                                     const Matrix& linearInput, 
+                                     const Matrix& G,
+                                     Matrix& output
+                                    )
 {            
-    Matrix jacobian;
+    Matrix activation;
+    activation.resize(
+                          linearInput.rows(), 
+                          linearInput.cols()
+                         );
+    
+    applyForward(linearInput, activation);
 
-    Matrix activation = applyForward(linearInput);
-
-    jacobian.array() = activation.array()
-                          * (1.0 - activation.array()) * G.array(); 
-
-    return jacobian;
+    output.array() = activation.array()
+                       * (1.0 - activation.array()) * G.array(); 
 }
 
 

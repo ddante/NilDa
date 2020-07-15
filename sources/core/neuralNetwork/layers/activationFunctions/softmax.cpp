@@ -7,30 +7,35 @@ namespace NilDa
 {
 
 
-Matrix softmax::applyForward(const Matrix& linearInput)
+void softmax::applyForward(
+                                    const Matrix& linearInput,
+                                    Matrix& output
+                                   )
 {
-    Matrix activation;
+    output.array() = linearInput.array().exp();
 
-    activation.array() = linearInput.array().exp();
+    RowArray sums = output.colwise().sum();
 
-    RowArray sums = activation.colwise().sum();
-
-    activation.array().rowwise() /= sums;
-
-    return activation;
+    output.array().rowwise() /= sums;
 }
 
-Matrix softmax::applyBackward(const Matrix& linearInput, const Matrix& G)
-{            
-    Matrix jacobian;
-
-    Matrix activation = applyForward(linearInput);
+void softmax::applyBackward(
+                                     const Matrix& linearInput, 
+                                     const Matrix& G,
+                                     Matrix& output
+                                    )
+{   
+    Matrix activation;
+    activation.resize(
+                         linearInput.rows(), 
+                         linearInput.cols()
+                        );
+    
+    applyForward(linearInput, activation);
 
     RowArray dotF = activation.cwiseProduct(G).colwise().sum();
 
-    jacobian.array() = activation.array() * (G.array().rowwise() - dotF);
-
-    return jacobian;
+    output.array() = activation.array() * (G.array().rowwise() - dotF);
 }
 
 

@@ -23,11 +23,18 @@ public:
     // Member functions
 
     // Apply the activation function in the forward propagation
-    virtual Matrix applyForward(const Matrix& linearInput) = 0;
+    virtual void applyForward(
+                                     const Matrix& linearInput,
+                                     Matrix& output
+                                    ) = 0;
 
     // Apply the derivative of the activation function to G
     // in the backward propagation
-    virtual Matrix applyBackward(const Matrix& linearInput, const Matrix& G) = 0;
+    virtual void applyBackward(
+                                      const Matrix& linearInput, 
+                                      const Matrix& G,
+                                      Matrix& output
+                                     ) = 0;
 
     // Destructor
 

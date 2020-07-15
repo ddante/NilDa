@@ -108,13 +108,15 @@ void denseLayer::forwardPropagation(const Matrix& inputData)
     linearOutput_.colwise() += biaes_;
 
     activation_.resize(
-                             linearOutput_.rows(), 
-                             linearOutput_.cols()
-                            );
+                            linearOutput_.rows(), 
+                            linearOutput_.cols()
+                           );
 
     // Apply the activation function
-    activation_ = 
-        activationFunction_->applyForward(linearOutput_);
+    activationFunction_->applyForward(
+                                                 linearOutput_, 
+                                                 activation_
+                                                );
 }
 
 } // namespace

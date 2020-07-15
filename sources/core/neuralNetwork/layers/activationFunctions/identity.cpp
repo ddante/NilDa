@@ -6,14 +6,21 @@ namespace NilDa
 {
 
 
-Matrix identity::applyForward(const Matrix& linearInput)
+void identity::applyForward(
+                                   const Matrix& linearInput,
+                                   Matrix& output
+                                  )
 {
-    return linearInput; 
+    output.noalias() = linearInput; 
 }
 
-Matrix identity::applyBackward(const Matrix& linearInput, const Matrix& G)
+void identity::applyBackward(
+                                     const Matrix& linearInput, 
+                                     const Matrix& G,
+                                     Matrix& output
+                                    )
 {          
-    return G;
+    output.noalias() = G;
 }
 
 } // namespace

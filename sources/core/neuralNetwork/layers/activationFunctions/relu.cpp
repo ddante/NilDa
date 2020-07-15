@@ -6,22 +6,21 @@ namespace NilDa
 {
 
 
-Matrix relu::applyForward(const Matrix& linearInput)
+void relu::applyForward(
+                               const Matrix& linearInput,
+                               Matrix& output
+                              ) 
 {
-    Matrix activation;
-
-    activation.array() = linearInput.array().max(0);
-
-    return activation;
+    output.array() = linearInput.array().max(0);
 }
 
-Matrix relu::applyBackward(const Matrix& linearInput, const Matrix& G)
-{            
-    Matrix jacobian;
-
-    jacobian.array() = (linearInput.array() > 0).select(G, 0);
-
-    return jacobian;
+void relu::applyBackward(
+                                const Matrix& linearInput, 
+                                const Matrix& G,
+                                Matrix& output
+                               )
+{          
+    output.array() = (linearInput.array() > 0).select(G, 0);
 }
 
 } // namespace
