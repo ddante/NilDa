@@ -14,8 +14,9 @@
 namespace NilDa
 {
 denseLayer::denseLayer(
-                                 const int inSize, 
-                                 const std::string activationName):
+                               const int inSize, 
+                               const std::string activationName
+                              ):
     layerSize_(inSize)
 {
     
@@ -24,21 +25,21 @@ denseLayer::denseLayer(
     switch (activationFunctionCode(activationName))
     {
         case activationFucntions::identity :
-            activationFunction_ = std::make_shared<identity>();
+            activationFunction_ = std::make_unique<identity>();
             break;
         case activationFucntions::sigmoid :
-            activationFunction_ = std::make_shared<sigmoid>();            
+            activationFunction_ = std::make_unique<sigmoid>();            
             break;
        case activationFucntions::relu :
-            activationFunction_ = std::make_shared<relu>();
-            break;            
+            activationFunction_ = std::make_unique<relu>();
+            break; 
        case activationFucntions::softmax :
-            activationFunction_ = std::make_shared<softmax>();
+            activationFunction_ = std::make_unique<softmax>();
             break; 
        default :
-           std::cerr << "Unknown activation function name " 
-                       << activationName
-                       << "." << std::endl;
+           std::cerr << "Not valid activation function  " 
+                        << activationName
+                        << " in this context." << std::endl;
            assert(false);
     }
     
@@ -96,6 +97,10 @@ void denseLayer::checkInputSize(const Matrix& inputData)
 
 void denseLayer::forwardPropagation(const Matrix& inputData) 
 {    
+#ifdef NILDA_DEBUG_BUILD
+    checkInputSize(inputData);
+#endif
+
     linearOutput_.resize(
                                 Weights_.rows(), 
                                 inputData.cols()
@@ -103,6 +108,15 @@ void denseLayer::forwardPropagation(const Matrix& inputData)
 
     // Apply the weights of the layer to the input
     linearOutput_.noalias() = Weights_ * inputData;
+
+    std::cout <<"input:\n";
+    std::cout << inputData << "\n--------\n";
+
+    std::cout <<"weights:\n";
+    std::cout << Weights_ << "\n--------\n";
+
+    std::cout <<"lin output:\n";
+    std::cout << linearOutput_ << "\n--------\n";
 
     // Add the biases 
     linearOutput_.colwise() += biaes_;
@@ -117,6 +131,9 @@ void denseLayer::forwardPropagation(const Matrix& inputData)
                                                  linearOutput_, 
                                                  activation_
                                                 );
+    std::cout <<"activation:\n";
+    std::cout << activation_ << "\n--------\n";
+
 }
 
 } // namespace

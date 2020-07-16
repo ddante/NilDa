@@ -33,13 +33,20 @@ public:
     layer() {}
 
     // Member functions
+
+    // Initialize the layer
     virtual void init(const layer* previousLayer) = 0;
    
+    // Check if the dimensions of input data are consistent with the layer
     virtual void checkInputSize(const Matrix& inputData) = 0;
 
     virtual void forwardPropagation(const Matrix& inputData)  = 0;
 
     //virtual void backwardPropagation() = 0;
+
+    virtual Matrix getWeights()  = 0;
+
+    virtual Matrix getBiases()  = 0;
 
     virtual Matrix output() = 0;
 

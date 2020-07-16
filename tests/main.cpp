@@ -1,24 +1,28 @@
 #include <iostream>
 #include <vector>
 
-//#include "core/neuralNetwork/coreNilDa.h"
-
 #include "core/neuralNetwork/layers/inputLayer.h"
 #include "core/neuralNetwork/layers/denseLayer.h"
 #include "core/neuralNetwork/neuralNetwork.h"
 
 int main(int argc, char const *argv[])
 {
-    NilDa::layer* l0 = new NilDa::inputLayer(10);
-    NilDa::layer* l1 = new NilDa::denseLayer(15, "relu");
-    NilDa::layer* l2 = new NilDa::denseLayer(15, "relu");
-    NilDa::layer* l3 = new NilDa::denseLayer(15, "relu");
-    NilDa::layer* l4 = new NilDa::denseLayer(15, "relu");
-    NilDa::layer* l5 = new NilDa::denseLayer(2, "relu");
+    NilDa::layer* l0 = new NilDa::inputLayer(3);
+    NilDa::layer* l1 = new NilDa::denseLayer(2, "relu");
+    NilDa::layer* l2 = new NilDa::denseLayer(3, "softmax");
 
-    NilDa::neuralNetwork nn({l0, l1, l2,l3,l4,l5});
+    NilDa::neuralNetwork nn({l0, l1, l2});
 
-    std::cout << l0->size() << std::endl;
+    NilDa::Matrix trainingData(3, 4);
+    trainingData <<  1.1, 1.21, 0.2, 0.42, 0.3, 0.63, 4.4, 4.84, 5.1, -0.3, 0.9, -1.4;
+
+    NilDa::Matrix trainingLabels(3, 4);
+    trainingLabels << 1,0,0,0, 0,1,0,1 ,0,0,1,0;
+
+    nn.setLossFunction("sparse_categorical_crossentropy");
+    nn.forwardPropagation(trainingData);
+    NilDa::Scalar J = nn.getLoss(trainingData, trainingLabels);
+    std::cout << J << std::endl;
 
     return 0;
 }

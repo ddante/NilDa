@@ -24,7 +24,7 @@ private:
     // Number of neurons of the current layer
     int layerSize_;
 
-    std::shared_ptr<activationFunction> activationFunction_;
+    std::unique_ptr<activationFunction> activationFunction_;
 
     // Linear output and activation 
     Matrix linearOutput_;
@@ -59,6 +59,15 @@ public:
 
     void forwardPropagation(const Matrix& inputData)  override;
 
+    inline Matrix getWeights() override
+    {
+        return Weights_;
+    }
+
+    inline Matrix getBiases() override
+    {
+        return biaes_;
+    }
     inline Matrix output() override
     {
         return activation_;

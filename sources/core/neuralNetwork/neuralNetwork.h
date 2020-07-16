@@ -2,12 +2,15 @@
 #define NEURAL_NETWORK_H
 
 #include <vector>
+#include <memory>
 
 #include "primitives/Scalar.h"
 #include "primitives/Vector.h"
 #include "primitives/Matrix.h"
 
 #include "layers/layer.h"
+
+#include "lossFunctions/lossFunction.h"
 
 // --------------------------------------------------------------------------- 
 
@@ -26,6 +29,14 @@ class neuralNetwork
      // Total number of layers (input + hidden + output)
      int numberOfLayers_;
 
+     // Store for simplicity the number of the last layer: 
+     // numberOfLayers_ - 1
+     int lastLayer_;
+
+     mutable bool validState_;
+
+     std::unique_ptr<lossFunction> lossFunction_;
+
 public:
     
     // Constructor 
@@ -36,7 +47,11 @@ public:
 
     //void addLayer(const layer singleLayer);
 
-    void forwardPropagation(const Matrix& trainingData);
+    void forwardPropagation(const Matrix& obs) const;
+
+    void setLossFunction(const std::string& lossName);
+
+    Scalar getLoss(const Matrix& obs, const Matrix& labels) const;
 
     // Destructor
 

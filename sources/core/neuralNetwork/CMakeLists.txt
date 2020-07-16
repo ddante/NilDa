@@ -1,5 +1,6 @@
 subdirs(
     layers
+    lossFunctions
 )
 
 add_library(nn

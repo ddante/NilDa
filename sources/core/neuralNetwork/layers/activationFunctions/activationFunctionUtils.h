@@ -4,6 +4,7 @@
 namespace NilDa
 {
 
+
 enum class activationFucntions
 {
     identity,
@@ -44,6 +45,7 @@ activationFucntions activationFunctionCode(const std::string& inName)
         assert(false);
     }
 }
+
 
 } // namespace
 

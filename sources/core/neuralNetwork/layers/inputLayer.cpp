@@ -26,35 +26,47 @@ inputLayer::inputLayer(const std::array<int,3>& inSize):
     assert(inputChannels_ >0);
 }
 
-void inputLayer::checkInputSize(const Matrix& inputData)
-{
+void inputLayer::checkInputSize(const Matrix& obs)
+{    
     if (flattenLayer_)
     {
-        if (inputSize_ != inputData.rows())
+        // For a flatten layer:
+        // number of rows = number of features
+        // number of cols = number of observations
+        if (inputSize_ != obs.rows())
         {
             std::cerr << "Size of the input data " 
-                        << "(" << inputData.rows() << ") "
+                        << "(" << obs.rows() << ") "
                         << " not consistent with the input layer size" 
                         << "(" << inputSize_ << ") "
                         << std::endl;
 
             assert(false);
         }
+
+        numberOfObservations_ = obs.cols();
     }
     else
     {
+        // For a 2D layer:
+        // number of rows = number of features
+        // number of cols = number of observations * number of channels
         const int channelSize = inputRows_*inputCols_;
 
-        if (channelSize  != inputData.rows())
+        // TODO: how to check if the number of channels is correct?
+
+        if (channelSize  !=obs.rows() || 
+            obs.cols() % inputChannels_ != 0
+           )
         {
-            std::cerr << "ISize of the input data " 
-                        << "(" << inputData.rows() << ") "
+            std::cerr << "Size of the input data " 
+                        << "(" << obs.rows() << ") "
                         << " not consistent with the input layer size" 
                         << "(" << channelSize << ") "
                         << std::endl;            
         }
 
-        // TODO: how to check if the number of channels is correct?
+        numberOfObservations_ = obs.cols() / inputChannels_;
     }
 }
 

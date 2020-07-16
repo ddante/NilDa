@@ -29,6 +29,8 @@ private:
     
     // Specify if it this a flatten (1D) input layer 
     bool flattenLayer_;
+    
+    int numberOfObservations_;
 
 public:
 
@@ -50,15 +52,29 @@ public:
         assert(false);
     }
 
-    void checkInputSize(const Matrix& inputData) override;
+    void checkInputSize(const Matrix& obs) override;
 
-    void forwardPropagation(const Matrix& inputData) override
+    void forwardPropagation(const Matrix& obs) override
     {
         std::cerr << "An input layer cannot call forwardPropagation." << std::endl;
 
         assert(false);
     }
 
+    inline Matrix getWeights() override
+    {
+        std::cerr << "An input layer cannot call getWeights." << std::endl;
+
+        assert(false);
+    }
+
+    inline Matrix getBiases() override
+    {
+        std::cerr << "An input layer cannot call getBiases." << std::endl;
+
+        assert(false);
+    }
+    
     inline Matrix output() override
     {
         std::cerr << "An input layer cannot call output." << std::endl;
