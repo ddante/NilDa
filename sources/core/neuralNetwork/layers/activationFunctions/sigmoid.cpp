@@ -11,6 +11,11 @@ void sigmoid::applyForward(
                                    Matrix& output
                                   )
 {
+#ifdef NILDA_DEBUG_BUILD    
+    assert(output.rows() == linearInput.rows());
+    assert(output.cols() == linearInput.cols());
+#endif
+
     output.array() = 1.0/(1.0 + (-linearInput.array()).exp());
 }
 
@@ -19,7 +24,15 @@ void sigmoid::applyBackward(
                                      const Matrix& G,
                                      Matrix& output
                                     )
-{            
+{   
+#ifdef NILDA_DEBUG_BUILD
+    assert(G.rows() == linearInput.rows());
+    assert(G.cols() == linearInput.cols());    
+    
+    assert(output.rows() == linearInput.rows());
+    assert(output.cols() == linearInput.cols());
+#endif
+         
     Matrix activation;
     activation.resize(
                           linearInput.rows(), 

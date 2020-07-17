@@ -15,6 +15,10 @@ sparseCategoricalCrossentropy::compute(
                                                    const Matrix& labels
                                                    )
 {
+#ifdef NILDA_DEBUG_BUILD
+    assert(labels.cols() == obs.cols());
+#endif
+
     int nObs = obs.cols();
 
     RowArray s;
@@ -33,6 +37,13 @@ sparseCategoricalCrossentropy::computeDerivative(
                                                                Matrix& output
                                                               )
 {    
+#ifdef NILDA_DEBUG_BUILD
+    assert(labels.cols() == obs.cols());
+
+    assert(output.rows() == obs.rows());
+    assert(output.cols() == obs.cols());    
+#endif
+
     output = -labels.array() * obs.array().cwiseInverse()
             + (1.0 - labels.array()) * (1.0 - obs.array()).cwiseInverse();
 }

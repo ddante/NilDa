@@ -11,6 +11,11 @@ void identity::applyForward(
                                    Matrix& output
                                   )
 {
+#ifdef NILDA_DEBUG_BUILD    
+    assert(output.rows() == linearInput.rows());
+    assert(output.cols() == linearInput.cols());
+#endif
+
     output.noalias() = linearInput; 
 }
 
@@ -20,6 +25,14 @@ void identity::applyBackward(
                                      Matrix& output
                                     )
 {          
+#ifdef NILDA_DEBUG_BUILD
+    assert(G.rows() == linearInput.rows());
+    assert(G.cols() == linearInput.cols());    
+    
+    assert(output.rows() == linearInput.rows());
+    assert(output.cols() == linearInput.cols());
+#endif
+    
     output.noalias() = G;
 }
 

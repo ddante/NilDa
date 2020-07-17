@@ -24,19 +24,24 @@ private:
     // Number of neurons of the current layer
     int layerSize_;
 
+    // Pointer to the activation function used in this layer
     std::unique_ptr<activationFunction> activationFunction_;
 
-    // Linear output and activation 
+    // Linear output and activation matrices
     Matrix linearOutput_;
     Matrix activation_;
 
-    // Weigh matrix and derivative of the weights
-    Matrix Weights_;
+    // Weight and derivative of the weights matrices
+    Matrix weights_;
     Matrix dWeights_;
 
-    // Bias vector and derivative of the bias 
-    Vector biaes_;
-    Vector dbiases_;
+    // Bias and derivative of the bias vectors
+    Vector biases_;
+    Vector dBiases_;
+
+    // Cache matrix to store the data to pass to the layer
+    // of the previous level during the back propagation
+    Matrix cacheBackProp_;
 
 public:
 
@@ -44,7 +49,7 @@ public:
 
     denseLayer(
                     const int inSize, 
-                    const std::string activationNam
+                    const std::string& activationName
                    );
 
     // Destructor 
@@ -55,22 +60,54 @@ public:
 
     void init(const layer* previousLayer) override;
     
-    void checkInputSize(const Matrix& inputData) override;
+    void checkInputSize(const Matrix& inputData) const override;
+
+    void checkInputAndCacheSize(const Matrix& inputData, 
+                                         const Matrix& cacheBackProp) const;
 
     void forwardPropagation(const Matrix& inputData)  override;
 
-    inline Matrix getWeights() override
+    void backwardPropagation(const Matrix& dActivationNex, 
+                                    const Matrix& inputData) override;
+
+    const Matrix& getWeights() const override
     {
-        return Weights_;
+        return weights_;
     }
 
-    inline Matrix getBiases() override
+    const Vector& getBiases() const override
     {
-        return biaes_;
+        return biases_;
     }
-    inline Matrix output() override
+
+    const Matrix& getWeightsDerivative() const override
+    {
+        return dWeights_;
+    }
+
+    const Vector& getBiasesDerivative() const override
+    {
+        return dBiases_;
+    }
+
+    void setWeightsAndBiases(
+                                    const Matrix& W, 
+                                    const Vector& b
+                                   ) override
+    {       
+        weights_.noalias() = W;
+
+        biases_.noalias() = b;
+    }
+
+    const Matrix& output() const override
     {
         return activation_;
+    }
+
+    const Matrix& backPropCache() const override
+    {
+        return cacheBackProp_;
     }
 
     int size() const override 

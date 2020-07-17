@@ -26,7 +26,7 @@ inputLayer::inputLayer(const std::array<int,3>& inSize):
     assert(inputChannels_ >0);
 }
 
-void inputLayer::checkInputSize(const Matrix& obs)
+void inputLayer::checkInputSize(const Matrix& obs) const
 {    
     if (flattenLayer_)
     {

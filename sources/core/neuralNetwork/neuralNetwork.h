@@ -37,6 +37,9 @@ class neuralNetwork
 
      std::unique_ptr<lossFunction> lossFunction_;
 
+     // Number of the last layer of the input layer      
+     const int firstLayer_ = 1;
+     
 public:
     
     // Constructor 
@@ -49,6 +52,11 @@ public:
 
     void forwardPropagation(const Matrix& obs) const;
 
+    void backwardPropagation(
+                                    const Matrix& obs, 
+                                    const Matrix& label
+                                   ) const;
+
     void setLossFunction(const std::string& lossName);
 
     Scalar getLoss(const Matrix& obs, const Matrix& labels) const;
@@ -57,7 +65,7 @@ public:
 
     ~neuralNetwork() 
     {
-        for(int i =0; i < numberOfLayers_; ++i)
+        for (int i = 0; i < numberOfLayers_; ++i)
         {
              delete layers_[i];
         }

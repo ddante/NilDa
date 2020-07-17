@@ -45,3 +45,4 @@ add_subdirectory(tests)
 
 add_subdirectory(unitTests/activationFunctions)
 add_subdirectory(unitTests/derivativeOfActivationFunctions)
+add_subdirectory(unitTests/neuralNetworks)

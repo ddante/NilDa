@@ -30,7 +30,7 @@ private:
     // Specify if it this a flatten (1D) input layer 
     bool flattenLayer_;
     
-    int numberOfObservations_;
+    mutable int numberOfObservations_;
 
 public:
 
@@ -52,7 +52,7 @@ public:
         assert(false);
     }
 
-    void checkInputSize(const Matrix& obs) override;
+    void checkInputSize(const Matrix& obs) const override;
 
     void forwardPropagation(const Matrix& obs) override
     {
@@ -61,25 +61,66 @@ public:
         assert(false);
     }
 
-    inline Matrix getWeights() override
+    void backwardPropagation(
+                                    const Matrix& dActivationNext, 
+                                    const Matrix& inputData
+                                   ) override
+    {
+        std::cerr << "An input layer cannot call backwardPropagation." << std::endl;
+
+        assert(false);
+    }
+
+    const Matrix& getWeights() const override
     {
         std::cerr << "An input layer cannot call getWeights." << std::endl;
 
         assert(false);
     }
 
-    inline Matrix getBiases() override
+    const Vector& getBiases() const override
     {
         std::cerr << "An input layer cannot call getBiases." << std::endl;
 
         assert(false);
     }
+
+    const Matrix& getWeightsDerivative() const override
+    {
+        std::cerr << "An input layer cannot call getWeightsDerivative." << std::endl;
+
+        assert(false);
+    }
+
+    const Vector& getBiasesDerivative() const override
+    {
+        std::cerr << "An input layer cannot call getBiasesDerivative." << std::endl;
+
+        assert(false);
+    }
     
-    inline Matrix output() override
+    const Matrix& output() const override
     {
         std::cerr << "An input layer cannot call output." << std::endl;
 
         assert(false);
+    }
+
+    const Matrix& backPropCache() const override
+    {
+        std::cerr << "An input layer cannot call backPropCache." << std::endl;
+
+        assert(false);    
+    }
+
+    void setWeightsAndBiases(
+                                    const Matrix& W, 
+                                    const Vector& b
+                                   ) override
+    {
+        std::cerr << "An input layer cannot call setWeightsAndBiases." << std::endl;
+
+        assert(false);         
     }
 
     int size() const override 

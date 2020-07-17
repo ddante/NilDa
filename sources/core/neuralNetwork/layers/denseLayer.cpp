@@ -15,7 +15,7 @@ namespace NilDa
 {
 denseLayer::denseLayer(
                                const int inSize, 
-                               const std::string activationName
+                               const std::string& activationName
                               ):
     layerSize_(inSize)
 {
@@ -68,20 +68,20 @@ void denseLayer::init(const layer* previousLayer)
 
     const int prevLayerSize = previousLayer->size();
 
-    Scalar epilonInit = sqrt(6.0)
-                           / sqrt(layerSize_ + prevLayerSize);
+    const Scalar epilonInit = sqrt(6.0)
+                                 / sqrt(layerSize_ + prevLayerSize);
 
-    Weights_.setRandom(layerSize_, prevLayerSize);
-    Weights_ *= epilonInit;
+    weights_.setRandom(layerSize_, prevLayerSize);
+    weights_ *= epilonInit;
 
     dWeights_.setZero(layerSize_, prevLayerSize);
 
-    biaes_.setZero(layerSize_);
+    biases_.setZero(layerSize_);
 
-    dbiases_.setZero(layerSize_);
+    dBiases_.setZero(layerSize_);
 }
 
-void denseLayer::checkInputSize(const Matrix& inputData)
+void denseLayer::checkInputSize(const Matrix& inputData) const
 {
     if (layerSize_ != inputData.rows())
     {
@@ -95,6 +95,37 @@ void denseLayer::checkInputSize(const Matrix& inputData)
     }
 }
 
+void denseLayer::checkInputAndCacheSize(
+                                                     const Matrix& inputData,
+                                                     const Matrix& cacheBackProp
+                                                    ) const
+{
+    if (layerSize_ != inputData.rows())
+    {
+        std::cerr << "Size of the input data "
+        << "(" << inputData.rows() << ") "
+        << " not consistent with the input layer size" 
+        << "(" << layerSize_ << ") "
+        << std::endl;
+
+        assert(false);
+    }
+
+    if(cacheBackProp.rows() != activation_.rows() &&
+       cacheBackProp.cols() != activation_.cols() )
+    {
+        std::cerr << "Size of the back propagation cache "
+        << "(" << cacheBackProp.rows() << ", "
+                  << cacheBackProp.cols() << ") " 
+        << " not consistent with the activation size " 
+        << "(" << activation_.rows() << ", "
+                  << activation_.cols() << ") " 
+        << std::endl;
+
+        assert(false);
+    }
+}
+
 void denseLayer::forwardPropagation(const Matrix& inputData) 
 {    
 #ifdef NILDA_DEBUG_BUILD
@@ -102,38 +133,65 @@ void denseLayer::forwardPropagation(const Matrix& inputData)
 #endif
 
     linearOutput_.resize(
-                                Weights_.rows(), 
-                                inputData.cols()
-                               );
+                               weights_.rows(), 
+                               inputData.cols()
+                              );
 
     // Apply the weights of the layer to the input
-    linearOutput_.noalias() = Weights_ * inputData;
-
-    std::cout <<"input:\n";
-    std::cout << inputData << "\n--------\n";
-
-    std::cout <<"weights:\n";
-    std::cout << Weights_ << "\n--------\n";
-
-    std::cout <<"lin output:\n";
-    std::cout << linearOutput_ << "\n--------\n";
+    linearOutput_.noalias() = weights_ * inputData;
 
     // Add the biases 
-    linearOutput_.colwise() += biaes_;
+    linearOutput_.colwise() += biases_;
 
+    // Apply the activation function
     activation_.resize(
                             linearOutput_.rows(), 
                             linearOutput_.cols()
                            );
 
-    // Apply the activation function
     activationFunction_->applyForward(
                                                  linearOutput_, 
                                                  activation_
                                                 );
-    std::cout <<"activation:\n";
-    std::cout << activation_ << "\n--------\n";
-
 }
+
+void denseLayer::backwardPropagation(
+                                                const Matrix& dActivationNext, 
+                                                const Matrix& inputData
+                                               )
+{
+#ifdef NILDA_DEBUG_BUILD
+    checkInputAndCacheSize(inputData, dActivationNext);
+#endif  
+
+    Matrix dLinearOutput(
+                               linearOutput_.rows(), 
+                               linearOutput_.cols()
+                              );
+
+    activationFunction_->applyBackward(
+                                                  linearOutput_, 
+                                                  dActivationNext,
+                                                  dLinearOutput
+                                                 );
+
+    const int nObs = activation_.cols();
+
+    dWeights_.noalias() = (1.0/nObs) 
+                              * dLinearOutput 
+                              * inputData.transpose();
+
+    dBiases_.noalias() = (1.0/nObs) 
+                             * dLinearOutput.rowwise().sum();
+
+    cacheBackProp_.resize(
+                                 dWeights_.cols(), 
+                                 dLinearOutput.cols()
+                                );
+
+    cacheBackProp_.noalias() = weights_.transpose() 
+                                     * dLinearOutput;
+}
+
 
 } // namespace

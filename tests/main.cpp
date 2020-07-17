@@ -19,10 +19,36 @@ int main(int argc, char const *argv[])
     NilDa::Matrix trainingLabels(3, 4);
     trainingLabels << 1,0,0,0, 0,1,0,1 ,0,0,1,0;
 
+    NilDa::Matrix W1(2,3);
+    W1 <<  -1, 2, -3, 0.4, -0.5, -0.6;
+    NilDa::Vector b1(2);
+    b1 << 0.3, 0.5;
+    l1->setWeightsAndBiases(W1, b1);
+
+    NilDa::Matrix W2(3,2);
+    W2 << -1, 2, 0.3, 0.4, 0.6, 0.7;
+    NilDa::Vector b2(3);
+    b2 << 0.3, 0.5, 0.7;
+    l2->setWeightsAndBiases(W2, b2);
+
     nn.setLossFunction("sparse_categorical_crossentropy");
+
     nn.forwardPropagation(trainingData);
+
     NilDa::Scalar J = nn.getLoss(trainingData, trainingLabels);
     std::cout << J << std::endl;
+
+    nn.backwardPropagation(trainingData, trainingLabels);
+
+    std::cout << "dW2:" << std::endl;
+    std::cout << l2->getWeightsDerivative() << "\n-----\n";
+    std::cout << "db2:" << std::endl;
+    std::cout << l2->getBiasesDerivative() << "\n-----\n";
+
+    std::cout << "dW1:" << std::endl;
+    std::cout << l1->getWeightsDerivative() << "\n-----\n";
+    std::cout << "db1:" << std::endl;
+    std::cout << l1->getBiasesDerivative() << "\n-----\n";
 
     return 0;
 }

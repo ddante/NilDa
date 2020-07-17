@@ -12,6 +12,11 @@ void softmax::applyForward(
                                     Matrix& output
                                    )
 {
+#ifdef NILDA_DEBUG_BUILD
+    assert(output.rows() == linearInput.rows());
+    assert(output.cols() == linearInput.cols());    
+#endif
+
     output.array() = linearInput.array().exp();
 
     RowArray sums = output.colwise().sum();
@@ -25,6 +30,14 @@ void softmax::applyBackward(
                                      Matrix& output
                                     )
 {   
+#ifdef NILDA_DEBUG_BUILD
+    assert(G.rows() == linearInput.rows());
+    assert(G.cols() == linearInput.cols());    
+    
+    assert(output.rows() == linearInput.rows());
+    assert(output.cols() == linearInput.cols());
+#endif
+    
     Matrix activation;
     activation.resize(
                          linearInput.rows(), 
