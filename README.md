@@ -1,2 +1,2 @@
 # NilDa
-![NilDa](https://user-images.githubusercontent.com/241088/87836403-364bbb00-c890-11ea-867f-1579cb44e65e.png)
+![NilDa](https://user-images.githubusercontent.com/241088/87836476-7f9c0a80-c890-11ea-963b-a39f75431e79.png)
