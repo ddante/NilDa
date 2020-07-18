@@ -1,4 +1,6 @@
 #include <iostream>
+#include <primitives/errors.h>
+
 #include "neuralNetwork.h"
 
 #include "lossFunctions/sparseCategoricalCrossentropy.h"
@@ -126,10 +128,196 @@ Scalar neuralNetwork::getLoss(
         forwardPropagation(obs);
     }  
 
-    return lossFunction_->compute( 
+    return lossFunction_->compute(
                                             layers_[lastLayer_]->output(), 
                                             labels
                                            );
+}
+
+errorCheck 
+neuralNetwork::checkWeightsGradients(
+                                                const int layer,
+                                                const Matrix& obs, 
+                                                const Matrix& labels,
+                                                const Scalar eps,
+                                                const Scalar errorLimit
+                                               ) const
+{       
+    // Store the original weights and biases 
+    const Matrix weightsBk = layers_[layer]->getWeights();
+
+    const Vector biasesBk = layers_[layer]->getBiases(); 
+
+    Matrix weights(weightsBk.rows(), weightsBk.cols());
+
+    Matrix dWeightsNum(weights.rows(), weights.cols());
+
+    for (int i = 0; i < weights.rows(); ++i)
+    {
+        for (int j = 0; j < weights.cols(); ++j)
+        {
+            // Compute the W+eps part
+            weights.noalias() = weightsBk;
+            weights(i, j) += eps;
+
+            layers_[layer]->setWeightsAndBiases(
+                                                           weights, 
+                                                           biasesBk
+                                                          );
+
+            forwardPropagation(obs);
+
+            const Scalar Jp = getLoss(obs, labels);
+
+            // Compute the W-eps part
+            weights.noalias() = weightsBk;
+            weights(i, j) -= eps;
+
+            layers_[layer]->setWeightsAndBiases(
+                                                           weights, 
+                                                           biasesBk
+                                                          );
+            
+            forwardPropagation(obs);
+
+            const Scalar Jm = getLoss(obs, labels);
+
+            // Numerical gradients: central difference
+            dWeightsNum(i,j) = (Jp - Jm)/(2*eps);
+        }
+    }
+
+    // Restore the correct values of weights and biases
+    layers_[layer]->setWeightsAndBiases(
+                                                   weightsBk, 
+                                                   biasesBk
+                                                  );
+
+    // Analytical derivative of the weights
+    const Matrix dWeights = layers_[layer]->getWeightsDerivative();
+
+    const Scalar error = (dWeights - dWeightsNum).norm() 
+                           / (dWeights.norm() + dWeightsNum.norm());
+
+    errorCheck output;
+    output.code = (error < errorLimit) ? EXIT_OK : EXIT_FAIL;
+    output.error = error;
+
+    return output;
+}
+
+errorCheck 
+neuralNetwork::checkBiasesGradients(
+                                              const int layer,
+                                              const Matrix& obs, 
+                                              const Matrix& labels,
+                                              const Scalar eps,
+                                              const Scalar errorLimit
+                                             ) const
+{       
+    // Store the original weights and biases 
+    const Matrix weightsBk = layers_[layer]->getWeights();
+
+    const Vector biasesBk = layers_[layer]->getBiases(); 
+
+    Vector biases(biasesBk.rows());
+
+    Vector dBiasesNum(biases.rows());
+
+    for (int i = 0; i < biases.rows(); ++i)
+    {
+        // Compute the W+eps part
+        biases.noalias() = biasesBk;
+        biases(i) += eps;
+
+        layers_[layer]->setWeightsAndBiases(
+                                                       weightsBk, 
+                                                       biases
+                                                      );
+
+        forwardPropagation(obs);
+
+        const Scalar Jp = getLoss(obs, labels);
+
+        // Compute the W-eps part
+        biases.noalias() = biasesBk;
+        biases(i) -= eps;
+
+        layers_[layer]->setWeightsAndBiases(
+                                                       weightsBk, 
+                                                       biases
+                                                      );
+
+        forwardPropagation(obs);
+
+        const Scalar Jm = getLoss(obs, labels);
+
+        // Numerical gradients: central difference
+        dBiasesNum(i) = (Jp - Jm)/(2*eps);
+    }
+
+    // Restore the correct values of weights and biases
+    layers_[layer]->setWeightsAndBiases(
+                                                   weightsBk, 
+                                                   biasesBk
+                                                  );
+
+    // Analytical derivative of the biases
+    const Vector dBiases = layers_[layer]->getBiasesDerivative();
+
+    const Scalar error = (dBiases - dBiasesNum).norm() 
+                           /  (dBiases.norm() + dBiasesNum.norm());
+
+    errorCheck output;
+    output.code = (error < errorLimit) ? EXIT_OK : EXIT_FAIL;
+    output.error = error;
+
+    return output;
+}
+
+int neuralNetwork::gradientsSanity(
+                                           const Matrix& obs, 
+                                           const Matrix& labels,
+                                           const bool printError
+                                          )  const
+{    
+#ifdef ND_SP
+    #error "Single precision used. For testing specify either double or long precision."
+#endif
+
+   int code = EXIT_OK;
+
+   forwardPropagation(obs);
+
+   backwardPropagation(obs, labels);
+
+   const Scalar errorLimit = 1.0e-8;
+   const Scalar eps = 1.0e-5;
+
+   for(int i = lastLayer_; i >= firstLayer_; --i)
+   {
+       const errorCheck outputW = 
+           checkWeightsGradients(i, obs, labels, eps, errorLimit);
+
+       const errorCheck outputB = 
+           checkBiasesGradients(i, obs, labels, eps, errorLimit);
+
+       if(outputW.code == EXIT_FAIL || outputW.code == EXIT_FAIL)
+       {           
+           code = EXIT_FAIL;
+       }
+
+       if(printError || code == EXIT_FAIL)
+       {
+           std::cout << "Error weights = " 
+                       << outputW.error << " " 
+                       << ", Error biases = " 
+                       << outputB.error 
+                       << std::endl;
+       }
+   }
+
+   return code;
 }
 
 } // namespace

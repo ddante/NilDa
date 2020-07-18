@@ -9,6 +9,8 @@ inputLayer::inputLayer(const int inSize):
     flattenLayer_(true)
 {
     type_ = layerTypes::input;
+    
+    trainable_ = false;
 
     assert(inputSize_ > 0);     
 }

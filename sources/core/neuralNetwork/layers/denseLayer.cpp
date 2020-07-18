@@ -13,14 +13,17 @@
 
 namespace NilDa
 {
+
+
 denseLayer::denseLayer(
                                const int inSize, 
                                const std::string& activationName
                               ):
     layerSize_(inSize)
-{
-    
+{    
     type_ = layerTypes::dense;
+    
+    trainable_ = true;
 
     switch (activationFunctionCode(activationName))
     {
@@ -192,6 +195,5 @@ void denseLayer::backwardPropagation(
     cacheBackProp_.noalias() = weights_.transpose() 
                                      * dLinearOutput;
 }
-
 
 } // namespace

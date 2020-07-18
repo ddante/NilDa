@@ -36,19 +36,11 @@ int main(int argc, char const *argv[])
     nn.forwardPropagation(trainingData);
 
     NilDa::Scalar J = nn.getLoss(trainingData, trainingLabels);
-    std::cout << J << std::endl;
+    //std::cout << J << std::endl;
 
     nn.backwardPropagation(trainingData, trainingLabels);
 
-    std::cout << "dW2:" << std::endl;
-    std::cout << l2->getWeightsDerivative() << "\n-----\n";
-    std::cout << "db2:" << std::endl;
-    std::cout << l2->getBiasesDerivative() << "\n-----\n";
-
-    std::cout << "dW1:" << std::endl;
-    std::cout << l1->getWeightsDerivative() << "\n-----\n";
-    std::cout << "db1:" << std::endl;
-    std::cout << l1->getBiasesDerivative() << "\n-----\n";
+    nn.gradientsSanity(trainingData, trainingLabels, /*printError=*/ true);
 
     return 0;
 }

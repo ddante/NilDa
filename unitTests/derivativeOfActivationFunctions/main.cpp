@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include "primitives/errors.h"
 #include "core/neuralNetwork/layers/activationFunctions/activationFunction.h"
 #include "core/neuralNetwork/layers/activationFunctions/identity.h"
 #include "core/neuralNetwork/layers/activationFunctions/relu.h"
@@ -28,12 +28,12 @@ int checkIdentity(const NilDa::Matrix& input, const NilDa::Matrix& G)
     if (difference < errTol)
     {
          std::cout << "test OK\n";
-         return 1;
+         return NilDa::EXIT_OK;
     }
     else
     {
         std::cout << "test FAILED, difference = " <<difference << "\n";
-        return 0;
+        return NilDa::EXIT_FAIL;
     }
 }
 
@@ -57,12 +57,12 @@ int checkRelu(const NilDa::Matrix& input, const NilDa::Matrix& G)
     if (difference < errTol)
     {
          std::cout << "test OK\n"; 
-         return 1;
+         return NilDa::EXIT_OK;
     }
     else
     {
         std::cout << "test FAILED, difference = " << difference << "\n";
-        return 0;
+        return NilDa::EXIT_FAIL;
     }
 }
 
@@ -86,12 +86,12 @@ int checkSigmoid(const NilDa::Matrix& input, const NilDa::Matrix& G)
     if (difference < errTol)
     {
          std::cout << "test OK\n";
-         return 1;
+         return NilDa::EXIT_OK;
     }
     else
     {
         std::cout << "test FAILED, difference = " << difference << "\n";
-        return 0;
+        return NilDa::EXIT_FAIL;
     }
 }
 
@@ -115,20 +115,18 @@ int checkSoftMax(const NilDa::Matrix& input, const NilDa::Matrix& G)
     if (difference < errTol)
     {
          std::cout << "test OK\n";
-         return 1;
+         return NilDa::EXIT_OK;
     }
     else
     {
         std::cout << "test FAILED, difference = " << difference << "\n";
-        return 0;
+        return NilDa::EXIT_FAIL;
     }
 }
 
 
 int main(int argc, char const *argv[])
 {
-    int testOK = 0;
-
 #ifdef ND_SP
 
     #error "Single precision used. For testing specify either double or long precision"
@@ -147,20 +145,17 @@ int main(int argc, char const *argv[])
             -0.21, -0.54, 0.11, 0.13,
              0.97, 0.04,  0.00, -0.35;
 
-    int codeI = checkIdentity(inputData, G);
-
-    int codeR = checkRelu(inputData, G);
-
-    int codeS = checkSigmoid(inputData, G);
-
-    int codeSM = checkSoftMax(inputData, G);
-
-    if (codeI && codeR && codeS && codeSM)
+    if (checkIdentity(inputData, G) == NilDa::EXIT_OK &&
+        checkRelu(inputData, G)     == NilDa::EXIT_OK &&
+        checkSigmoid(inputData, G) == NilDa::EXIT_OK &&
+        checkSoftMax(inputData, G) == NilDa::EXIT_OK)
     {
-        testOK = 1;
+        return NilDa::EXIT_OK;
+    }
+    else
+    {
+        return NilDa::EXIT_FAIL;
     }
    
 #endif
-
-    return testOK;
 }

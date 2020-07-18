@@ -1,6 +1,6 @@
 #include <iostream>
 #include <math.h>
-
+#include "primitives/errors.h"
 #include "core/neuralNetwork/layers/inputLayer.h"
 #include "core/neuralNetwork/layers/denseLayer.h"
 #include "core/neuralNetwork/neuralNetwork.h"
@@ -92,7 +92,7 @@ int test1()
        )
     {
          std::cout << "test OK\n";
-         return 1;
+         return NilDa::EXIT_OK;
     }
     else
     {
@@ -102,27 +102,27 @@ int test1()
         std::cout << difference_db1 << ", ";
         std::cout << difference_dw2 << ", ";
         std::cout << difference_db2 << std::endl;
-        return 0;
+        return NilDa::EXIT_FAIL;
     }
 
 }
 
 int main(int argc, char const *argv[])
 {
-    int testOK = 0;
-
 #ifdef ND_SP
 
     #error "Single precision used. For testing specify either double or long precision"
 
 #else
 
-    if (test1())
+    if (test1() == NilDa::EXIT_OK)
     {
-        testOK = 1;
+        return NilDa::EXIT_OK;
+    }
+    else
+    {
+        return NilDa::EXIT_FAIL;
     }
    
 #endif
-
-    return testOK;
 }

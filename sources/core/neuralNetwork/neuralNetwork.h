@@ -4,6 +4,8 @@
 #include <vector>
 #include <memory>
 
+#include "primitives/errors.h"
+
 #include "primitives/Scalar.h"
 #include "primitives/Vector.h"
 #include "primitives/Matrix.h"
@@ -39,7 +41,26 @@ class neuralNetwork
 
      // Number of the last layer of the input layer      
      const int firstLayer_ = 1;
-     
+
+private:
+
+    errorCheck 
+    checkWeightsGradients(
+                                 const int layer,
+                                 const Matrix& obs, 
+                                 const Matrix& labels,
+                                 const Scalar eps,
+                                 const Scalar errorLimit                                    
+                                ) const;
+
+    errorCheck 
+    checkBiasesGradients(
+                               const int layer,
+                               const Matrix& obs, 
+                               const Matrix& labels,
+                               const Scalar eps,
+                               const Scalar errorLimit
+                              ) const;
 public:
     
     // Constructor 
@@ -47,6 +68,8 @@ public:
     neuralNetwork() = delete;
 
     neuralNetwork(const std::vector<layer*>& vectorLayer);
+
+    // Member functions 
 
     //void addLayer(const layer singleLayer);
 
@@ -60,6 +83,12 @@ public:
     void setLossFunction(const std::string& lossName);
 
     Scalar getLoss(const Matrix& obs, const Matrix& labels) const;
+
+    int gradientsSanity(
+                            const Matrix& obs, 
+                            const Matrix& label,
+                            const bool printError
+                           ) const;
 
     // Destructor
 

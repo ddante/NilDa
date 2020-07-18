@@ -26,6 +26,8 @@ protected:
 
     layerTypes type_;
 
+    bool trainable_;
+
 public:
 
     // Constructors
@@ -79,6 +81,11 @@ public:
         return type_;
     }
 
+    bool isTrainable() const
+    {
+        return trainable_;
+    }
+
     // Return the string name of the type layer from the enum name
     std::string layerName(const layerTypes inLayerType) const
     {
@@ -109,8 +116,7 @@ public:
         return name;
     }
 
-    // Set the values of the weights and biases
-    // in the current layer. Mainly for debugging
+    // Set the values of the weights and biases in the layer    
     virtual void setWeightsAndBiases(
                                              const Matrix& W, 
                                              const Vector& b
