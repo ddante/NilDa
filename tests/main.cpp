@@ -18,6 +18,7 @@ int main(int argc, char const *argv[])
 
     NilDa::Matrix trainingLabels(3, 4);
     trainingLabels << 1,0,0,0, 0,1,0,1 ,0,0,1,0;
+    //trainingLabels << 1,0,0,1;
 
     NilDa::Matrix W1(2,3);
     W1 <<  -1, 2, -3, 0.4, -0.5, -0.6;
@@ -36,7 +37,7 @@ int main(int argc, char const *argv[])
     nn.forwardPropagation(trainingData);
 
     NilDa::Scalar J = nn.getLoss(trainingData, trainingLabels);
-    //std::cout << J << std::endl;
+    std::cout << J << std::endl;
 
     nn.backwardPropagation(trainingData, trainingLabels);
 

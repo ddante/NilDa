@@ -4,12 +4,14 @@ project(NilDa VERSION 0.1)
 
 ######################################
 option(NILDA_DEBUG_BUILD  "Enable debug build" ON)
+
 set(NILDA_PRECISION_OPTION "DP")
 
 ######################################
 
 if(${NILDA_DEBUG_BUILD})
   set(CMAKE_BUILD_TYPE Debug)
+  add_definitions(-DND_DEBUG_CHECKS)
 else()
   set(CMAKE_BUILD_TYPE Release)
 endif()

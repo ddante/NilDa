@@ -43,6 +43,10 @@ private:
     // of the previous level during the back propagation
     Matrix cacheBackProp_;
 
+    // Store the number of observations seen in the 
+    // forward propagation
+    int nObservations_;
+
 public:
 
     // Constructor
@@ -93,13 +97,8 @@ public:
     void setWeightsAndBiases(
                                     const Matrix& W, 
                                     const Vector& b
-                                   ) override
-    {       
-        weights_.noalias() = W;
-
-        biases_.noalias() = b;
-    }
-
+                                   ) override;
+    
     const Matrix& output() const override
     {
         return activation_;

@@ -12,7 +12,7 @@ void softmax::applyForward(
                                     Matrix& output
                                    )
 {
-#ifdef NILDA_DEBUG_BUILD
+#ifdef ND_DEBUG_CHECKS
     assert(output.rows() == linearInput.rows());
     assert(output.cols() == linearInput.cols());    
 #endif
@@ -30,7 +30,7 @@ void softmax::applyBackward(
                                      Matrix& output
                                     )
 {   
-#ifdef NILDA_DEBUG_BUILD
+#ifdef ND_DEBUG_CHECKS
     assert(G.rows() == linearInput.rows());
     assert(G.cols() == linearInput.cols());    
     

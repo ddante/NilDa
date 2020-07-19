@@ -37,9 +37,9 @@ void inputLayer::checkInputSize(const Matrix& obs) const
         // number of cols = number of observations
         if (inputSize_ != obs.rows())
         {
-            std::cerr << "Size of the input data " 
+            std::cerr << "Size of input data " 
                         << "(" << obs.rows() << ") "
-                        << " not consistent with the input layer size" 
+                        << " not consistent with input layer size" 
                         << "(" << inputSize_ << ") "
                         << std::endl;
 
@@ -61,9 +61,9 @@ void inputLayer::checkInputSize(const Matrix& obs) const
             obs.cols() % inputChannels_ != 0
            )
         {
-            std::cerr << "Size of the input data " 
+            std::cerr << "Size of input data " 
                         << "(" << obs.rows() << ") "
-                        << " not consistent with the input layer size" 
+                        << " not consistent with input layer size" 
                         << "(" << channelSize << ") "
                         << std::endl;            
         }

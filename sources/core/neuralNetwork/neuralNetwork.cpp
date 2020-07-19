@@ -58,7 +58,7 @@ void neuralNetwork::backwardPropagation(
                                                     const Matrix& labels
                                                     ) const
 {   
-#ifdef NILDA_DEBUG_BUILD
+#ifdef ND_DEBUG_CHECKS
     assert(validState_);
 #endif
 
@@ -107,7 +107,7 @@ void neuralNetwork::setLossFunction(const std::string& lossName)
     switch(lossFunctionCode(lossName))
     {
         case lossFunctions::sparseCategoricalCrossentropy :
-            lossFunction_ = std::make_unique<sparseCategoricalCrossentropy>();            
+            lossFunction_ = std::make_unique<sparseCategoricalCrossentropy>();
             break;
         default :
             std::cerr << "Not valid loss function  " 

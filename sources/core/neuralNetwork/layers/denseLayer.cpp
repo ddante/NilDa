@@ -47,6 +47,14 @@ denseLayer::denseLayer(
     }
     
     assert(layerSize_ > 0);
+
+    if (layerSize_ == 1 && 
+        activationFunctionCode(activationName) ==
+        activationFucntions::softmax)
+    {
+        std::cout << "Softmax activation requires layer size > 1" << std::endl;
+        assert(false);
+    }
 }
 
 void denseLayer::init(const layer* previousLayer)
@@ -86,12 +94,13 @@ void denseLayer::init(const layer* previousLayer)
 
 void denseLayer::checkInputSize(const Matrix& inputData) const
 {
-    if (layerSize_ != inputData.rows())
+    if (weights_.cols() != inputData.rows())
     {
-        std::cerr << "Size of the input data "
+        std::cerr << "Size of input data "
         << "(" << inputData.rows() << ") "
-        << " not consistent with the input layer size" 
-        << "(" << layerSize_ << ") "
+        << " not consistent with dense layer weights size" 
+        << "(" << weights_.rows() << ", "
+        << weights_.cols() << ") "
         << std::endl;
 
         assert(false);
@@ -103,12 +112,14 @@ void denseLayer::checkInputAndCacheSize(
                                                      const Matrix& cacheBackProp
                                                     ) const
 {
-    if (layerSize_ != inputData.rows())
+    if (weights_.cols() != inputData.rows())
     {
-        std::cerr << "Size of the input data "
+        std::cerr << "Size of input data "
         << "(" << inputData.rows() << ") "
-        << " not consistent with the input layer size" 
-        << "(" << layerSize_ << ") "
+        << " not consistent with dense layer size" 
+        << " not consistent with dense layer weights size" 
+        << "(" << weights_.rows() << ", "
+        << weights_.cols() << ") "
         << std::endl;
 
         assert(false);
@@ -131,9 +142,11 @@ void denseLayer::checkInputAndCacheSize(
 
 void denseLayer::forwardPropagation(const Matrix& inputData) 
 {    
-#ifdef NILDA_DEBUG_BUILD
+#ifdef ND_DEBUG_CHECKS
     checkInputSize(inputData);
 #endif
+
+    nObservations_ = inputData.cols();
 
     linearOutput_.resize(
                                weights_.rows(), 
@@ -163,8 +176,10 @@ void denseLayer::backwardPropagation(
                                                 const Matrix& inputData
                                                )
 {
-#ifdef NILDA_DEBUG_BUILD
+#ifdef ND_DEBUG_CHECKS
     checkInputAndCacheSize(inputData, dActivationNext);
+
+    assert(inputData.cols() == nObservations_);
 #endif  
 
     Matrix dLinearOutput(
@@ -195,5 +210,41 @@ void denseLayer::backwardPropagation(
     cacheBackProp_.noalias() = weights_.transpose() 
                                      * dLinearOutput;
 }
+
+void denseLayer::setWeightsAndBiases(
+                                                const Matrix& W, 
+                                                const Vector& b
+                                               ) 
+{       
+    if (W.rows() != weights_.rows() ||
+        W.cols() != weights_.cols())
+    {
+        std::cerr << "Size of the input weights matrix "
+        << "(" << W.rows() << ", "
+                  << W.cols() << ") " 
+        << " not consistent with the layer weights size " 
+        << "(" << weights_.rows() << ", "
+                  << weights_.cols() << ") " 
+        << std::endl;
+
+        assert(false);
+    }
+
+    if (b.rows() != biases_.rows())
+    {
+        std::cerr << "Size of the input biases vector "
+        << "(" << b.rows() << ") "
+        << " not consistent with the layer biases size " 
+        << "(" << biases_.rows() << ") "
+        << std::endl;
+        
+        assert(false);
+    }
+
+    weights_.noalias() = W;
+
+    biases_.noalias() = b;
+}
+
 
 } // namespace
