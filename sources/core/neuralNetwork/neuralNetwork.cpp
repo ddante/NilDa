@@ -102,6 +102,8 @@ void neuralNetwork::backwardPropagation(
                                                           );    
 }
 
+//void neuralNetwork::configure()
+
 void neuralNetwork::setLossFunction(const std::string& lossName)
 {
     switch(lossFunctionCode(lossName))
@@ -275,11 +277,11 @@ neuralNetwork::checkBiasesGradients(
     return output;
 }
 
-int neuralNetwork::gradientsSanity(
-                                           const Matrix& obs, 
-                                           const Matrix& labels,
-                                           const bool printError
-                                          )  const
+int neuralNetwork::gradientsSanityCheck(
+                                                  const Matrix& obs, 
+                                                  const Matrix& labels,
+                                                  const bool printError
+                                                 )  const
 {    
 #ifdef ND_SP
     #error "Single precision used. For testing specify either double or long precision."

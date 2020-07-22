@@ -84,11 +84,11 @@ public:
 
     Scalar getLoss(const Matrix& obs, const Matrix& labels) const;
 
-    int gradientsSanity(
-                            const Matrix& obs, 
-                            const Matrix& label,
-                            const bool printError
-                           ) const;
+    int gradientsSanityCheck(
+                                   const Matrix& obs, 
+                                   const Matrix& label,
+                                   const bool printError
+                                  ) const;
 
     // Destructor
 

@@ -4,6 +4,7 @@
 #include "core/neuralNetwork/layers/inputLayer.h"
 #include "core/neuralNetwork/layers/denseLayer.h"
 #include "core/neuralNetwork/neuralNetwork.h"
+#include "core/neuralNetwork/optimizers/sgd.h"
 
 int main(int argc, char const *argv[])
 {
@@ -41,7 +42,9 @@ int main(int argc, char const *argv[])
 
     nn.backwardPropagation(trainingData, trainingLabels);
 
-    nn.gradientsSanity(trainingData, trainingLabels, /*printError=*/ true);
+    nn.gradientsSanityCheck(trainingData, trainingLabels, /*printError=*/ true);
+
+    NilDa::sgd opt(0.1);
 
     return 0;
 }

@@ -31,11 +31,11 @@ private:
     Matrix linearOutput_;
     Matrix activation_;
 
-    // Weight and derivative of the weights matrices
+    // Weight and derivative w.r.t. weights matrices
     Matrix weights_;
     Matrix dWeights_;
 
-    // Bias and derivative of the bias vectors
+    // Bias and derivative w.r.t. bias vectors
     Vector biases_;
     Vector dBiases_;
 
