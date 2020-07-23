@@ -1,10 +1,14 @@
 #include <iostream>
+#include <memory>
+
 #include <primitives/errors.h>
 
 #include "neuralNetwork.h"
 
 #include "lossFunctions/sparseCategoricalCrossentropy.h"
 #include "lossFunctions/lossFunctionUtils.h"
+
+#include "optimizers/sgd.h"
 
 // --------------------------------------------------------------------------- 
 
@@ -102,7 +106,15 @@ void neuralNetwork::backwardPropagation(
                                                           );    
 }
 
-//void neuralNetwork::configure()
+void neuralNetwork::configure(
+                                      const optimizer& opt,
+                                      const std::string& lossName
+                                     )
+{    
+    optimizer_ = &opt;
+    
+    setLossFunction(lossName);   
+}
 
 void neuralNetwork::setLossFunction(const std::string& lossName)
 {

@@ -12,6 +12,8 @@
 
 #include "layers/layer.h"
 
+#include "optimizers/optimizer.h"
+
 #include "lossFunctions/lossFunction.h"
 
 // --------------------------------------------------------------------------- 
@@ -28,8 +30,17 @@ class neuralNetwork
      // List of all the layer in the neural network
      std::vector<layer*> layers_;
 
+     // Pointer to the loss function
+     std::unique_ptr<lossFunction> lossFunction_;
+
+     // Pointer to the optimizer
+     const optimizer* optimizer_;
+
      // Total number of layers (input + hidden + output)
      int numberOfLayers_;
+
+     // Number of the last layer of the input layer      
+     const int firstLayer_ = 1;
 
      // Store for simplicity the number of the last layer: 
      // numberOfLayers_ - 1
@@ -37,13 +48,10 @@ class neuralNetwork
 
      mutable bool validState_;
 
-     std::unique_ptr<lossFunction> lossFunction_;
-
-     // Number of the last layer of the input layer      
-     const int firstLayer_ = 1;
-
 private:
 
+    // Internal routines to compute the difference between 
+    // the analytical and the numerical gradients 
     errorCheck 
     checkWeightsGradients(
                                  const int layer,
@@ -61,6 +69,7 @@ private:
                                const Scalar eps,
                                const Scalar errorLimit
                               ) const;
+
 public:
     
     // Constructor 
@@ -80,10 +89,18 @@ public:
                                     const Matrix& label
                                    ) const;
 
+    void configure(
+                      const optimizer& opt,
+                      const std::string& lossName
+                     );
+
+    // Set the loss function
     void setLossFunction(const std::string& lossName);
 
+    // Return the value of the loss function at the current state
     Scalar getLoss(const Matrix& obs, const Matrix& labels) const;
 
+    // Check if the analytical gradients matches numerical ones
     int gradientsSanityCheck(
                                    const Matrix& obs, 
                                    const Matrix& label,

@@ -1,6 +1,8 @@
 #ifndef SGD_H
 #define SGD_H
 
+#include <iostream>
+#include <memory>
 #include <map>
 
 #include "optimizer.h"
@@ -34,9 +36,17 @@ public:
 
     // Constructors
 
+    sgd() = delete;
+
     sgd(Scalar alpha);
 
     sgd(Scalar alpha, Scalar m);
+ 
+    void get() const override
+    {
+        std::cout << learningRate_ << " ~~~ "
+                    << momentum_ << "\n";
+    }
 
     void init(
                const Matrix& weightsGradient, 
@@ -51,6 +61,7 @@ public:
                   ) override;
 
     // Destructor
+
     ~sgd() = default;
 
     

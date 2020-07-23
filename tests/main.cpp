@@ -33,18 +33,23 @@ int main(int argc, char const *argv[])
     b2 << 0.3, 0.5, 0.7;
     l2->setWeightsAndBiases(W2, b2);
 
-    nn.setLossFunction("sparse_categorical_crossentropy");
-
-    nn.forwardPropagation(trainingData);
-
-    NilDa::Scalar J = nn.getLoss(trainingData, trainingLabels);
-    std::cout << J << std::endl;
-
-    nn.backwardPropagation(trainingData, trainingLabels);
-
-    nn.gradientsSanityCheck(trainingData, trainingLabels, /*printError=*/ true);
-
+    //NilDa::optimizer* opt = new NilDa::sgd(0.1);
     NilDa::sgd opt(0.1);
+
+    nn.configure(opt, "sparse_categorical_crossentropy");
+   
+    // nn.setLossFunction("sparse_categorical_crossentropy");
+
+    // nn.forwardPropagation(trainingData);
+
+    // NilDa::Scalar J = nn.getLoss(trainingData, trainingLabels);
+    // std::cout << J << std::endl;
+
+    // nn.backwardPropagation(trainingData, trainingLabels);
+
+    // nn.gradientsSanityCheck(trainingData, trainingLabels, /*printError=*/ true);
+
+
 
     return 0;
 }

@@ -19,6 +19,8 @@ public:
 
     // Member functions 
 
+    virtual void get()  const = 0;
+
     // Initialize the map for the history of the gradients
     virtual void init(
                         const Matrix& weightsGradient, 
