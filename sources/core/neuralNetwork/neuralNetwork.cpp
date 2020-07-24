@@ -1,6 +1,10 @@
 #include <iostream>
 #include <memory>
 
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <Eigen/StdVector>
+
 #include <primitives/errors.h>
 
 #include "neuralNetwork.h"
@@ -20,17 +24,18 @@ neuralNetwork::neuralNetwork(const std::vector<layer*>& vLayers):
     layers_(vLayers),
     numberOfLayers_(vLayers.size()),
     lastLayer_(numberOfLayers_ - 1),
-    validState_(false)
+    validState_(false),
+    finalizedNetwork_(false)
 {
      // The first layer must be an input layer
-     if (layers_[0]->layerType() != layerTypes::input)
+     if (layers_[inputLayer_]->layerType() != layerTypes::input)
      {
          std::cerr << "First layer is not an input layer." << std::endl;
          assert(false);
      }
 
     // Initialize the hidden and the output layers
-    for (int i = 1; i < numberOfLayers_; ++i)
+    for (int i = firstLayer_; i < numberOfLayers_; ++i)
     {
         layers_[i]->init(layers_[i - 1]);
     }
@@ -40,15 +45,17 @@ void neuralNetwork::forwardPropagation(const Matrix& obs) const
 {   
     validState_ = false;
 
+#ifdef ND_DEBUG_CHECKS
     // The layer 0 is an input layer, just check that
     // the size of the input data is consistent with the 
     // input layer size 
-    layers_[0]->checkInputSize(obs);
+    layers_[inputLayer_]->checkInputSize(obs);
+#endif
 
     // The first actual layer takes in directly the input data
     layers_[firstLayer_]->forwardPropagation(obs);
 
-    for (int i = 2; i < numberOfLayers_; ++i)
+    for (int i = firstLayer_ + 1; i < numberOfLayers_; ++i)
     {
         // The other layers take in the output of the previous layer
         layers_[i]->forwardPropagation(layers_[i - 1]->output());
@@ -111,9 +118,19 @@ void neuralNetwork::configure(
                                       const std::string& lossName
                                      )
 {    
+    if (numberOfLayers_ <= 0)
+    {
+        std::cerr << "The neural network has no layer." << std::endl;
+        assert(false);
+    }
+
     optimizer_ = &opt;
     
+    initOptimizer();
+
     setLossFunction(lossName);   
+
+    finalizedNetwork_ = true;
 }
 
 void neuralNetwork::setLossFunction(const std::string& lossName)
@@ -138,7 +155,7 @@ Scalar neuralNetwork::getLoss(
 {   
     if(!validState_)
     {   
-        std::cout << "Warning: need to apply forwardPropagation" << std::endl;
+        std::cout << "Warning: need to apply forwardPropagation." << std::endl;
         forwardPropagation(obs);
     }  
 
@@ -146,6 +163,94 @@ Scalar neuralNetwork::getLoss(
                                             layers_[lastLayer_]->output(), 
                                             labels
                                            );
+}
+
+void neuralNetwork::train(
+                                const Matrix& obs,
+                                const Matrix& labels,                                
+                                const int epochs,
+                                const int batchSize
+                               ) const
+{
+    if (!finalizedNetwork_)
+    {
+        std::cerr << "The neural network has not been configured." << std::endl;
+
+        assert(false);
+    }
+
+    const int nObs = obs.cols() 
+                      / layers_[inputLayer_]->inputStride();
+
+    assert(batchSize < nObs);
+
+    const int epochSteps = floor((float)nObs/(float)batchSize);
+
+    const int batchStride = batchSize 
+                              * layers_[inputLayer_]->inputStride();
+
+    for (int i = 0; i < epochs; ++i)
+    {
+        std::cout <<  "Epoch " << i+1 << "/" << epochs << std::endl;
+
+        for (int j = 0; j < epochSteps; ++j)
+        {
+            forwardPropagation(
+                                     obs(
+                                           Eigen::all, 
+                                           Eigen::seqN(j*batchStride, batchStride)
+                                          )
+                                   );
+
+            backwardPropagation(
+                                       obs(
+                                           Eigen::all, 
+                                           Eigen::seqN(j*batchStride, batchStride)
+                                          ),
+                                       labels(
+                                               Eigen::all, 
+                                               Eigen::seqN(j*batchStride, batchStride)
+                                          )
+                                     );
+
+            update();
+        } 
+    }
+
+}
+
+void neuralNetwork::initOptimizer() const
+{
+    for (int i = firstLayer_; i < lastLayer_; ++i)
+    {
+        optimizer_->init( 
+                              layers_[i]->getWeightsDerivative(),
+                              layers_[i]->getBiasesDerivative()
+                             );
+    }
+}
+
+void neuralNetwork::update() const
+{
+    Matrix deltaWeights;
+
+    Vector deltaBiases;
+
+    for (int i = firstLayer_; i < lastLayer_; ++i)
+    {
+        optimizer_->update(  
+                                  layers_[i]->getWeightsDerivative(),
+                                  layers_[i]->getBiasesDerivative(),
+                                  deltaWeights,
+                                  deltaBiases
+                                 );
+
+        layers_[i]->incrementWeightsAndBiases(
+                                                          deltaWeights, 
+                                                          deltaBiases
+                                                         );
+    }
+
 }
 
 errorCheck 

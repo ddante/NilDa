@@ -39,14 +39,19 @@ class neuralNetwork
      // Total number of layers (input + hidden + output)
      int numberOfLayers_;
 
-     // Number of the last layer of the input layer      
-     const int firstLayer_ = 1;
-
      // Store for simplicity the number of the last layer: 
      // numberOfLayers_ - 1
      int lastLayer_;
 
      mutable bool validState_;
+
+     mutable bool finalizedNetwork_;
+
+     // Number of the input layer
+     const int inputLayer_ = 0;
+
+     // Number of the first layer after of the input layer
+     const int firstLayer_ = 1;
 
 private:
 
@@ -69,6 +74,13 @@ private:
                                const Scalar eps,
                                const Scalar errorLimit
                               ) const;
+
+    // Initialize the optimizer internal cache for each layer
+    void initOptimizer() const;
+
+    // Update the weights and biases of each layer 
+    // with the increments computed by the optimizer
+    void update() const;
 
 public:
     
@@ -93,6 +105,13 @@ public:
                       const optimizer& opt,
                       const std::string& lossName
                      );
+
+    void train(
+                 const Matrix& obs,
+                 const Matrix& labes,
+                 const int epochs,
+                 const int batchSize
+                ) const;
 
     // Set the loss function
     void setLossFunction(const std::string& lossName);

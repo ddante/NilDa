@@ -40,6 +40,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-march=native")
 
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
+message("${EIGEN3_INCLUDE_DIR}")
 
 if(NOT TARGET spdlog)
     # Stand-alone build

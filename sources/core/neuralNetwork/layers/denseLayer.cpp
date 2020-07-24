@@ -246,5 +246,42 @@ void denseLayer::setWeightsAndBiases(
     biases_.noalias() = b;
 }
 
+void denseLayer::incrementWeightsAndBiases(
+                                                        const Matrix& deltaW, 
+                                                        const Vector& deltaB                                                   
+                                                       )
+{
+#ifdef ND_DEBUG_CHECKS
+    if (deltaW.rows() != weights_.rows() ||
+        deltaW.cols() != weights_.cols())
+    {
+        std::cerr << "Size of the input weights matrix "
+        << "(" << deltaW.rows() << ", "
+                  << deltaW.cols() << ") " 
+        << " not consistent with the layer weights size " 
+        << "(" << weights_.rows() << ", "
+                  << weights_.cols() << ") " 
+        << std::endl;
+
+        assert(false);
+    }
+
+    if (deltaB.rows() != biases_.rows())
+    {
+        std::cerr << "Size of the input biases vector "
+        << "(" << deltaB.rows() << ") "
+        << " not consistent with the layer biases size " 
+        << "(" << biases_.rows() << ") "
+        << std::endl;
+        
+        assert(false);
+    }
+#endif
+
+    weights_ += deltaW;
+
+    biases_ += deltaB;
+}
+
 
 } // namespace

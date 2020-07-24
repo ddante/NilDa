@@ -25,7 +25,7 @@ public:
     virtual void init(
                         const Matrix& weightsGradient, 
                         const Vector& biasesGradient
-                       ) = 0;
+                       ) const = 0;
 
     // Compute the increments of the weights and biases
     virtual void update(
@@ -33,7 +33,7 @@ public:
                             const Vector& biasesGradient,
                             Matrix& deltaWeights,
                             Vector& deltaBiases
-                           ) = 0;
+                           ) const = 0;
 
     // Destructor
 

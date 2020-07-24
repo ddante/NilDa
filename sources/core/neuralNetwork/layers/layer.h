@@ -74,6 +74,8 @@ public:
 
     virtual void size(std::array<int, 3>& sizes) const = 0;
 
+    virtual int inputStride() const = 0;
+
     //virtual void update() = 0;  
 
     layerTypes layerType()  const
@@ -121,6 +123,11 @@ public:
                                              const Matrix& W, 
                                              const Vector& b
                                             ) = 0;
+
+     virtual void incrementWeightsAndBiases(
+                                                      const Matrix& deltaW, 
+                                                      const Vector& deltaB                                                   
+                                                     ) = 0;
 
     // Destructor
     virtual ~layer()  = default;

@@ -98,7 +98,12 @@ public:
                                     const Matrix& W, 
                                     const Vector& b
                                    ) override;
-    
+
+    void incrementWeightsAndBiases(
+                                            const Matrix& deltaW, 
+                                            const Vector& deltaB                                                   
+                                           ) override;
+
     const Matrix& output() const override
     {
         return activation_;
@@ -120,6 +125,14 @@ public:
 
         assert(false);
     }
+
+    int inputStride() const override
+    {
+        std::cerr << "A dense layer cannot call observationStride function" << std::endl;
+
+        assert(false);
+    }
+
 };
 
 

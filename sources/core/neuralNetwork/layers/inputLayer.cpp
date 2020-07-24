@@ -6,6 +6,10 @@ namespace NilDa
 
 inputLayer::inputLayer(const int inSize):
     inputSize_(inSize),
+    inputRows_(0),
+    inputCols_(0),
+    inputChannels_(1),
+    observationStride_(1),
     flattenLayer_(true)
 {
     type_ = layerTypes::input;
@@ -16,9 +20,11 @@ inputLayer::inputLayer(const int inSize):
 }
 
 inputLayer::inputLayer(const std::array<int,3>& inSize):
+    inputSize_(inSize[0]*inSize[1]*inSize[3]),
     inputRows_(inSize[0]),
     inputCols_(inSize[1]),
     inputChannels_(inSize[3]),
+    observationStride_(inSize[3]),
     flattenLayer_(false)
 {    
     type_ = layerTypes::input;

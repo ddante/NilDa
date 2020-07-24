@@ -42,7 +42,7 @@ sgd::sgd(Scalar alpha, Scalar m):
 void sgd::init(
                  const Matrix& weightsGradient, 
                  const Vector& biasesGradient
-                )
+                ) const
 {    
     Matrix& weightsFirstMomentum 
         = weightsHistory_[weightsGradient.data()];
@@ -65,7 +65,7 @@ void sgd::update(const Matrix& weightsGradient,
                      const Vector& biasesGradient,              
                      Matrix& deltaWeights,
                      Vector& deltaBiases
-                    )
+                    ) const
 {   
     // Get the history of the weights and biases associated with  the current layer
     Matrix& weightsFirstMomentum 

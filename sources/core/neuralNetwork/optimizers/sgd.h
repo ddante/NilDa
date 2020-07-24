@@ -28,9 +28,9 @@ private:
     // biases associated with their respective gradient,
     // store the history in map using as key a constant pointer
     // to the gradients of the weights and biases
-    std::map<const Scalar*, Matrix> weightsHistory_;
+    mutable std::map<const Scalar*, Matrix> weightsHistory_;
 
-    std::map<const Scalar*, Vector> biasesHistory_;
+    mutable std::map<const Scalar*, Vector> biasesHistory_;
 
 public:
 
@@ -51,14 +51,14 @@ public:
     void init(
                const Matrix& weightsGradient, 
                const Vector& biasesGradient
-              ) override;
+              ) const override;
 
     // Member functions
     void update(const Matrix& weightsGradient, 
                    const Vector& biasesGradient,                   
                    Matrix& deltaWeights,
                    Vector& deltaBiases
-                  ) override;
+                  ) const override;
 
     // Destructor
 
