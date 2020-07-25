@@ -3,7 +3,7 @@
 
 #include "activationFunction.h"
 
-// --------------------------------------------------------------------------- 
+// ---------------------------------------------------------------------------
 
 namespace NilDa
 {
@@ -13,21 +13,21 @@ class identity : public activationFunction
 {
 public:
 
-    identity() = default;
+  identity() = default;
 
-    void applyForward(
-                            const Matrix& linearInput,
-                            Matrix& output
-                           ) override;
+  void applyForward(
+                    const Matrix& linearInput,
+                    Matrix& output
+                   ) override;
 
-    void applyBackward(
-                             const Matrix& linearInput, 
-                             const Matrix& G,
-                             Matrix& output
-                            ) override;
+  void applyBackward(
+                     const Matrix& linearInput,
+                     const Matrix& G,
+                     Matrix& output
+                    ) override;
 
-    ~identity() = default;
-};
+  ~identity() = default;
+  };
 
 
 } // namespace

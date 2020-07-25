@@ -5,7 +5,7 @@
 #include "primitives/Matrix.h"
 #include "primitives/Vector.h"
 
-// --------------------------------------------------------------------------- 
+// ---------------------------------------------------------------------------
 
 namespace NilDa
 {
@@ -15,26 +15,26 @@ class lossFunction
 {
 public:
 
-    // Constructors
+  // Constructors
 
-    lossFunction() = default;
+  lossFunction() = default;
 
-    // Member functions
+  // Member functions
 
-    virtual Scalar compute(
-                                 const Matrix& obs, 
-                                 const Matrix& labels
+  virtual Scalar compute(
+                         const Matrix& obs,
+                         const Matrix& labels
+                        ) = 0;
+
+  virtual void computeDerivative(
+                                 const Matrix& obs,
+                                 const Matrix& labels,
+                                 Matrix& output
                                 ) = 0;
 
-    virtual void computeDerivative(
-                                          const Matrix& obs, 
-                                          const Matrix& labels, 
-                                          Matrix& output
-                                          ) = 0; 
+  // Destructors
 
-    // Destructors
-
-    virtual ~lossFunction() = default;
+  virtual ~lossFunction() = default;
 };
 
 

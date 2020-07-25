@@ -6,7 +6,7 @@
 
 #include "Scalar.h"
 
-// --------------------------------------------------------------------------- 
+// ---------------------------------------------------------------------------
 
 namespace NilDa
 {
@@ -15,6 +15,6 @@ typedef Eigen::Matrix<int, Eigen::Dynamic, 1> VectorI;
 
 typedef Eigen::Matrix<Scalar, Eigen::Dynamic, 1> Vector;
 
-}
+} // namespace
 
 #endif

@@ -14,429 +14,429 @@
 
 #include "optimizers/sgd.h"
 
-// --------------------------------------------------------------------------- 
+// ---------------------------------------------------------------------------
 
 namespace NilDa
 {
 
 
 neuralNetwork::neuralNetwork(const std::vector<layer*>& vLayers):
-    layers_(vLayers),
-    numberOfLayers_(vLayers.size()),
-    lastLayer_(numberOfLayers_ - 1),
-    validState_(false),
-    finalizedNetwork_(false)
+  layers_(vLayers),
+  numberOfLayers_(vLayers.size()),
+  lastLayer_(numberOfLayers_ - 1),
+  validState_(false),
+  finalizedNetwork_(false)
 {
-     // The first layer must be an input layer
-     if (layers_[inputLayer_]->layerType() != layerTypes::input)
-     {
-         std::cerr << "First layer is not an input layer." << std::endl;
-         assert(false);
-     }
+  // The first layer must be an input layer
+  if (layers_[inputLayer_]->layerType() != layerTypes::input)
+  {
+     std::cerr << "First layer is not an input layer." << std::endl;
+     assert(false);
+  }
 
-    // Initialize the hidden and the output layers
-    for (int i = firstLayer_; i < numberOfLayers_; ++i)
-    {
-        layers_[i]->init(layers_[i - 1]);
-    }
+  // Initialize the hidden and the output layers
+  for (int i = firstLayer_; i < numberOfLayers_; ++i)
+  {
+    layers_[i]->init(layers_[i - 1]);
+  }
 }
 
 void neuralNetwork::forwardPropagation(const Matrix& obs) const
-{   
-    validState_ = false;
+{
+  validState_ = false;
 
 #ifdef ND_DEBUG_CHECKS
-    // The layer 0 is an input layer, just check that
-    // the size of the input data is consistent with the 
-    // input layer size 
-    layers_[inputLayer_]->checkInputSize(obs);
+  // The layer 0 is an input layer, just check that
+  // the size of the input data is consistent with the
+  // input layer size
+  layers_[inputLayer_]->checkInputSize(obs);
 #endif
 
-    // The first actual layer takes in directly the input data
-    layers_[firstLayer_]->forwardPropagation(obs);
+  // The first actual layer takes in directly the input data
+  layers_[firstLayer_]->forwardPropagation(obs);
 
-    for (int i = firstLayer_ + 1; i < numberOfLayers_; ++i)
-    {
-        // The other layers take in the output of the previous layer
-        layers_[i]->forwardPropagation(layers_[i - 1]->output());
-    }
+  for (int i = firstLayer_ + 1; i < numberOfLayers_; ++i)
+  {
+    // The other layers take in the output of the previous layer
+    layers_[i]->forwardPropagation(layers_[i - 1]->output());
+  }
 
-    validState_ = true;
+  validState_ = true;
 }
 
 void neuralNetwork::backwardPropagation(
-                                                    const Matrix& obs, 
-                                                    const Matrix& labels
-                                                    ) const
-{   
+                                        const Matrix& obs,
+                                        const Matrix& labels
+                                       ) const
+{
 #ifdef ND_DEBUG_CHECKS
-    assert(validState_);
+  assert(validState_);
 #endif
 
-    // Derivative of the cost function w.r.t the activation 
-    // output of the last layer
-    Matrix dLoss;
-    dLoss.resize(labels.rows(), labels.cols());
+  // Derivative of the cost function w.r.t the activation
+  // output of the last layer
+  Matrix dLoss;
+  dLoss.resize(labels.rows(), labels.cols());
 
-    lossFunction_->computeDerivative(
-                                                layers_[lastLayer_]->output(),
-                                                labels, 
-                                                dLoss
-                                               );
-    
-    // Derivatives of the cost function w.r.t. the 
-    // weights and biases of the last layer
-    layers_[lastLayer_]->backwardPropagation(
-                                                          dLoss, 
-                                                          layers_[lastLayer_ - 1]->output()
-                                                         );
+  lossFunction_->computeDerivative(
+                                   layers_[lastLayer_]->output(),
+                                   labels,
+                                   dLoss
+                                  );
 
-    // Maybe the if statement is not necessary
-    if(numberOfLayers_ > 2) 
-    {        
-        // Derivatives of the cost function w.r.t. the 
-        // weights and biases for the hidden layers
-        for (int i = lastLayer_ - 1; i > firstLayer_; --i)
-        {    
-            layers_[i]->backwardPropagation(
-                                                      layers_[i + 1]->backPropCache(),
-                                                      layers_[i - 1]->output()
-                                                     );     
-        }
+  // Derivatives of the cost function w.r.t. the
+  // weights and biases of the last layer
+  layers_[lastLayer_]->backwardPropagation(
+                                           dLoss,
+                                           layers_[lastLayer_ - 1]->output()
+                                          );
+
+  // Maybe the if statement is not necessary
+  if(numberOfLayers_ > 2)
+  {
+    // Derivatives of the cost function w.r.t. the
+    // weights and biases for the hidden layers
+    for (int i = lastLayer_ - 1; i > firstLayer_; --i)
+    {
+      layers_[i]->backwardPropagation(
+                                      layers_[i + 1]->backPropCache(),
+                                      layers_[i - 1]->output()
+                                      );
     }
+  }
 
-    // Derivatives of the cost function w.r.t. the 
-    // weights and biases of the first layer
-    layers_[firstLayer_]->backwardPropagation(
-                                                           layers_[firstLayer_ + 1]->backPropCache(),
-                                                           obs
-                                                          );    
+  // Derivatives of the cost function w.r.t. the
+  // weights and biases of the first layer
+  layers_[firstLayer_]->backwardPropagation(
+                                            layers_[firstLayer_ + 1]->backPropCache(),
+                                            obs
+                                           );
 }
 
 void neuralNetwork::configure(
-                                      const optimizer& opt,
-                                      const std::string& lossName
-                                     )
-{    
-    if (numberOfLayers_ <= 0)
-    {
-        std::cerr << "The neural network has no layer." << std::endl;
-        assert(false);
-    }
+                              const optimizer& opt,
+                              const std::string& lossName
+                              )
+{
+  if (numberOfLayers_ <= 0)
+  {
+    std::cerr << "The neural network has no layer." << std::endl;
+    assert(false);
+  }
 
-    optimizer_ = &opt;
-    
-    initOptimizer();
+  optimizer_ = &opt;
 
-    setLossFunction(lossName);   
+  initOptimizer();
 
-    finalizedNetwork_ = true;
+  setLossFunction(lossName);
+
+  finalizedNetwork_ = true;
 }
 
 void neuralNetwork::setLossFunction(const std::string& lossName)
 {
-    switch(lossFunctionCode(lossName))
-    {
-        case lossFunctions::sparseCategoricalCrossentropy :
-            lossFunction_ = std::make_unique<sparseCategoricalCrossentropy>();
-            break;
-        default :
-            std::cerr << "Not valid loss function  " 
-                        << lossName
-                        << " in this context." << std::endl;
-        assert(false);
-    }
+  switch(lossFunctionCode(lossName))
+  {
+    case lossFunctions::sparseCategoricalCrossentropy :
+        lossFunction_ = std::make_unique<sparseCategoricalCrossentropy>();
+        break;
+    default :
+        std::cerr << "Not valid loss function  "
+                    << lossName
+                    << " in this context." << std::endl;
+    assert(false);
+  }
 }
 
 Scalar neuralNetwork::getLoss(
-                                       const Matrix& obs, 
-                                       const Matrix& labels
-                                      ) const 
-{   
-    if(!validState_)
-    {   
-        std::cout << "Warning: need to apply forwardPropagation." << std::endl;
-        forwardPropagation(obs);
-    }  
+                              const Matrix& obs,
+                              const Matrix& labels
+                             ) const
+{
+  if(!validState_)
+  {
+    std::cout << "Warning: need to apply forwardPropagation." << std::endl;
+    forwardPropagation(obs);
+  }
 
-    return lossFunction_->compute(
-                                            layers_[lastLayer_]->output(), 
-                                            labels
-                                           );
+  return lossFunction_->compute(
+                                layers_[lastLayer_]->output(),
+                                labels
+                               );
 }
 
 void neuralNetwork::train(
-                                const Matrix& obs,
-                                const Matrix& labels,                                
-                                const int epochs,
-                                const int batchSize
-                               ) const
+                          const Matrix& obs,
+                          const Matrix& labels,
+                          const int epochs,
+                          const int batchSize
+                         ) const
 {
-    if (!finalizedNetwork_)
+  if (!finalizedNetwork_)
+  {
+    std::cerr << "The neural network has not been configured." << std::endl;
+
+    assert(false);
+  }
+
+  const int nObs = obs.cols()
+                 / layers_[inputLayer_]->inputStride();
+
+  assert(batchSize < nObs);
+
+  const int epochSteps = floor((float)nObs/(float)batchSize);
+
+  const int batchStride = batchSize
+                        * layers_[inputLayer_]->inputStride();
+
+  for (int i = 0; i < epochs; ++i)
+  {
+    std::cout <<  "Epoch " << i+1 << "/" << epochs << std::endl;
+
+    for (int j = 0; j < epochSteps; ++j)
     {
-        std::cerr << "The neural network has not been configured." << std::endl;
+        forwardPropagation(
+                           obs(
+                               Eigen::all,
+                               Eigen::seqN(j*batchStride, batchStride)
+                              )
+                         );
 
-        assert(false);
+        backwardPropagation(
+                            obs(
+                                Eigen::all,
+                                Eigen::seqN(j*batchStride, batchStride)
+                               ),
+                               labels(
+                                      Eigen::all,
+                                      Eigen::seqN(j*batchStride, batchStride)
+                                     )
+                           );
+
+        update();
     }
-
-    const int nObs = obs.cols() 
-                      / layers_[inputLayer_]->inputStride();
-
-    assert(batchSize < nObs);
-
-    const int epochSteps = floor((float)nObs/(float)batchSize);
-
-    const int batchStride = batchSize 
-                              * layers_[inputLayer_]->inputStride();
-
-    for (int i = 0; i < epochs; ++i)
-    {
-        std::cout <<  "Epoch " << i+1 << "/" << epochs << std::endl;
-
-        for (int j = 0; j < epochSteps; ++j)
-        {
-            forwardPropagation(
-                                     obs(
-                                           Eigen::all, 
-                                           Eigen::seqN(j*batchStride, batchStride)
-                                          )
-                                   );
-
-            backwardPropagation(
-                                       obs(
-                                           Eigen::all, 
-                                           Eigen::seqN(j*batchStride, batchStride)
-                                          ),
-                                       labels(
-                                               Eigen::all, 
-                                               Eigen::seqN(j*batchStride, batchStride)
-                                          )
-                                     );
-
-            update();
-        } 
-    }
-
+  }
 }
 
 void neuralNetwork::initOptimizer() const
 {
-    for (int i = firstLayer_; i < lastLayer_; ++i)
-    {
-        optimizer_->init( 
-                              layers_[i]->getWeightsDerivative(),
-                              layers_[i]->getBiasesDerivative()
-                             );
-    }
+  for (int i = firstLayer_; i < lastLayer_; ++i)
+  {
+    optimizer_->init(
+                     layers_[i]->getWeightsDerivative(),
+                     layers_[i]->getBiasesDerivative()
+                    );
+  }
 }
 
 void neuralNetwork::update() const
 {
-    Matrix deltaWeights;
+  Matrix deltaWeights;
 
-    Vector deltaBiases;
+  Vector deltaBiases;
 
-    for (int i = firstLayer_; i < lastLayer_; ++i)
-    {
-        optimizer_->update(  
-                                  layers_[i]->getWeightsDerivative(),
-                                  layers_[i]->getBiasesDerivative(),
-                                  deltaWeights,
-                                  deltaBiases
-                                 );
+  for (int i = firstLayer_; i < lastLayer_; ++i)
+  {
+    optimizer_->update(
+                       layers_[i]->getWeightsDerivative(),
+                       layers_[i]->getBiasesDerivative(),
+                       deltaWeights,
+                       deltaBiases
+                      );
 
-        layers_[i]->incrementWeightsAndBiases(
-                                                          deltaWeights, 
-                                                          deltaBiases
-                                                         );
-    }
+    layers_[i]->incrementWeightsAndBiases(
+                                          deltaWeights,
+                                          deltaBiases
+                                         );
+  }
 
 }
 
-errorCheck 
+errorCheck
 neuralNetwork::checkWeightsGradients(
-                                                const int layer,
-                                                const Matrix& obs, 
-                                                const Matrix& labels,
-                                                const Scalar eps,
-                                                const Scalar errorLimit
-                                               ) const
-{       
-    // Store the original weights and biases 
-    const Matrix weightsBk = layers_[layer]->getWeights();
+                                     const int layer,
+                                     const Matrix& obs,
+                                     const Matrix& labels,
+                                     const Scalar eps,
+                                     const Scalar errorLimit
+                                    ) const
+{
+  // Store the original weights and biases
+  const Matrix weightsBk = layers_[layer]->getWeights();
 
-    const Vector biasesBk = layers_[layer]->getBiases(); 
+  const Vector biasesBk = layers_[layer]->getBiases();
 
-    Matrix weights(weightsBk.rows(), weightsBk.cols());
+  Matrix weights(weightsBk.rows(), weightsBk.cols());
 
-    Matrix dWeightsNum(weights.rows(), weights.cols());
+  Matrix dWeightsNum(weights.rows(), weights.cols());
 
-    for (int i = 0; i < weights.rows(); ++i)
+  for (int i = 0; i < weights.rows(); ++i)
+  {
+    for (int j = 0; j < weights.cols(); ++j)
     {
-        for (int j = 0; j < weights.cols(); ++j)
-        {
-            // Compute the W+eps part
-            weights.noalias() = weightsBk;
-            weights(i, j) += eps;
+      // Compute the W+eps part
+      weights.noalias() = weightsBk;
+      weights(i, j) += eps;
 
-            layers_[layer]->setWeightsAndBiases(
-                                                           weights, 
-                                                           biasesBk
-                                                          );
+      layers_[layer]->setWeightsAndBiases(
+                                          weights,
+                                          biasesBk
+                                         );
 
-            forwardPropagation(obs);
+      forwardPropagation(obs);
 
-            const Scalar Jp = getLoss(obs, labels);
+      const Scalar Jp = getLoss(obs, labels);
 
-            // Compute the W-eps part
-            weights.noalias() = weightsBk;
-            weights(i, j) -= eps;
+      // Compute the W-eps part
+      weights.noalias() = weightsBk;
+      weights(i, j) -= eps;
 
-            layers_[layer]->setWeightsAndBiases(
-                                                           weights, 
-                                                           biasesBk
-                                                          );
-            
-            forwardPropagation(obs);
+      layers_[layer]->setWeightsAndBiases(
+                                          weights,
+                                          biasesBk
+                                         );
 
-            const Scalar Jm = getLoss(obs, labels);
+      forwardPropagation(obs);
 
-            // Numerical gradients: central difference
-            dWeightsNum(i,j) = (Jp - Jm)/(2*eps);
-        }
+      const Scalar Jm = getLoss(obs, labels);
+
+      // Numerical gradients: central difference
+      dWeightsNum(i,j) = (Jp - Jm)/(2*eps);
     }
+  }
 
-    // Restore the correct values of weights and biases
-    layers_[layer]->setWeightsAndBiases(
-                                                   weightsBk, 
-                                                   biasesBk
-                                                  );
+  // Restore the correct values of weights and biases
+  layers_[layer]->setWeightsAndBiases(
+                                      weightsBk,
+                                      biasesBk
+                                     );
 
-    // Analytical derivative of the weights
-    const Matrix dWeights = layers_[layer]->getWeightsDerivative();
+  // Analytical derivative of the weights
+  const Matrix dWeights = layers_[layer]->getWeightsDerivative();
 
-    const Scalar error = (dWeights - dWeightsNum).norm() 
-                           / (dWeights.norm() + dWeightsNum.norm());
+  const Scalar error = (dWeights - dWeightsNum).norm()
+                     / (dWeights.norm() + dWeightsNum.norm());
 
-    errorCheck output;
-    output.code = (error < errorLimit) ? EXIT_OK : EXIT_FAIL;
-    output.error = error;
+  errorCheck output;
+  output.code = (error < errorLimit) ? EXIT_OK : EXIT_FAIL;
+  output.error = error;
 
-    return output;
+  return output;
 }
 
-errorCheck 
+errorCheck
 neuralNetwork::checkBiasesGradients(
-                                              const int layer,
-                                              const Matrix& obs, 
-                                              const Matrix& labels,
-                                              const Scalar eps,
-                                              const Scalar errorLimit
-                                             ) const
-{       
-    // Store the original weights and biases 
-    const Matrix weightsBk = layers_[layer]->getWeights();
+                                    const int layer,
+                                    const Matrix& obs,
+                                    const Matrix& labels,
+                                    const Scalar eps,
+                                    const Scalar errorLimit
+                                   ) const
+{
+  // Store the original weights and biases
+  const Matrix weightsBk = layers_[layer]->getWeights();
 
-    const Vector biasesBk = layers_[layer]->getBiases(); 
+  const Vector biasesBk = layers_[layer]->getBiases();
 
-    Vector biases(biasesBk.rows());
+  Vector biases(biasesBk.rows());
 
-    Vector dBiasesNum(biases.rows());
+  Vector dBiasesNum(biases.rows());
 
-    for (int i = 0; i < biases.rows(); ++i)
-    {
-        // Compute the W+eps part
-        biases.noalias() = biasesBk;
-        biases(i) += eps;
+  for (int i = 0; i < biases.rows(); ++i)
+  {
+    // Compute the W+eps part
+    biases.noalias() = biasesBk;
+    biases(i) += eps;
 
-        layers_[layer]->setWeightsAndBiases(
-                                                       weightsBk, 
-                                                       biases
-                                                      );
-
-        forwardPropagation(obs);
-
-        const Scalar Jp = getLoss(obs, labels);
-
-        // Compute the W-eps part
-        biases.noalias() = biasesBk;
-        biases(i) -= eps;
-
-        layers_[layer]->setWeightsAndBiases(
-                                                       weightsBk, 
-                                                       biases
-                                                      );
-
-        forwardPropagation(obs);
-
-        const Scalar Jm = getLoss(obs, labels);
-
-        // Numerical gradients: central difference
-        dBiasesNum(i) = (Jp - Jm)/(2*eps);
-    }
-
-    // Restore the correct values of weights and biases
     layers_[layer]->setWeightsAndBiases(
-                                                   weightsBk, 
-                                                   biasesBk
-                                                  );
+                                        weightsBk,
+                                        biases
+                                       );
 
-    // Analytical derivative of the biases
-    const Vector dBiases = layers_[layer]->getBiasesDerivative();
+    forwardPropagation(obs);
 
-    const Scalar error = (dBiases - dBiasesNum).norm() 
-                           /  (dBiases.norm() + dBiasesNum.norm());
+    const Scalar Jp = getLoss(obs, labels);
 
-    errorCheck output;
-    output.code = (error < errorLimit) ? EXIT_OK : EXIT_FAIL;
-    output.error = error;
+    // Compute the W-eps part
+    biases.noalias() = biasesBk;
+    biases(i) -= eps;
 
-    return output;
+    layers_[layer]->setWeightsAndBiases(
+                                        weightsBk,
+                                        biases
+                                       );
+
+    forwardPropagation(obs);
+
+    const Scalar Jm = getLoss(obs, labels);
+
+    // Numerical gradients: central difference
+    dBiasesNum(i) = (Jp - Jm)/(2*eps);
+  }
+
+  // Restore the correct values of weights and biases
+  layers_[layer]->setWeightsAndBiases(
+                                      weightsBk,
+                                      biasesBk
+                                     );
+
+  // Analytical derivative of the biases
+  const Vector dBiases = layers_[layer]->getBiasesDerivative();
+
+  const Scalar error = (dBiases - dBiasesNum).norm()
+                     /  (dBiases.norm() + dBiasesNum.norm());
+
+  errorCheck output;
+  output.code = (error < errorLimit) ? EXIT_OK : EXIT_FAIL;
+  output.error = error;
+
+  return output;
 }
 
 int neuralNetwork::gradientsSanityCheck(
-                                                  const Matrix& obs, 
-                                                  const Matrix& labels,
-                                                  const bool printError
-                                                 )  const
-{    
+                                        const Matrix& obs,
+                                        const Matrix& labels,
+                                        const bool printError
+                                       ) const
+{
 #ifdef ND_SP
-    #error "Single precision used. For testing specify either double or long precision."
+  #error "Single precision used. For testing specify either double or long precision."
 #endif
 
-   int code = EXIT_OK;
+  int code = EXIT_OK;
 
-   forwardPropagation(obs);
+  forwardPropagation(obs);
 
-   backwardPropagation(obs, labels);
+  backwardPropagation(obs, labels);
 
-   const Scalar errorLimit = 1.0e-8;
-   const Scalar eps = 1.0e-5;
+  const Scalar errorLimit = 1.0e-8;
 
-   for(int i = lastLayer_; i >= firstLayer_; --i)
-   {
-       const errorCheck outputW = 
-           checkWeightsGradients(i, obs, labels, eps, errorLimit);
+  const Scalar eps = 1.0e-5;
 
-       const errorCheck outputB = 
-           checkBiasesGradients(i, obs, labels, eps, errorLimit);
+  for(int i = lastLayer_; i >= firstLayer_; --i)
+  {
+    const errorCheck outputW =
+      checkWeightsGradients(i, obs, labels, eps, errorLimit);
 
-       if(outputW.code == EXIT_FAIL || outputW.code == EXIT_FAIL)
-       {           
-           code = EXIT_FAIL;
-       }
+    const errorCheck outputB =
+      checkBiasesGradients(i, obs, labels, eps, errorLimit);
 
-       if(printError || code == EXIT_FAIL)
-       {
-           std::cout << "Error weights = " 
-                       << outputW.error << " " 
-                       << ", Error biases = " 
-                       << outputB.error 
-                       << std::endl;
-       }
-   }
+    if(outputW.code == EXIT_FAIL || outputW.code == EXIT_FAIL)
+    {
+      code = EXIT_FAIL;
+    }
 
-   return code;
+    if(printError || code == EXIT_FAIL)
+    {
+      std::cout << "Error weights = "
+                << outputW.error << " "
+                << ", Error biases = "
+                << outputB.error
+                << std::endl;
+    }
+  }
+
+  return code;
 }
 
 } // namespace

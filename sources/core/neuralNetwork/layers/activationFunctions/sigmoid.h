@@ -3,7 +3,7 @@
 
 #include "activationFunction.h"
 
-// --------------------------------------------------------------------------- 
+// ---------------------------------------------------------------------------
 
 namespace NilDa
 {
@@ -14,20 +14,20 @@ class sigmoid : public activationFunction
 
 public:
 
-    sigmoid() = default;
+  sigmoid() = default;
 
-    void applyForward(
-                            const Matrix& linearInput,
-                            Matrix& output
-                           ) override;
+  void applyForward(
+                    const Matrix& linearInput,
+                    Matrix& output
+                   ) override;
 
-    void applyBackward(
-                             const Matrix& linearInput, 
-                             const Matrix& G,
-                             Matrix& output
-                            ) override;
+  void applyBackward(
+                     const Matrix& linearInput,
+                     const Matrix& G,
+                     Matrix& output
+                    ) override;
 
-    ~sigmoid() = default;
+  ~sigmoid() = default;
 };
 
 } // namespace

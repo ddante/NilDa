@@ -6,27 +6,27 @@
 
 #include "Scalar.h"
 
-// --------------------------------------------------------------------------- 
+// ---------------------------------------------------------------------------
 
 namespace NilDa
 {
 
 
 typedef Eigen::Array<
-                             Scalar, 
-                             1, 
-                             Eigen::Dynamic
-                           >
-                           RowArray;
+                     Scalar,
+                     1,
+                     Eigen::Dynamic
+                    >
+                    RowArray;
 
 typedef Eigen::Array<
-                             Scalar, 
-                             Eigen::Dynamic, 
-                             1
-                           > 
-                           ColArray;
+                     Scalar,
+                     Eigen::Dynamic,
+                     1
+                    >
+                    ColArray;
 
 
-}
+} // namespace
 
 #endif

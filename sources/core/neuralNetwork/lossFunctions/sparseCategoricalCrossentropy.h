@@ -7,7 +7,7 @@
 
 #include "lossFunction.h"
 
-// --------------------------------------------------------------------------- 
+// ---------------------------------------------------------------------------
 
 namespace NilDa
 {
@@ -17,26 +17,26 @@ class sparseCategoricalCrossentropy : public lossFunction
 {
 public:
 
-    // Constructors
+  // Constructors
 
-    sparseCategoricalCrossentropy() = default;
+  sparseCategoricalCrossentropy() = default;
 
-    // Member functions
+  // Member functions
 
-    Scalar compute(
-                        const Matrix& obs, 
-                        const Matrix& labels
-                       ) override;
+  Scalar compute(
+                 const Matrix& obs,
+                 const Matrix& labels
+                ) override;
 
-    void computeDerivative(
-                                 const Matrix& data, 
-                                 const Matrix& labels, 
-                                 Matrix& output
-                                ) override; 
-    
-    // Destructor
+  void computeDerivative(
+                         const Matrix& data,
+                         const Matrix& labels,
+                         Matrix& output
+                        ) override;
 
-    ~sparseCategoricalCrossentropy() = default;
+  // Destructor
+
+  ~sparseCategoricalCrossentropy() = default;
 };
 
 

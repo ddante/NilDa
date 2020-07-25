@@ -6,7 +6,7 @@
 #include "primitives/Vector.h"
 #include "primitives/Matrix.h"
 
-// --------------------------------------------------------------------------- 
+// ---------------------------------------------------------------------------
 
 namespace NilDa
 {
@@ -16,32 +16,32 @@ class activationFunction
 {
 public:
 
-    // Constructors
+  // Constructors
 
-    activationFunction() = default;
+  activationFunction() = default;
 
-    // Member functions
+  // Member functions
 
-    // Apply the activation function in the forward propagation
-    virtual void applyForward(
-                                     const Matrix& linearInput,
-                                     Matrix& output
-                                    ) = 0;
+  // Apply the activation function in the forward propagation
+  virtual void applyForward(
+                            const Matrix& linearInput,
+                            Matrix& output
+                           ) = 0;
 
-    // Apply the derivative of the activation function to G
-    // in the backward propagation
-    virtual void applyBackward(
-                                      const Matrix& linearInput, 
-                                      const Matrix& G,
-                                      Matrix& output
-                                     ) = 0;
+  // Apply the derivative of the activation function to G
+  // in the backward propagation
+  virtual void applyBackward(
+                             const Matrix& linearInput,
+                             const Matrix& G,
+                             Matrix& output
+                            ) = 0;
 
-    // Destructor
+  // Destructor
 
-    virtual ~activationFunction() = default;
-    
+  virtual ~activationFunction() = default;
+
 };
- 
+
 } // namespace
 
 #endif

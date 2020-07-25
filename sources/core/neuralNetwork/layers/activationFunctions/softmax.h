@@ -3,7 +3,7 @@
 
 #include "activationFunction.h"
 
-// --------------------------------------------------------------------------- 
+// ---------------------------------------------------------------------------
 
 namespace NilDa
 {
@@ -14,20 +14,20 @@ class softmax : public activationFunction
 
 public:
 
-    softmax() = default;
+  softmax() = default;
 
-    void applyForward(
-                            const Matrix& linearInput,
-                            Matrix& output
-                           ) override;
+  void applyForward(
+                    const Matrix& linearInput,
+                    Matrix& output
+                   ) override;
 
-    void applyBackward(
-                             const Matrix& linearInput, 
-                             const Matrix& G,
-                             Matrix& output
-                            ) override;
+  void applyBackward(
+                     const Matrix& linearInput,
+                     const Matrix& G,
+                     Matrix& output
+                    ) override;
 
-    ~softmax() = default;
+  ~softmax() = default;
 };
 
 

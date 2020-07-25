@@ -3,7 +3,7 @@
 
 #include "activationFunction.h"
 
-// --------------------------------------------------------------------------- 
+// ---------------------------------------------------------------------------
 
 namespace NilDa
 {
@@ -13,20 +13,20 @@ class relu : public activationFunction
 {
 public:
 
-    relu() = default;
+  relu() = default;
 
-    void applyForward(
-                            const Matrix& linearInput,
-                            Matrix& output
-                           ) override;
+  void applyForward(
+                    const Matrix& linearInput,
+                    Matrix& output
+                   ) override;
 
-    void applyBackward(
-                             const Matrix& linearInput, 
-                             const Matrix& G,
-                             Matrix& output
-                            ) override;
+  void applyBackward(
+                     const Matrix& linearInput,
+                     const Matrix& G,
+                     Matrix& output
+                    ) override;
 
-    ~relu()  = default;
+  ~relu()  = default;
 };
 
 } // namespace

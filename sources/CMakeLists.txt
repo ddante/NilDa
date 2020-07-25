@@ -1,6 +1,4 @@
 subdirs(
-    primitives 
-    core
+  primitives
+  core
 )
-
-

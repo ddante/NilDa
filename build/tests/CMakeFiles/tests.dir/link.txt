@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall -Wpedantic -g CMakeFiles/tests.dir/main.cpp.o -o tests  ../sources/core/neuralNetwork/libnn.a ../sources/core/neuralNetwork/layers/liblayers.a ../sources/core/neuralNetwork/lossFunctions/libloss.a ../sources/core/neuralNetwork/optimizers/libopt.a 

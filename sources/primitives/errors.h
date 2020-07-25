@@ -3,7 +3,7 @@
 
 #include "Scalar.h"
 
-// --------------------------------------------------------------------------- 
+// ---------------------------------------------------------------------------
 
 namespace NilDa
 {
@@ -15,11 +15,11 @@ const int EXIT_FAIL = 1;
 
 struct errorCheck
 {
-    int code;
-    Scalar error;
+  int code;
+  Scalar error;
 };
 
 
-}
+} // namespace
 
 #endif
