@@ -78,6 +78,9 @@ private:
   // Initialize the optimizer internal cache for each layer
   void initOptimizer() const;
 
+  // Perform one forward and backaward step
+  Scalar propagate(const Matrix& obs, const Matrix& labels) const;
+
   // Update the weights and biases of each layer
   // with the increments computed by the optimizer
   void update() const;
@@ -110,7 +113,8 @@ public:
                const Matrix& obs,
                const Matrix& labes,
                const int epochs,
-               const int batchSize
+               const int batchSize,
+               const int verbosity = 2
               ) const;
 
     // Set the loss function

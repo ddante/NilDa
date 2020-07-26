@@ -7,6 +7,7 @@ sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.o
  ../sources/primitives/Scalar.h
  ../sources/primitives/Vector.h
  ../sources/primitives/errors.h
+ ../sources/utils/progressBar.h
  /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/layer.h
  /home/dante/dev/NilDa/sources/core/neuralNetwork/lossFunctions/lossFunction.h
  /home/dante/dev/NilDa/sources/core/neuralNetwork/lossFunctions/lossFunctionUtils.h

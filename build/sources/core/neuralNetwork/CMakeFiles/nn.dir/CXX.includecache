@@ -36,6 +36,10 @@ Scalar.h
 Scalar.h
 ../sources/primitives/Scalar.h
 
+../sources/utils/progressBar.h
+iostream
+-
+
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/layer.h
 assert.h
 -
@@ -78,7 +82,9 @@ Eigen/Dense
 Eigen/StdVector
 -
 primitives/errors.h
--
+/home/dante/dev/NilDa/sources/core/neuralNetwork/primitives/errors.h
+utils/progressBar.h
+/home/dante/dev/NilDa/sources/core/neuralNetwork/utils/progressBar.h
 neuralNetwork.h
 /home/dante/dev/NilDa/sources/core/neuralNetwork/neuralNetwork.h
 lossFunctions/sparseCategoricalCrossentropy.h

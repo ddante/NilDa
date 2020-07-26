@@ -10,7 +10,6 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # Preprocessor definitions for this target.
 set(CMAKE_TARGET_DEFINITIONS_CXX
-  "ND_DEBUG_CHECKS"
   "ND_DP"
   )
 
@@ -18,6 +17,7 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../sources/primitives"
   "../sources"
+  "../sources/utils"
   "../sources/core/neuralNetwork"
   "../sources/core/neuralNetwork/layers"
   "../sources/core/neuralNetwork/lossFunctions"
@@ -27,6 +27,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
+  "/home/dante/dev/NilDa/build/sources/utils/CMakeFiles/utils.dir/DependInfo.cmake"
   "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/CMakeFiles/nn.dir/DependInfo.cmake"
   "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/DependInfo.cmake"
   "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/DependInfo.cmake"

@@ -6,6 +6,7 @@ sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.o: ../sources/pri
 sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.o: ../sources/primitives/Scalar.h
 sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.o: ../sources/primitives/Vector.h
 sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.o: ../sources/primitives/errors.h
+sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.o: ../sources/utils/progressBar.h
 sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.o: ../sources/core/neuralNetwork/layers/layer.h
 sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.o: ../sources/core/neuralNetwork/lossFunctions/lossFunction.h
 sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.o: ../sources/core/neuralNetwork/lossFunctions/lossFunctionUtils.h

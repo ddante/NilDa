@@ -14,6 +14,7 @@ tests/CMakeFiles/tests.dir/main.cpp.o: ../sources/primitives/Matrix.h
 tests/CMakeFiles/tests.dir/main.cpp.o: ../sources/primitives/Scalar.h
 tests/CMakeFiles/tests.dir/main.cpp.o: ../sources/primitives/Vector.h
 tests/CMakeFiles/tests.dir/main.cpp.o: ../sources/primitives/errors.h
+tests/CMakeFiles/tests.dir/main.cpp.o: ../sources/utils/importDatasets.h
 tests/CMakeFiles/tests.dir/main.cpp.o: ../tests/main.cpp
 tests/CMakeFiles/tests.dir/main.cpp.o: /usr/local/include/eigen3/Eigen/Cholesky
 tests/CMakeFiles/tests.dir/main.cpp.o: /usr/local/include/eigen3/Eigen/Core

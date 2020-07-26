@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(NilDa VERSION 0.1)
 
 ######################################
-option(NILDA_DEBUG_BUILD  "Enable debug build" ON)
+option(NILDA_DEBUG_BUILD  "Enable debug build" OFF)
 
 set(NILDA_PRECISION_OPTION "DP")
 

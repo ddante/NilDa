@@ -130,6 +130,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named utils
+
+# Build rule for target.
+utils: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 utils
+.PHONY : utils
+
+# fast build rule for target.
+utils/fast:
+	$(MAKE) $(MAKESILENT) -f sources/utils/CMakeFiles/utils.dir/build.make sources/utils/CMakeFiles/utils.dir/build
+.PHONY : utils/fast
+
+#=============================================================================
 # Target rules for targets named nn
 
 # Build rule for target.
@@ -249,6 +262,7 @@ help:
 	@echo "... unitTests_activationFunctions"
 	@echo "... unitTests_derivativeOfactivationFunctions"
 	@echo "... unitTests_nuerulaNetwors"
+	@echo "... utils"
 .PHONY : help
 
 

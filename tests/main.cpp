@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 
+#include "utils/importDatasets.h"
 #include "core/neuralNetwork/layers/inputLayer.h"
 #include "core/neuralNetwork/layers/denseLayer.h"
 #include "core/neuralNetwork/neuralNetwork.h"
@@ -8,48 +9,48 @@
 
 int main(int argc, char const *argv[])
 {
-    NilDa::layer* l0 = new NilDa::inputLayer(3);
-    NilDa::layer* l1 = new NilDa::denseLayer(2, "relu");
-    NilDa::layer* l2 = new NilDa::denseLayer(3, "softmax");
+  const std::string mnistImagesTrainFile
+    = "/home/dante/dev/NilDa/datasets/mnist/train-images-idx3-ubyte";
 
-    NilDa::neuralNetwork nn({l0, l1, l2});
+  const std::string mnistLabelsTrainFile
+    = "/home/dante/dev/NilDa/datasets/mnist/train-labels-idx1-ubyte";
 
-    NilDa::Matrix trainingData(3, 4);
-    trainingData <<  1.1, 1.21, 0.2, 0.42, 0.3, 0.63, 4.4, 4.84, 5.1, -0.3, 0.9, -1.4;
+	NilDa::Matrix trainingImages;
+	NilDa::Matrix trainingLabels;
 
-    NilDa::Matrix trainingLabels(3, 4);
-    trainingLabels << 1,0,0,0, 0,1,0,1 ,0,0,1,0;
-    //trainingLabels << 1,0,0,1;
+	const NilDa::Scalar imgScaling = 1.0/255.0;
 
-    NilDa::Matrix W1(2,3);
-    W1 <<  -1, 2, -3, 0.4, -0.5, -0.6;
-    NilDa::Vector b1(2);
-    b1 << 0.3, 0.5;
-    l1->setWeightsAndBiases(W1, b1);
+	NilDa::importMNISTDatabase(
+                             mnistImagesTrainFile,
+		                 			   mnistLabelsTrainFile,
+		       			             imgScaling,
+		       			             /*shuffle=*/ true,
+			                       trainingImages,
+			                       trainingLabels
+                            );
 
-    NilDa::Matrix W2(3,2);
-    W2 << -1, 2, 0.3, 0.4, 0.6, 0.7;
-    NilDa::Vector b2(3);
-    b2 << 0.3, 0.5, 0.7;
-    l2->setWeightsAndBiases(W2, b2);
+  NilDa::layer* l0 = new NilDa::inputLayer(784);
+  NilDa::layer* l1 = new NilDa::denseLayer(28, "relu");
+  NilDa::layer* l2 = new NilDa::denseLayer(10, "softmax");
 
-    //NilDa::optimizer* opt = new NilDa::sgd(0.1);
-    NilDa::sgd opt(0.1);
+  NilDa::neuralNetwork nn({l0, l1, l2});
 
-    nn.configure(opt, "sparse_categorical_crossentropy");
-   
-    // nn.setLossFunction("sparse_categorical_crossentropy");
+  //
 
-    // nn.forwardPropagation(trainingData);
+	const NilDa::Scalar learningRate = 0.1;
 
-    // NilDa::Scalar J = nn.getLoss(trainingData, trainingLabels);
-    // std::cout << J << std::endl;
+	const NilDa::Scalar momentum = 0.90;
 
-    // nn.backwardPropagation(trainingData, trainingLabels);
+  NilDa::sgd opt(learningRate, momentum);
 
-    // nn.gradientsSanityCheck(trainingData, trainingLabels, /*printError=*/ true);
+  nn.configure(opt, "sparse_categorical_crossentropy");
 
+  //
 
+	const int epochs = 10;
+	const int batchSize = 32;
 
-    return 0;
+  nn.train(trainingImages, trainingLabels, epochs, batchSize);
+
+  return 0;
 }

@@ -128,11 +128,23 @@ Scalar.h
 Scalar.h
 ../sources/primitives/Scalar.h
 
+../sources/utils/importDatasets.h
+iostream
+-
+fstream
+-
+string
+-
+primitives/Matrix.h
+../sources/utils/primitives/Matrix.h
+
 /home/dante/dev/NilDa/tests/main.cpp
 iostream
 -
 vector
 -
+utils/importDatasets.h
+/home/dante/dev/NilDa/tests/utils/importDatasets.h
 core/neuralNetwork/layers/inputLayer.h
 /home/dante/dev/NilDa/tests/core/neuralNetwork/layers/inputLayer.h
 core/neuralNetwork/layers/denseLayer.h

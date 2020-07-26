@@ -27,14 +27,15 @@ sgd::sgd(Scalar alpha, Scalar m):
   if (learningRate_ <= 0)
   {
     std::cerr << "In SGD optimizer, "
-                 << "learning rate must be > 0.\n";
+              << "learning rate must be > 0.\n";
+
     assert(false);
   }
 
   if (momentum_ < 0 || momentum_ >=1)
   {
     std::cerr << "In SGD optimizer, "
-                      "momentum must be >= 0 and < 1 " << std::endl;
+                 "momentum must be >= 0 and < 1 " << std::endl;
     assert(false);
   }
 }

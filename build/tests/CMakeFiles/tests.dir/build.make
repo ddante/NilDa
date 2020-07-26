@@ -98,6 +98,7 @@ tests_EXTERNAL_OBJECTS =
 
 tests/tests: tests/CMakeFiles/tests.dir/main.cpp.o
 tests/tests: tests/CMakeFiles/tests.dir/build.make
+tests/tests: sources/utils/libutils.a
 tests/tests: sources/core/neuralNetwork/libnn.a
 tests/tests: sources/core/neuralNetwork/layers/liblayers.a
 tests/tests: sources/core/neuralNetwork/lossFunctions/libloss.a

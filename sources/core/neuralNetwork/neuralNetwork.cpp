@@ -5,7 +5,9 @@
 #include <Eigen/Dense>
 #include <Eigen/StdVector>
 
-#include <primitives/errors.h>
+#include "primitives/errors.h"
+
+#include "utils/progressBar.h"
 
 #include "neuralNetwork.h"
 
@@ -169,7 +171,8 @@ void neuralNetwork::train(
                           const Matrix& obs,
                           const Matrix& labels,
                           const int epochs,
-                          const int batchSize
+                          const int batchSize,
+                          const int verbosity
                          ) const
 {
   if (!finalizedNetwork_)
@@ -179,43 +182,71 @@ void neuralNetwork::train(
     assert(false);
   }
 
+  assert(epochs > 0);
+
+  assert(batchSize > 0);
+
   const int nObs = obs.cols()
                  / layers_[inputLayer_]->inputStride();
 
-  assert(batchSize < nObs);
+  assert(batchSize <= nObs);
 
   const int epochSteps = floor((float)nObs/(float)batchSize);
 
   const int batchStride = batchSize
                         * layers_[inputLayer_]->inputStride();
 
+#ifdef ND_DEBUG_CHECKS
+  assert(epochSteps > 0);
+  assert(batchSize > 0);
+#endif
+
   for (int i = 0; i < epochs; ++i)
   {
     std::cout <<  "Epoch " << i+1 << "/" << epochs << std::endl;
 
+    progressBar progBar;
+
     for (int j = 0; j < epochSteps; ++j)
     {
-        forwardPropagation(
-                           obs(
-                               Eigen::all,
-                               Eigen::seqN(j*batchStride, batchStride)
-                              )
-                         );
+      Scalar loss = propagate(
+                              obs(
+                                  Eigen::all,
+                                  Eigen::seqN(j*batchStride, batchStride)
+                                ),
+                              labels(
+                                  Eigen::all,
+                                  Eigen::seqN(j*batchStride, batchStride)
+                                 )
+                             );
 
-        backwardPropagation(
-                            obs(
-                                Eigen::all,
-                                Eigen::seqN(j*batchStride, batchStride)
-                               ),
-                               labels(
-                                      Eigen::all,
-                                      Eigen::seqN(j*batchStride, batchStride)
-                                     )
-                           );
+      update();
 
-        update();
+      if (verbosity > 1)
+      {
+        const float progess = (float)(j+1) / epochSteps;
+
+				const std::string message = std::to_string(j+1)
+                                  + "/"
+                                  + std::to_string(epochSteps)
+      			       		            + " Cost function: "
+                                  + std::to_string(loss);
+
+        progBar.update(progess, message);
+      }
     }
+    
+    progBar.close();
   }
+}
+
+Scalar neuralNetwork::propagate(const Matrix& obs, const Matrix& labels) const
+{
+  forwardPropagation(obs);
+
+  backwardPropagation(obs, labels);
+
+  return lossFunction_->compute(layers_[lastLayer_]->output(),labels);
 }
 
 void neuralNetwork::initOptimizer() const
@@ -249,7 +280,6 @@ void neuralNetwork::update() const
                                           deltaBiases
                                          );
   }
-
 }
 
 errorCheck

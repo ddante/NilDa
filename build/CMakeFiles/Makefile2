@@ -104,18 +104,21 @@ clean: unitTests/neuralNetworks/clean
 # Recursive "all" directory target.
 sources/all: sources/primitives/all
 sources/all: sources/core/all
+sources/all: sources/utils/all
 
 .PHONY : sources/all
 
 # Recursive "preinstall" directory target.
 sources/preinstall: sources/primitives/preinstall
 sources/preinstall: sources/core/preinstall
+sources/preinstall: sources/utils/preinstall
 
 .PHONY : sources/preinstall
 
 # Recursive "clean" directory target.
 sources/clean: sources/primitives/clean
 sources/clean: sources/core/clean
+sources/clean: sources/utils/clean
 
 .PHONY : sources/clean
 
@@ -236,6 +239,24 @@ sources/primitives/clean:
 .PHONY : sources/primitives/clean
 
 #=============================================================================
+# Directory level rules for directory sources/utils
+
+# Recursive "all" directory target.
+sources/utils/all: sources/utils/CMakeFiles/utils.dir/all
+
+.PHONY : sources/utils/all
+
+# Recursive "preinstall" directory target.
+sources/utils/preinstall:
+
+.PHONY : sources/utils/preinstall
+
+# Recursive "clean" directory target.
+sources/utils/clean: sources/utils/CMakeFiles/utils.dir/clean
+
+.PHONY : sources/utils/clean
+
+#=============================================================================
 # Directory level rules for directory tests
 
 # Recursive "all" directory target.
@@ -306,6 +327,33 @@ unitTests/neuralNetworks/preinstall:
 unitTests/neuralNetworks/clean: unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/clean
 
 .PHONY : unitTests/neuralNetworks/clean
+
+#=============================================================================
+# Target rules for target sources/utils/CMakeFiles/utils.dir
+
+# All Build rule for target.
+sources/utils/CMakeFiles/utils.dir/all:
+	$(MAKE) $(MAKESILENT) -f sources/utils/CMakeFiles/utils.dir/build.make sources/utils/CMakeFiles/utils.dir/depend
+	$(MAKE) $(MAKESILENT) -f sources/utils/CMakeFiles/utils.dir/build.make sources/utils/CMakeFiles/utils.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=22,23 "Built target utils"
+.PHONY : sources/utils/CMakeFiles/utils.dir/all
+
+# Build rule for subdir invocation for target.
+sources/utils/CMakeFiles/utils.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sources/utils/CMakeFiles/utils.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 0
+.PHONY : sources/utils/CMakeFiles/utils.dir/rule
+
+# Convenience name for target.
+utils: sources/utils/CMakeFiles/utils.dir/rule
+
+.PHONY : utils
+
+# clean rule for target.
+sources/utils/CMakeFiles/utils.dir/clean:
+	$(MAKE) $(MAKESILENT) -f sources/utils/CMakeFiles/utils.dir/build.make sources/utils/CMakeFiles/utils.dir/clean
+.PHONY : sources/utils/CMakeFiles/utils.dir/clean
 
 #=============================================================================
 # Target rules for target sources/core/neuralNetwork/CMakeFiles/nn.dir
@@ -419,6 +467,7 @@ sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/clean:
 # Target rules for target tests/CMakeFiles/tests.dir
 
 # All Build rule for target.
+tests/CMakeFiles/tests.dir/all: sources/utils/CMakeFiles/utils.dir/all
 tests/CMakeFiles/tests.dir/all: sources/core/neuralNetwork/CMakeFiles/nn.dir/all
 tests/CMakeFiles/tests.dir/all: sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/all
 tests/CMakeFiles/tests.dir/all: sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/all
@@ -430,7 +479,7 @@ tests/CMakeFiles/tests.dir/all: sources/core/neuralNetwork/optimizers/CMakeFiles
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 15
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 0
 .PHONY : tests/CMakeFiles/tests.dir/rule
