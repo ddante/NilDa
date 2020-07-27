@@ -79,80 +79,80 @@ include sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/flags.make
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/denseLayer.cpp.o: sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/flags.make
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/denseLayer.cpp.o: ../sources/core/neuralNetwork/layers/denseLayer.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/denseLayer.cpp.o"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/layers.dir/denseLayer.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.cpp
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/layers.dir/denseLayer.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.cpp
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/denseLayer.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/layers.dir/denseLayer.cpp.i"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.cpp > CMakeFiles/layers.dir/denseLayer.cpp.i
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.cpp > CMakeFiles/layers.dir/denseLayer.cpp.i
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/denseLayer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/layers.dir/denseLayer.cpp.s"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.cpp -o CMakeFiles/layers.dir/denseLayer.cpp.s
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.cpp -o CMakeFiles/layers.dir/denseLayer.cpp.s
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/inputLayer.cpp.o: sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/flags.make
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/inputLayer.cpp.o: ../sources/core/neuralNetwork/layers/inputLayer.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/inputLayer.cpp.o"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/layers.dir/inputLayer.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.cpp
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/layers.dir/inputLayer.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.cpp
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/inputLayer.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/layers.dir/inputLayer.cpp.i"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.cpp > CMakeFiles/layers.dir/inputLayer.cpp.i
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.cpp > CMakeFiles/layers.dir/inputLayer.cpp.i
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/inputLayer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/layers.dir/inputLayer.cpp.s"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.cpp -o CMakeFiles/layers.dir/inputLayer.cpp.s
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.cpp -o CMakeFiles/layers.dir/inputLayer.cpp.s
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/identity.cpp.o: sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/flags.make
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/identity.cpp.o: ../sources/core/neuralNetwork/layers/activationFunctions/identity.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/identity.cpp.o"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/layers.dir/activationFunctions/identity.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/identity.cpp
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/layers.dir/activationFunctions/identity.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/identity.cpp
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/identity.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/layers.dir/activationFunctions/identity.cpp.i"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/identity.cpp > CMakeFiles/layers.dir/activationFunctions/identity.cpp.i
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/identity.cpp > CMakeFiles/layers.dir/activationFunctions/identity.cpp.i
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/identity.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/layers.dir/activationFunctions/identity.cpp.s"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/identity.cpp -o CMakeFiles/layers.dir/activationFunctions/identity.cpp.s
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/identity.cpp -o CMakeFiles/layers.dir/activationFunctions/identity.cpp.s
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/relu.cpp.o: sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/flags.make
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/relu.cpp.o: ../sources/core/neuralNetwork/layers/activationFunctions/relu.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/relu.cpp.o"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/layers.dir/activationFunctions/relu.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/relu.cpp
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/layers.dir/activationFunctions/relu.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/relu.cpp
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/relu.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/layers.dir/activationFunctions/relu.cpp.i"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/relu.cpp > CMakeFiles/layers.dir/activationFunctions/relu.cpp.i
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/relu.cpp > CMakeFiles/layers.dir/activationFunctions/relu.cpp.i
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/relu.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/layers.dir/activationFunctions/relu.cpp.s"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/relu.cpp -o CMakeFiles/layers.dir/activationFunctions/relu.cpp.s
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/relu.cpp -o CMakeFiles/layers.dir/activationFunctions/relu.cpp.s
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.o: sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/flags.make
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.o: ../sources/core/neuralNetwork/layers/activationFunctions/sigmoid.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.o"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/sigmoid.cpp
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/sigmoid.cpp
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.i"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/sigmoid.cpp > CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.i
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/sigmoid.cpp > CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.i
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.s"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/sigmoid.cpp -o CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.s
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/sigmoid.cpp -o CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.s
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/softmax.cpp.o: sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/flags.make
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/softmax.cpp.o: ../sources/core/neuralNetwork/layers/activationFunctions/softmax.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/softmax.cpp.o"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/layers.dir/activationFunctions/softmax.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/softmax.cpp
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/layers.dir/activationFunctions/softmax.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/softmax.cpp
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/softmax.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/layers.dir/activationFunctions/softmax.cpp.i"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/softmax.cpp > CMakeFiles/layers.dir/activationFunctions/softmax.cpp.i
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/softmax.cpp > CMakeFiles/layers.dir/activationFunctions/softmax.cpp.i
 
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/softmax.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/layers.dir/activationFunctions/softmax.cpp.s"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/softmax.cpp -o CMakeFiles/layers.dir/activationFunctions/softmax.cpp.s
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/softmax.cpp -o CMakeFiles/layers.dir/activationFunctions/softmax.cpp.s
 
 # Object files for target layers
 layers_OBJECTS = \

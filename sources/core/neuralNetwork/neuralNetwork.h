@@ -121,7 +121,13 @@ public:
     void setLossFunction(const std::string& lossName);
 
     // Return the value of the loss function at the current state
-    Scalar getLoss(const Matrix& obs, const Matrix& labels) const;
+    Scalar getLoss(const Matrix& labels) const;
+
+    // Compute the prediciton for the given data
+    void predict(const Matrix& obs, Matrix& predictions) const;
+
+    // Return the accuracy of the trained model
+    Scalar getAccuracy(const Matrix& obs, const Matrix& trueData) const;
 
     // Check if the analytical gradients matches numerical ones
     int gradientsSanityCheck(

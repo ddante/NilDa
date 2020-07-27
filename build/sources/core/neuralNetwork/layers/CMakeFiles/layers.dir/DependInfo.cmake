@@ -11,7 +11,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.cpp" "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/denseLayer.cpp.o"
   "/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.cpp" "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/inputLayer.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "GNU")
+set(CMAKE_CXX_COMPILER_ID "Intel")
 
 # Preprocessor definitions for this target.
 set(CMAKE_TARGET_DEFINITIONS_CXX

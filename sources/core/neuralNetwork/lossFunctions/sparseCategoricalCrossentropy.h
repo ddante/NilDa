@@ -34,6 +34,11 @@ public:
                          Matrix& output
                         ) override;
 
+  void predict(
+               const Matrix& output,
+               Matrix& predictions
+              ) override;
+
   // Destructor
 
   ~sparseCategoricalCrossentropy() = default;

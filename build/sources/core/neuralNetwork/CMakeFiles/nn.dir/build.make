@@ -79,15 +79,15 @@ include sources/core/neuralNetwork/CMakeFiles/nn.dir/flags.make
 sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.o: sources/core/neuralNetwork/CMakeFiles/nn.dir/flags.make
 sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.o: ../sources/core/neuralNetwork/neuralNetwork.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.o"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/nn.dir/neuralNetwork.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/neuralNetwork.cpp
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/nn.dir/neuralNetwork.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/neuralNetwork.cpp
 
 sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/nn.dir/neuralNetwork.cpp.i"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/neuralNetwork.cpp > CMakeFiles/nn.dir/neuralNetwork.cpp.i
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/neuralNetwork.cpp > CMakeFiles/nn.dir/neuralNetwork.cpp.i
 
 sources/core/neuralNetwork/CMakeFiles/nn.dir/neuralNetwork.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/nn.dir/neuralNetwork.cpp.s"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/neuralNetwork.cpp -o CMakeFiles/nn.dir/neuralNetwork.cpp.s
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/neuralNetwork.cpp -o CMakeFiles/nn.dir/neuralNetwork.cpp.s
 
 # Object files for target nn
 nn_OBJECTS = \

@@ -32,6 +32,11 @@ public:
                                  Matrix& output
                                 ) = 0;
 
+  virtual void predict(
+                       const Matrix& output,
+                       Matrix& predictions
+                      ) = 0;
+
   // Destructors
 
   virtual ~lossFunction() = default;

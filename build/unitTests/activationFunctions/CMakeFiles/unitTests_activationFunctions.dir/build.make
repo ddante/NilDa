@@ -79,15 +79,15 @@ include unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.d
 unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/main.cpp.o: unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/flags.make
 unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/main.cpp.o: ../unitTests/activationFunctions/main.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/main.cpp.o"
-	cd /home/dante/dev/NilDa/build/unitTests/activationFunctions && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unitTests_activationFunctions.dir/main.cpp.o -c /home/dante/dev/NilDa/unitTests/activationFunctions/main.cpp
+	cd /home/dante/dev/NilDa/build/unitTests/activationFunctions && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unitTests_activationFunctions.dir/main.cpp.o -c /home/dante/dev/NilDa/unitTests/activationFunctions/main.cpp
 
 unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unitTests_activationFunctions.dir/main.cpp.i"
-	cd /home/dante/dev/NilDa/build/unitTests/activationFunctions && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/unitTests/activationFunctions/main.cpp > CMakeFiles/unitTests_activationFunctions.dir/main.cpp.i
+	cd /home/dante/dev/NilDa/build/unitTests/activationFunctions && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/unitTests/activationFunctions/main.cpp > CMakeFiles/unitTests_activationFunctions.dir/main.cpp.i
 
 unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unitTests_activationFunctions.dir/main.cpp.s"
-	cd /home/dante/dev/NilDa/build/unitTests/activationFunctions && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/unitTests/activationFunctions/main.cpp -o CMakeFiles/unitTests_activationFunctions.dir/main.cpp.s
+	cd /home/dante/dev/NilDa/build/unitTests/activationFunctions && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/unitTests/activationFunctions/main.cpp -o CMakeFiles/unitTests_activationFunctions.dir/main.cpp.s
 
 # Object files for target unitTests_activationFunctions
 unitTests_activationFunctions_OBJECTS = \

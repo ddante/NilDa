@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory>
+#include <chrono>
 
 #include <Eigen/Core>
 #include <Eigen/Dense>
@@ -150,16 +151,11 @@ void neuralNetwork::setLossFunction(const std::string& lossName)
   }
 }
 
-Scalar neuralNetwork::getLoss(
-                              const Matrix& obs,
-                              const Matrix& labels
-                             ) const
+Scalar neuralNetwork::getLoss(const Matrix& labels) const
 {
-  if(!validState_)
-  {
-    std::cout << "Warning: need to apply forwardPropagation." << std::endl;
-    forwardPropagation(obs);
-  }
+#ifdef ND_DEBUG_CHECKS
+  assert(validState_);
+#endif
 
   return lossFunction_->compute(
                                 layers_[lastLayer_]->output(),
@@ -198,7 +194,7 @@ void neuralNetwork::train(
 
 #ifdef ND_DEBUG_CHECKS
   assert(epochSteps > 0);
-  assert(batchSize > 0);
+  assert(batchStride > 0);
 #endif
 
   for (int i = 0; i < epochs; ++i)
@@ -206,6 +202,8 @@ void neuralNetwork::train(
     std::cout <<  "Epoch " << i+1 << "/" << epochs << std::endl;
 
     progressBar progBar;
+
+    auto startTime = std::chrono::high_resolution_clock::now();
 
     for (int j = 0; j < epochSteps; ++j)
     {
@@ -235,8 +233,22 @@ void neuralNetwork::train(
         progBar.update(progess, message);
       }
     }
-    
+
     progBar.close();
+
+    auto stopTime = std::chrono::high_resolution_clock::now();
+
+    auto elapsedTime =
+      std::chrono::duration_cast<std::chrono::milliseconds>(stopTime - startTime);
+
+    Matrix predictedLabels;
+
+    std::cout << "Accuracy: " << getAccuracy(obs, labels) << " -- "
+   	          << 0.001*elapsedTime.count() << " s: "
+   	          << (float)elapsedTime.count()/epochSteps << " ms/steps"
+   	          << std::endl;
+
+
   }
 }
 
@@ -246,7 +258,7 @@ Scalar neuralNetwork::propagate(const Matrix& obs, const Matrix& labels) const
 
   backwardPropagation(obs, labels);
 
-  return lossFunction_->compute(layers_[lastLayer_]->output(),labels);
+  return getLoss(labels);
 }
 
 void neuralNetwork::initOptimizer() const
@@ -282,6 +294,35 @@ void neuralNetwork::update() const
   }
 }
 
+void neuralNetwork::predict(
+                            const Matrix& obs,
+                            Matrix& predictions
+                           ) const
+{
+  forwardPropagation(obs);
+
+  lossFunction_->predict(
+                         layers_[lastLayer_]->output(),
+                         predictions
+                        );
+}
+
+Scalar neuralNetwork::getAccuracy(
+                                  const Matrix& obs,
+                                  const Matrix& trueData
+                                 ) const
+{
+  Matrix predictions;
+
+  predict(obs, predictions);
+
+  Matrix err(trueData.rows(), trueData.cols());
+
+  err.array() = ((predictions - trueData).array()).abs();
+
+  return 1.0 - err.mean();
+}
+
 errorCheck
 neuralNetwork::checkWeightsGradients(
                                      const int layer,
@@ -315,7 +356,7 @@ neuralNetwork::checkWeightsGradients(
 
       forwardPropagation(obs);
 
-      const Scalar Jp = getLoss(obs, labels);
+      const Scalar Jp = getLoss(labels);
 
       // Compute the W-eps part
       weights.noalias() = weightsBk;
@@ -328,7 +369,7 @@ neuralNetwork::checkWeightsGradients(
 
       forwardPropagation(obs);
 
-      const Scalar Jm = getLoss(obs, labels);
+      const Scalar Jm = getLoss(labels);
 
       // Numerical gradients: central difference
       dWeightsNum(i,j) = (Jp - Jm)/(2*eps);
@@ -385,7 +426,7 @@ neuralNetwork::checkBiasesGradients(
 
     forwardPropagation(obs);
 
-    const Scalar Jp = getLoss(obs, labels);
+    const Scalar Jp = getLoss(labels);
 
     // Compute the W-eps part
     biases.noalias() = biasesBk;
@@ -398,7 +439,7 @@ neuralNetwork::checkBiasesGradients(
 
     forwardPropagation(obs);
 
-    const Scalar Jm = getLoss(obs, labels);
+    const Scalar Jm = getLoss(labels);
 
     // Numerical gradients: central difference
     dBiasesNum(i) = (Jp - Jm)/(2*eps);

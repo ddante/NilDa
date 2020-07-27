@@ -1,7 +1,7 @@
-set(CMAKE_C_COMPILER "/usr/bin/cc")
+set(CMAKE_C_COMPILER "/opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icc")
 set(CMAKE_C_COMPILER_ARG1 "")
-set(CMAKE_C_COMPILER_ID "GNU")
-set(CMAKE_C_COMPILER_VERSION "9.3.0")
+set(CMAKE_C_COMPILER_ID "Intel")
+set(CMAKE_C_COMPILER_VERSION "19.1.2.20200623")
 set(CMAKE_C_COMPILER_VERSION_INTERNAL "")
 set(CMAKE_C_COMPILER_WRAPPER "")
 set(CMAKE_C_STANDARD_COMPUTED_DEFAULT "11")
@@ -11,20 +11,20 @@ set(CMAKE_C99_COMPILE_FEATURES "c_std_99;c_restrict;c_variadic_macros")
 set(CMAKE_C11_COMPILE_FEATURES "c_std_11;c_static_assert")
 
 set(CMAKE_C_PLATFORM_ID "Linux")
-set(CMAKE_C_SIMULATE_ID "")
+set(CMAKE_C_SIMULATE_ID "GNU")
 set(CMAKE_C_COMPILER_FRONTEND_VARIANT "")
-set(CMAKE_C_SIMULATE_VERSION "")
+set(CMAKE_C_SIMULATE_VERSION "9.3.0")
 
 
 
 
 set(CMAKE_AR "/usr/bin/ar")
-set(CMAKE_C_COMPILER_AR "/usr/bin/gcc-ar-9")
+set(CMAKE_C_COMPILER_AR "")
 set(CMAKE_RANLIB "/usr/bin/ranlib")
-set(CMAKE_C_COMPILER_RANLIB "/usr/bin/gcc-ranlib-9")
+set(CMAKE_C_COMPILER_RANLIB "")
 set(CMAKE_LINKER "/usr/bin/ld")
 set(CMAKE_MT "")
-set(CMAKE_COMPILER_IS_GNUCC 1)
+set(CMAKE_COMPILER_IS_GNUCC )
 set(CMAKE_C_COMPILER_LOADED 1)
 set(CMAKE_C_COMPILER_WORKS TRUE)
 set(CMAKE_C_ABI_COMPILED TRUE)
@@ -71,7 +71,7 @@ endif()
 
 
 
-set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES "/opt/intel/compilers_and_libraries_2020.2.254/linux/ipp/include;/opt/intel/compilers_and_libraries_2020.2.254/linux/mkl/include;/opt/intel/compilers_and_libraries_2020.2.254/linux/pstl/include;/opt/intel/compilers_and_libraries_2020.2.254/linux/pstl/stdlib;/opt/intel/compilers_and_libraries_2020.2.254/linux/tbb/include;/opt/intel/compilers_and_libraries_2020.2.254/linux/daal/include;/usr/lib/gcc/x86_64-linux-gnu/9/include;/usr/local/include;/usr/include/x86_64-linux-gnu;/usr/include")
-set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "gcc;gcc_s;c;gcc;gcc_s")
-set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "/opt/intel/compilers_and_libraries_2020.2.254/linux/mpi/intel64/libfabric/lib;/usr/lib/gcc/x86_64-linux-gnu/9;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib;/opt/intel/compilers_and_libraries_2020.2.254/linux/ipp/lib/intel64;/opt/intel/compilers_and_libraries_2020.2.254/linux/compiler/lib/intel64_lin;/opt/intel/compilers_and_libraries_2020.2.254/linux/mkl/lib/intel64_lin;/opt/intel/compilers_and_libraries_2020.2.254/linux/tbb/lib/intel64/gcc4.8;/opt/intel/compilers_and_libraries_2020.2.254/linux/daal/lib/intel64_lin;/opt/intel/compilers_and_libraries_2020.2.254/linux/tbb/lib/intel64_lin/gcc4.8")
+set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES "/opt/intel/compilers_and_libraries_2020.2.254/linux/pstl/include;/opt/intel/compilers_and_libraries_2020.2.254/linux/ipp/include;/opt/intel/compilers_and_libraries_2020.2.254/linux/mkl/include;/opt/intel/compilers_and_libraries_2020.2.254/linux/pstl/stdlib;/opt/intel/compilers_and_libraries_2020.2.254/linux/tbb/include;/opt/intel/compilers_and_libraries_2020.2.254/linux/daal/include;/opt/intel/compilers_and_libraries_2020.2.254/linux/compiler/include/intel64;/opt/intel/compilers_and_libraries_2020.2.254/linux/compiler/include/icc;/opt/intel/compilers_and_libraries_2020.2.254/linux/compiler/include;/usr/local/include;/usr/lib/gcc/x86_64-linux-gnu/9/include;/usr/include;/usr/include/x86_64-linux-gnu")
+set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "imf;svml;irng;m;ipgo;decimal;cilkrts;stdc++;gcc;gcc_s;irc;svml;c;gcc;gcc_s;irc_s;dl;c")
+set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "/opt/intel/compilers_and_libraries_2020.2.254/linux/mpi/intel64/libfabric/lib;/opt/intel/compilers_and_libraries_2020.2.254/linux/ipp/lib/intel64;/opt/intel/compilers_and_libraries_2020.2.254/linux/compiler/lib/intel64_lin;/opt/intel/compilers_and_libraries_2020.2.254/linux/mkl/lib/intel64_lin;/opt/intel/compilers_and_libraries_2020.2.254/linux/tbb/lib/intel64/gcc4.8;/opt/intel/compilers_and_libraries_2020.2.254/linux/daal/lib/intel64_lin;/opt/intel/compilers_and_libraries_2020.2.254/linux/tbb/lib/intel64_lin/gcc4.4;/opt/intel/compilers_and_libraries_2020.2.254/linux/tbb/lib/intel64_lin/gcc4.8;/usr/lib/gcc/x86_64-linux-gnu/9;/usr/lib/x86_64-linux-gnu;/usr/lib64;/usr/lib;/lib/x86_64-linux-gnu;/lib64;/lib;/usr/lib/i386-linux-gnu")
 set(CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "")

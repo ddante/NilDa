@@ -16,6 +16,7 @@ sparseCategoricalCrossentropy::compute(
                                       )
 {
 #ifdef ND_DEBUG_CHECKS
+  assert(labels.rows() == obs.rows());
   assert(labels.cols() == obs.cols());
 #endif
 
@@ -48,5 +49,28 @@ sparseCategoricalCrossentropy::computeDerivative(
          + (1.0 - labels.array()) * (1.0 - obs.array()).cwiseInverse();
 }
 
+void
+sparseCategoricalCrossentropy::predict(
+                                       const Matrix& output,
+                                       Matrix& predictions
+                                      )
+{
+  predictions.resize(output.rows(), output.cols());
+
+  predictions.setZero(predictions.rows(), predictions.cols());
+
+  const int nObs = predictions.cols();
+
+  Matrix::Index maxIndex;
+
+  for (int i=0; i < nObs; ++i)
+  {
+    Scalar maxVal = output.col(i).maxCoeff(&maxIndex);
+
+    (void) maxVal;
+
+    predictions(maxIndex, i) = 1;
+  }
+}
 
 } // namespace

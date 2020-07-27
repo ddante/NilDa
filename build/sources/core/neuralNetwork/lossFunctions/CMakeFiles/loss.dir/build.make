@@ -79,15 +79,15 @@ include sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/flags.make
 sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.o: sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/flags.make
 sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.o: ../sources/core/neuralNetwork/lossFunctions/sparseCategoricalCrossentropy.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.o"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/lossFunctions && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/lossFunctions/sparseCategoricalCrossentropy.cpp
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/lossFunctions && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/lossFunctions/sparseCategoricalCrossentropy.cpp
 
 sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.i"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/lossFunctions && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/lossFunctions/sparseCategoricalCrossentropy.cpp > CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.i
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/lossFunctions && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/lossFunctions/sparseCategoricalCrossentropy.cpp > CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.i
 
 sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.s"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/lossFunctions && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/lossFunctions/sparseCategoricalCrossentropy.cpp -o CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.s
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/lossFunctions && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/lossFunctions/sparseCategoricalCrossentropy.cpp -o CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.s
 
 # Object files for target loss
 loss_OBJECTS = \

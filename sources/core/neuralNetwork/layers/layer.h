@@ -58,22 +58,44 @@ public:
                                    const Matrix& inputData
                                   ) = 0;
 
+  // Return the weight matrix of the layer
   virtual const Matrix& getWeights() const = 0;
 
+  // Return the biase vector of the layer
   virtual const Vector& getBiases() const = 0;
 
+  // Return the weight derivative matrix of the layer
   virtual const Matrix& getWeightsDerivative() const = 0;
 
+  // Return the bias derivative vector of the layer
   virtual const Vector& getBiasesDerivative() const = 0;
 
+  // Return the activation of the layer
   virtual const Matrix& output() const = 0;
 
+  // Return the matrix with the bacpropagation cache
+  // for the backward propagation
   virtual const Matrix& backPropCache() const = 0;
 
+  // Set the values of the weights and biases in the layer
+  virtual void setWeightsAndBiases(
+                                   const Matrix& W,
+                                   const Vector& b
+                                  ) = 0;
+
+   // Update the weights and biases in the layer with an increment
+   virtual void incrementWeightsAndBiases(
+                                          const Matrix& deltaW,
+                                          const Vector& deltaB
+                                         ) = 0;
+
+  // Return the size of the 1D layer
   virtual int size() const = 0;
 
+  // Coomput the sizes of the 2D layer
   virtual void size(std::array<int, 3>& sizes) const = 0;
 
+  // Return the colum stride for each observation in the input
   virtual int inputStride() const = 0;
 
   //virtual void update() = 0;
@@ -117,17 +139,6 @@ public:
 
     return name;
   }
-
-  // Set the values of the weights and biases in the layer
-  virtual void setWeightsAndBiases(
-                                   const Matrix& W,
-                                   const Vector& b
-                                  ) = 0;
-
-   virtual void incrementWeightsAndBiases(
-                                          const Matrix& deltaW,
-                                          const Vector& deltaB
-                                         ) = 0;
 
   // Destructor
   virtual ~layer()  = default;
