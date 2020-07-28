@@ -6,10 +6,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/dante/dev/NilDa/unitTests/derivativeOfActivationFunctions/main.cpp" "/home/dante/dev/NilDa/build/unitTests/derivativeOfActivationFunctions/CMakeFiles/unitTests_derivativeOfactivationFunctions.dir/main.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "Intel")
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # Preprocessor definitions for this target.
 set(CMAKE_TARGET_DEFINITIONS_CXX
+  "ND_DEBUG_CHECKS"
   "ND_DP"
   )
 

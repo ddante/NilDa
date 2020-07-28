@@ -4,17 +4,21 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/activationFunctionUtils.cpp" "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/activationFunctionUtils.cpp.o"
   "/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/identity.cpp" "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/identity.cpp.o"
   "/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/relu.cpp" "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/relu.cpp.o"
   "/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/sigmoid.cpp" "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/sigmoid.cpp.o"
   "/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/softmax.cpp" "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/softmax.cpp.o"
+  "/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DLayer.cpp" "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/conv2DLayer.cpp.o"
+  "/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DUtils.cpp" "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/conv2DUtils.cpp.o"
   "/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.cpp" "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/denseLayer.cpp.o"
   "/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.cpp" "/home/dante/dev/NilDa/build/sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/inputLayer.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "Intel")
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # Preprocessor definitions for this target.
 set(CMAKE_TARGET_DEFINITIONS_CXX
+  "ND_DEBUG_CHECKS"
   "ND_DP"
   )
 

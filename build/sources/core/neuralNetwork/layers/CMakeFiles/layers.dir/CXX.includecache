@@ -6,14 +6,6 @@
 
 #IncludeRegexTransform: 
 
-../sources/primitives/Array.h
-Eigen/Core
--
-Eigen/Dense
--
-Scalar.h
-../sources/primitives/Scalar.h
-
 ../sources/primitives/Matrix.h
 Eigen/Core
 -
@@ -40,49 +32,27 @@ primitives/Vector.h
 primitives/Matrix.h
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/primitives/Matrix.h
 
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/activationFunctionUtils.h
-
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/identity.cpp
-identity.h
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/identity.h
-
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/identity.h
 activationFunction.h
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/activationFunction.h
-
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/relu.cpp
-relu.h
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/relu.h
 
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/relu.h
 activationFunction.h
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/activationFunction.h
 
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/sigmoid.cpp
-sigmoid.h
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/sigmoid.h
-
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/sigmoid.h
 activationFunction.h
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/activationFunction.h
-
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/softmax.cpp
-primitives/Array.h
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/primitives/Array.h
-softmax.h
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/softmax.h
 
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/softmax.h
 activationFunction.h
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/activationFunction.h
 
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.cpp
+/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DLayer.cpp
 iostream
 -
-denseLayer.h
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.h
-activationFunctions/activationFunctionUtils.h
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/activationFunctionUtils.h
+conv2DLayer.h
+/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DLayer.h
 activationFunctions/identity.h
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/identity.h
 activationFunctions/sigmoid.h
@@ -92,8 +62,10 @@ activationFunctions/relu.h
 activationFunctions/softmax.h
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/softmax.h
 
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.h
+/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DLayer.h
 iostream
+-
+array
 -
 memory
 -
@@ -103,24 +75,14 @@ primitives/Matrix.h
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/primitives/Matrix.h
 activationFunctions/activationFunction.h
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/activationFunction.h
+conv2DUtils.h
+/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DUtils.h
 layer.h
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/layer.h
 
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.cpp
-inputLayer.h
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.h
-
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.h
+/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DUtils.h
 iostream
 -
-array
--
-primitives/Vector.h
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/primitives/Vector.h
-primitives/Matrix.h
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/primitives/Matrix.h
-layer.h
-/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/layer.h
 
 /home/dante/dev/NilDa/sources/core/neuralNetwork/layers/layer.h
 assert.h

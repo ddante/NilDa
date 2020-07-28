@@ -335,7 +335,7 @@ unitTests/neuralNetworks/clean: unitTests/neuralNetworks/CMakeFiles/unitTests_nu
 sources/utils/CMakeFiles/utils.dir/all:
 	$(MAKE) $(MAKESILENT) -f sources/utils/CMakeFiles/utils.dir/build.make sources/utils/CMakeFiles/utils.dir/depend
 	$(MAKE) $(MAKESILENT) -f sources/utils/CMakeFiles/utils.dir/build.make sources/utils/CMakeFiles/utils.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=22,23 "Built target utils"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=25,26 "Built target utils"
 .PHONY : sources/utils/CMakeFiles/utils.dir/all
 
 # Build rule for subdir invocation for target.
@@ -362,7 +362,7 @@ sources/utils/CMakeFiles/utils.dir/clean:
 sources/core/neuralNetwork/CMakeFiles/nn.dir/all:
 	$(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/CMakeFiles/nn.dir/build.make sources/core/neuralNetwork/CMakeFiles/nn.dir/depend
 	$(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/CMakeFiles/nn.dir/build.make sources/core/neuralNetwork/CMakeFiles/nn.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=10,11 "Built target nn"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=13,14 "Built target nn"
 .PHONY : sources/core/neuralNetwork/CMakeFiles/nn.dir/all
 
 # Build rule for subdir invocation for target.
@@ -389,12 +389,12 @@ sources/core/neuralNetwork/CMakeFiles/nn.dir/clean:
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/all:
 	$(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build.make sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/depend
 	$(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build.make sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target layers"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10 "Built target layers"
 .PHONY : sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/all
 
 # Build rule for subdir invocation for target.
 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 10
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 0
 .PHONY : sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/rule
@@ -416,7 +416,7 @@ sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/clean:
 sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/all:
 	$(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/build.make sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/depend
 	$(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/build.make sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=8,9 "Built target loss"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=11,12 "Built target loss"
 .PHONY : sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/all
 
 # Build rule for subdir invocation for target.
@@ -443,7 +443,7 @@ sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/clean:
 sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/all:
 	$(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/build.make sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/depend
 	$(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/build.make sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=12,13 "Built target opt"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=15,16 "Built target opt"
 .PHONY : sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/all
 
 # Build rule for subdir invocation for target.
@@ -474,12 +474,12 @@ tests/CMakeFiles/tests.dir/all: sources/core/neuralNetwork/lossFunctions/CMakeFi
 tests/CMakeFiles/tests.dir/all: sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/all
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tests.dir/build.make tests/CMakeFiles/tests.dir/depend
 	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/tests.dir/build.make tests/CMakeFiles/tests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=14,15 "Built target tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=17,18 "Built target tests"
 .PHONY : tests/CMakeFiles/tests.dir/all
 
 # Build rule for subdir invocation for target.
 tests/CMakeFiles/tests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 17
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 20
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/tests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 0
 .PHONY : tests/CMakeFiles/tests.dir/rule
@@ -503,12 +503,12 @@ unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/all: 
 unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/all: sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/all
 	$(MAKE) $(MAKESILENT) -f unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/build.make unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/depend
 	$(MAKE) $(MAKESILENT) -f unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/build.make unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=16,17 "Built target unitTests_activationFunctions"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=19,20 "Built target unitTests_activationFunctions"
 .PHONY : unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/all
 
 # Build rule for subdir invocation for target.
 unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 13
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 0
 .PHONY : unitTests/activationFunctions/CMakeFiles/unitTests_activationFunctions.dir/rule
@@ -532,12 +532,12 @@ unitTests/derivativeOfActivationFunctions/CMakeFiles/unitTests_derivativeOfactiv
 unitTests/derivativeOfActivationFunctions/CMakeFiles/unitTests_derivativeOfactivationFunctions.dir/all: sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/all
 	$(MAKE) $(MAKESILENT) -f unitTests/derivativeOfActivationFunctions/CMakeFiles/unitTests_derivativeOfactivationFunctions.dir/build.make unitTests/derivativeOfActivationFunctions/CMakeFiles/unitTests_derivativeOfactivationFunctions.dir/depend
 	$(MAKE) $(MAKESILENT) -f unitTests/derivativeOfActivationFunctions/CMakeFiles/unitTests_derivativeOfactivationFunctions.dir/build.make unitTests/derivativeOfActivationFunctions/CMakeFiles/unitTests_derivativeOfactivationFunctions.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=18,19 "Built target unitTests_derivativeOfactivationFunctions"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=21,22 "Built target unitTests_derivativeOfactivationFunctions"
 .PHONY : unitTests/derivativeOfActivationFunctions/CMakeFiles/unitTests_derivativeOfactivationFunctions.dir/all
 
 # Build rule for subdir invocation for target.
 unitTests/derivativeOfActivationFunctions/CMakeFiles/unitTests_derivativeOfactivationFunctions.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 13
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 unitTests/derivativeOfActivationFunctions/CMakeFiles/unitTests_derivativeOfactivationFunctions.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 0
 .PHONY : unitTests/derivativeOfActivationFunctions/CMakeFiles/unitTests_derivativeOfactivationFunctions.dir/rule
@@ -561,12 +561,12 @@ unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/all: sources/co
 unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/all: sources/core/neuralNetwork/lossFunctions/CMakeFiles/loss.dir/all
 	$(MAKE) $(MAKESILENT) -f unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/build.make unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/depend
 	$(MAKE) $(MAKESILENT) -f unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/build.make unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=20,21 "Built target unitTests_nuerulaNetwors"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=23,24 "Built target unitTests_nuerulaNetwors"
 .PHONY : unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/all
 
 # Build rule for subdir invocation for target.
 unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 13
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/dante/dev/NilDa/build/CMakeFiles 0
 .PHONY : unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/rule

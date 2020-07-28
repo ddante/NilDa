@@ -144,6 +144,33 @@ layers/fast:
 	cd /home/dante/dev/NilDa/build && $(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build.make sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build
 .PHONY : layers/fast
 
+activationFunctions/activationFunctionUtils.o: activationFunctions/activationFunctionUtils.cpp.o
+
+.PHONY : activationFunctions/activationFunctionUtils.o
+
+# target to build an object file
+activationFunctions/activationFunctionUtils.cpp.o:
+	cd /home/dante/dev/NilDa/build && $(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build.make sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/activationFunctionUtils.cpp.o
+.PHONY : activationFunctions/activationFunctionUtils.cpp.o
+
+activationFunctions/activationFunctionUtils.i: activationFunctions/activationFunctionUtils.cpp.i
+
+.PHONY : activationFunctions/activationFunctionUtils.i
+
+# target to preprocess a source file
+activationFunctions/activationFunctionUtils.cpp.i:
+	cd /home/dante/dev/NilDa/build && $(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build.make sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/activationFunctionUtils.cpp.i
+.PHONY : activationFunctions/activationFunctionUtils.cpp.i
+
+activationFunctions/activationFunctionUtils.s: activationFunctions/activationFunctionUtils.cpp.s
+
+.PHONY : activationFunctions/activationFunctionUtils.s
+
+# target to generate assembly for a file
+activationFunctions/activationFunctionUtils.cpp.s:
+	cd /home/dante/dev/NilDa/build && $(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build.make sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/activationFunctionUtils.cpp.s
+.PHONY : activationFunctions/activationFunctionUtils.cpp.s
+
 activationFunctions/identity.o: activationFunctions/identity.cpp.o
 
 .PHONY : activationFunctions/identity.o
@@ -252,6 +279,60 @@ activationFunctions/softmax.cpp.s:
 	cd /home/dante/dev/NilDa/build && $(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build.make sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/activationFunctions/softmax.cpp.s
 .PHONY : activationFunctions/softmax.cpp.s
 
+conv2DLayer.o: conv2DLayer.cpp.o
+
+.PHONY : conv2DLayer.o
+
+# target to build an object file
+conv2DLayer.cpp.o:
+	cd /home/dante/dev/NilDa/build && $(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build.make sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/conv2DLayer.cpp.o
+.PHONY : conv2DLayer.cpp.o
+
+conv2DLayer.i: conv2DLayer.cpp.i
+
+.PHONY : conv2DLayer.i
+
+# target to preprocess a source file
+conv2DLayer.cpp.i:
+	cd /home/dante/dev/NilDa/build && $(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build.make sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/conv2DLayer.cpp.i
+.PHONY : conv2DLayer.cpp.i
+
+conv2DLayer.s: conv2DLayer.cpp.s
+
+.PHONY : conv2DLayer.s
+
+# target to generate assembly for a file
+conv2DLayer.cpp.s:
+	cd /home/dante/dev/NilDa/build && $(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build.make sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/conv2DLayer.cpp.s
+.PHONY : conv2DLayer.cpp.s
+
+conv2DUtils.o: conv2DUtils.cpp.o
+
+.PHONY : conv2DUtils.o
+
+# target to build an object file
+conv2DUtils.cpp.o:
+	cd /home/dante/dev/NilDa/build && $(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build.make sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/conv2DUtils.cpp.o
+.PHONY : conv2DUtils.cpp.o
+
+conv2DUtils.i: conv2DUtils.cpp.i
+
+.PHONY : conv2DUtils.i
+
+# target to preprocess a source file
+conv2DUtils.cpp.i:
+	cd /home/dante/dev/NilDa/build && $(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build.make sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/conv2DUtils.cpp.i
+.PHONY : conv2DUtils.cpp.i
+
+conv2DUtils.s: conv2DUtils.cpp.s
+
+.PHONY : conv2DUtils.s
+
+# target to generate assembly for a file
+conv2DUtils.cpp.s:
+	cd /home/dante/dev/NilDa/build && $(MAKE) $(MAKESILENT) -f sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/build.make sources/core/neuralNetwork/layers/CMakeFiles/layers.dir/conv2DUtils.cpp.s
+.PHONY : conv2DUtils.cpp.s
+
 denseLayer.o: denseLayer.cpp.o
 
 .PHONY : denseLayer.o
@@ -315,6 +396,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... layers"
+	@echo "... activationFunctions/activationFunctionUtils.o"
+	@echo "... activationFunctions/activationFunctionUtils.i"
+	@echo "... activationFunctions/activationFunctionUtils.s"
 	@echo "... activationFunctions/identity.o"
 	@echo "... activationFunctions/identity.i"
 	@echo "... activationFunctions/identity.s"
@@ -327,6 +411,12 @@ help:
 	@echo "... activationFunctions/softmax.o"
 	@echo "... activationFunctions/softmax.i"
 	@echo "... activationFunctions/softmax.s"
+	@echo "... conv2DLayer.o"
+	@echo "... conv2DLayer.i"
+	@echo "... conv2DLayer.s"
+	@echo "... conv2DUtils.o"
+	@echo "... conv2DUtils.i"
+	@echo "... conv2DUtils.s"
 	@echo "... denseLayer.o"
 	@echo "... denseLayer.i"
 	@echo "... denseLayer.s"

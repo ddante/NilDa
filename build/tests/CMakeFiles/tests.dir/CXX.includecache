@@ -14,6 +14,28 @@ primitives/Vector.h
 primitives/Matrix.h
 ../sources/core/neuralNetwork/layers/activationFunctions/primitives/Matrix.h
 
+../sources/core/neuralNetwork/layers/conv2DLayer.h
+iostream
+-
+array
+-
+memory
+-
+primitives/Vector.h
+../sources/core/neuralNetwork/layers/primitives/Vector.h
+primitives/Matrix.h
+../sources/core/neuralNetwork/layers/primitives/Matrix.h
+activationFunctions/activationFunction.h
+../sources/core/neuralNetwork/layers/activationFunctions/activationFunction.h
+conv2DUtils.h
+../sources/core/neuralNetwork/layers/conv2DUtils.h
+layer.h
+../sources/core/neuralNetwork/layers/layer.h
+
+../sources/core/neuralNetwork/layers/conv2DUtils.h
+iostream
+-
+
 ../sources/core/neuralNetwork/layers/denseLayer.h
 iostream
 -
@@ -149,6 +171,8 @@ core/neuralNetwork/layers/inputLayer.h
 /home/dante/dev/NilDa/tests/core/neuralNetwork/layers/inputLayer.h
 core/neuralNetwork/layers/denseLayer.h
 /home/dante/dev/NilDa/tests/core/neuralNetwork/layers/denseLayer.h
+core/neuralNetwork/layers/conv2DLayer.h
+/home/dante/dev/NilDa/tests/core/neuralNetwork/layers/conv2DLayer.h
 core/neuralNetwork/neuralNetwork.h
 /home/dante/dev/NilDa/tests/core/neuralNetwork/neuralNetwork.h
 core/neuralNetwork/optimizers/sgd.h

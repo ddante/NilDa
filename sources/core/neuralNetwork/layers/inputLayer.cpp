@@ -20,11 +20,11 @@ inputLayer::inputLayer(const int inSize):
 }
 
 inputLayer::inputLayer(const std::array<int,3>& inSize):
-  inputSize_(inSize[0]*inSize[1]*inSize[3]),
+  inputSize_(inSize[0]*inSize[1]*inSize[2]),
   inputRows_(inSize[0]),
   inputCols_(inSize[1]),
-  inputChannels_(inSize[3]),
-  observationStride_(inSize[3]),
+  inputChannels_(inSize[2]),
+  observationStride_(inSize[2]),
   flattenLayer_(false)
 {
   type_ = layerTypes::input;

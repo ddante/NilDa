@@ -79,15 +79,15 @@ include sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/flags.make
 sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/sgd.cpp.o: sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/flags.make
 sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/sgd.cpp.o: ../sources/core/neuralNetwork/optimizers/sgd.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/sgd.cpp.o"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/optimizers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/opt.dir/sgd.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/optimizers/sgd.cpp
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/optimizers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/opt.dir/sgd.cpp.o -c /home/dante/dev/NilDa/sources/core/neuralNetwork/optimizers/sgd.cpp
 
 sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/sgd.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/opt.dir/sgd.cpp.i"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/optimizers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/optimizers/sgd.cpp > CMakeFiles/opt.dir/sgd.cpp.i
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/optimizers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/sources/core/neuralNetwork/optimizers/sgd.cpp > CMakeFiles/opt.dir/sgd.cpp.i
 
 sources/core/neuralNetwork/optimizers/CMakeFiles/opt.dir/sgd.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/opt.dir/sgd.cpp.s"
-	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/optimizers && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/optimizers/sgd.cpp -o CMakeFiles/opt.dir/sgd.cpp.s
+	cd /home/dante/dev/NilDa/build/sources/core/neuralNetwork/optimizers && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/sources/core/neuralNetwork/optimizers/sgd.cpp -o CMakeFiles/opt.dir/sgd.cpp.s
 
 # Object files for target opt
 opt_OBJECTS = \

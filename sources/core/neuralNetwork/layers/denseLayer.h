@@ -121,14 +121,14 @@ public:
 
   void size(std::array<int, 3>& sizes)  const override
   {
-    std::cerr << "A dense layer cannot call multi-D size function" << std::endl;
+    std::cerr << "Dense layer cannot call multi-D size function" << std::endl;
 
     assert(false);
   }
 
   int inputStride() const override
   {
-    std::cerr << "A dense layer cannot call observationStride function" << std::endl;
+    std::cerr << "Dense layer cannot call inputStride function" << std::endl;
 
     assert(false);
   }

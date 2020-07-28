@@ -1,21 +1,22 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
 Change Dir: /home/dante/dev/NilDa/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make cmTC_fbed1/fast && /usr/bin/make  -f CMakeFiles/cmTC_fbed1.dir/build.make CMakeFiles/cmTC_fbed1.dir/build
+Run Build Command(s):/usr/bin/make cmTC_451f0/fast && /usr/bin/make  -f CMakeFiles/cmTC_451f0.dir/build.make CMakeFiles/cmTC_451f0.dir/build
 make[1]: Entering directory '/home/dante/dev/NilDa/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_fbed1.dir/src.c.o
-/opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icc   -DCMAKE_HAVE_LIBC_PTHREAD -o CMakeFiles/cmTC_fbed1.dir/src.c.o -c /home/dante/dev/NilDa/build/CMakeFiles/CMakeTmp/src.c
-Linking C executable cmTC_fbed1
-/snap/cmake/487/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fbed1.dir/link.txt --verbose=1
-/opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icc  -DCMAKE_HAVE_LIBC_PTHREAD CMakeFiles/cmTC_fbed1.dir/src.c.o -o cmTC_fbed1 
-ld: CMakeFiles/cmTC_fbed1.dir/src.c.o: in function `main':
-src.c:(.text+0x39): undefined reference to `pthread_create'
-ld: src.c:(.text+0x42): undefined reference to `pthread_detach'
-ld: src.c:(.text+0x4b): undefined reference to `pthread_cancel'
-ld: src.c:(.text+0x56): undefined reference to `pthread_join'
-make[1]: *** [CMakeFiles/cmTC_fbed1.dir/build.make:106: cmTC_fbed1] Error 1
+Building C object CMakeFiles/cmTC_451f0.dir/src.c.o
+/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD -o CMakeFiles/cmTC_451f0.dir/src.c.o -c /home/dante/dev/NilDa/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_451f0
+/snap/cmake/487/bin/cmake -E cmake_link_script CMakeFiles/cmTC_451f0.dir/link.txt --verbose=1
+/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD CMakeFiles/cmTC_451f0.dir/src.c.o -o cmTC_451f0 
+/usr/bin/ld: CMakeFiles/cmTC_451f0.dir/src.c.o: in function `main':
+src.c:(.text+0x46): undefined reference to `pthread_create'
+/usr/bin/ld: src.c:(.text+0x52): undefined reference to `pthread_detach'
+/usr/bin/ld: src.c:(.text+0x5e): undefined reference to `pthread_cancel'
+/usr/bin/ld: src.c:(.text+0x6f): undefined reference to `pthread_join'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_451f0.dir/build.make:106: cmTC_451f0] Error 1
 make[1]: Leaving directory '/home/dante/dev/NilDa/build/CMakeFiles/CMakeTmp'
-make: *** [Makefile:140: cmTC_fbed1/fast] Error 2
+make: *** [Makefile:140: cmTC_451f0/fast] Error 2
 
 
 Source file was:
@@ -42,17 +43,18 @@ int main(void)
 Determining if the function pthread_create exists in the pthreads failed with the following output:
 Change Dir: /home/dante/dev/NilDa/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make cmTC_2181b/fast && /usr/bin/make  -f CMakeFiles/cmTC_2181b.dir/build.make CMakeFiles/cmTC_2181b.dir/build
+Run Build Command(s):/usr/bin/make cmTC_abb15/fast && /usr/bin/make  -f CMakeFiles/cmTC_abb15.dir/build.make CMakeFiles/cmTC_abb15.dir/build
 make[1]: Entering directory '/home/dante/dev/NilDa/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_2181b.dir/CheckFunctionExists.c.o
-/opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_2181b.dir/CheckFunctionExists.c.o -c /snap/cmake/487/share/cmake-3.18/Modules/CheckFunctionExists.c
-Linking C executable cmTC_2181b
-/snap/cmake/487/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2181b.dir/link.txt --verbose=1
-/opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_2181b.dir/CheckFunctionExists.c.o -o cmTC_2181b  -lpthreads 
-ld: cannot find -lpthreads
-make[1]: *** [CMakeFiles/cmTC_2181b.dir/build.make:106: cmTC_2181b] Error 1
+Building C object CMakeFiles/cmTC_abb15.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_abb15.dir/CheckFunctionExists.c.o -c /snap/cmake/487/share/cmake-3.18/Modules/CheckFunctionExists.c
+Linking C executable cmTC_abb15
+/snap/cmake/487/bin/cmake -E cmake_link_script CMakeFiles/cmTC_abb15.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_abb15.dir/CheckFunctionExists.c.o -o cmTC_abb15  -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_abb15.dir/build.make:106: cmTC_abb15] Error 1
 make[1]: Leaving directory '/home/dante/dev/NilDa/build/CMakeFiles/CMakeTmp'
-make: *** [Makefile:140: cmTC_2181b/fast] Error 2
+make: *** [Makefile:140: cmTC_abb15/fast] Error 2
 
 
 

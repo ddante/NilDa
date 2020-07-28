@@ -79,15 +79,15 @@ include unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/flags.m
 unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.o: unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/flags.make
 unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.o: ../unitTests/neuralNetworks/main.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.o"
-	cd /home/dante/dev/NilDa/build/unitTests/neuralNetworks && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.o -c /home/dante/dev/NilDa/unitTests/neuralNetworks/main.cpp
+	cd /home/dante/dev/NilDa/build/unitTests/neuralNetworks && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.o -c /home/dante/dev/NilDa/unitTests/neuralNetworks/main.cpp
 
 unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.i"
-	cd /home/dante/dev/NilDa/build/unitTests/neuralNetworks && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/unitTests/neuralNetworks/main.cpp > CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.i
+	cd /home/dante/dev/NilDa/build/unitTests/neuralNetworks && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/unitTests/neuralNetworks/main.cpp > CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.i
 
 unitTests/neuralNetworks/CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.s"
-	cd /home/dante/dev/NilDa/build/unitTests/neuralNetworks && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/unitTests/neuralNetworks/main.cpp -o CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.s
+	cd /home/dante/dev/NilDa/build/unitTests/neuralNetworks && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/unitTests/neuralNetworks/main.cpp -o CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.s
 
 # Object files for target unitTests_nuerulaNetwors
 unitTests_nuerulaNetwors_OBJECTS = \

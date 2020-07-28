@@ -1,6 +1,9 @@
 add_library(layers
-            denseLayer.cpp
             inputLayer.cpp
+            denseLayer.cpp
+            conv2DLayer.cpp
+            conv2DUtils.cpp
+            activationFunctions/activationFunctionUtils.cpp
             activationFunctions/identity.cpp
             activationFunctions/relu.cpp
             activationFunctions/sigmoid.cpp

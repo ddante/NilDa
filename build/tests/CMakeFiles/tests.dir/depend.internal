@@ -3,6 +3,8 @@
 
 tests/CMakeFiles/tests.dir/main.cpp.o
  ../sources/core/neuralNetwork/layers/activationFunctions/activationFunction.h
+ ../sources/core/neuralNetwork/layers/conv2DLayer.h
+ ../sources/core/neuralNetwork/layers/conv2DUtils.h
  ../sources/core/neuralNetwork/layers/denseLayer.h
  ../sources/core/neuralNetwork/layers/inputLayer.h
  ../sources/core/neuralNetwork/layers/layer.h

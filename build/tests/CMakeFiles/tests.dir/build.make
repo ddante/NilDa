@@ -79,15 +79,15 @@ include tests/CMakeFiles/tests.dir/flags.make
 tests/CMakeFiles/tests.dir/main.cpp.o: tests/CMakeFiles/tests.dir/flags.make
 tests/CMakeFiles/tests.dir/main.cpp.o: ../tests/main.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dante/dev/NilDa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object tests/CMakeFiles/tests.dir/main.cpp.o"
-	cd /home/dante/dev/NilDa/build/tests && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tests.dir/main.cpp.o -c /home/dante/dev/NilDa/tests/main.cpp
+	cd /home/dante/dev/NilDa/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/tests.dir/main.cpp.o -c /home/dante/dev/NilDa/tests/main.cpp
 
 tests/CMakeFiles/tests.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/tests.dir/main.cpp.i"
-	cd /home/dante/dev/NilDa/build/tests && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/tests/main.cpp > CMakeFiles/tests.dir/main.cpp.i
+	cd /home/dante/dev/NilDa/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dante/dev/NilDa/tests/main.cpp > CMakeFiles/tests.dir/main.cpp.i
 
 tests/CMakeFiles/tests.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/tests.dir/main.cpp.s"
-	cd /home/dante/dev/NilDa/build/tests && /opt/intel/compilers_and_libraries_2020.2.254/linux/bin/intel64/icpc $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/tests/main.cpp -o CMakeFiles/tests.dir/main.cpp.s
+	cd /home/dante/dev/NilDa/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dante/dev/NilDa/tests/main.cpp -o CMakeFiles/tests.dir/main.cpp.s
 
 # Object files for target tests
 tests_OBJECTS = \
