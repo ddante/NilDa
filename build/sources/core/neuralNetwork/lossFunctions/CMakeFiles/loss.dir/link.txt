@@ -1,2 +1,0 @@
-/usr/bin/ar qc libloss.a CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.o
-/usr/bin/ranlib libloss.a

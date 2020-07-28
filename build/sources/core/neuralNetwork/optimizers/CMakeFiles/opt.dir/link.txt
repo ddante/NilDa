@@ -1,2 +1,0 @@
-/usr/bin/ar qc libopt.a CMakeFiles/opt.dir/sgd.cpp.o
-/usr/bin/ranlib libopt.a

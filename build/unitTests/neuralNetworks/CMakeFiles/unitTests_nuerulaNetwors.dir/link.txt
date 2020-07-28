@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wall -Wpedantic -g CMakeFiles/unitTests_nuerulaNetwors.dir/main.cpp.o -o unitTests_nuerulaNetwors  ../../sources/core/neuralNetwork/libnn.a ../../sources/core/neuralNetwork/layers/liblayers.a ../../sources/core/neuralNetwork/lossFunctions/libloss.a 
