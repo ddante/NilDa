@@ -33,13 +33,13 @@ denseLayer::denseLayer(
     case activationFucntions::sigmoid :
       activationFunction_ = std::make_unique<sigmoid>();
       break;
-   case activationFucntions::relu :
+    case activationFucntions::relu :
       activationFunction_ = std::make_unique<relu>();
       break;
-   case activationFucntions::softmax :
+    case activationFucntions::softmax :
       activationFunction_ = std::make_unique<softmax>();
       break;
-   default :
+    default :
      std::cerr << "Not valid activation function  "
                << activationName
                << " in this context." << std::endl;
@@ -65,8 +65,7 @@ void denseLayer::init(const layer* previousLayer)
   (
    previousLayer->layerType() != layerTypes::input &&
    previousLayer->layerType() != layerTypes::dense &&
-   previousLayer->layerType() != layerTypes::dropout &&
-   previousLayer->layerType() != layerTypes::flatten
+   previousLayer->layerType() != layerTypes::conv2D
   )
   {
     std::cerr << "Previous layer of type "
@@ -78,6 +77,8 @@ void denseLayer::init(const layer* previousLayer)
   }
 
   const int prevLayerSize = previousLayer->size();
+
+  assert(prevLayerSize > 0);
 
   const Scalar epilonInit = sqrt(6.0)
                           / sqrt(layerSize_ + prevLayerSize);

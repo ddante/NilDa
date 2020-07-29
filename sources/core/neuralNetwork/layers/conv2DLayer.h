@@ -25,6 +25,21 @@ class conv2DLayer : public layer
 
 private:
 
+  // Number of filters
+  int numberOfFilters_;
+
+  // Dimensions of the filters (rows, cols)
+  std::array<int, 2> filterSize_;
+
+  // Stride of the filters (rows, cols)
+  std::array<int, 2> filterStride_;
+
+  // Is padding used?
+  bool withPadding_;
+
+  // Name of the activation function
+  std::string activationName_;
+
   // Pointer to the activation function used in this layer
   std::unique_ptr<activationFunction> activationFunction_;
 
@@ -44,13 +59,17 @@ private:
   // of the previous level during the back propagation
   Matrix cacheBackProp_;
 
-  conv2DDimensions forwardConvDims;
-  conv2DDimensions backwardWeightsConvDims;
-  conv2DDimensions backwardInputConvDims;
+  conv2DDimensions forwardConvDims_;
+  conv2DDimensions backwardWeightsConvDims_;
+  conv2DDimensions backwardInputConvDims_;
 
   // Store the number of observations seen in the
   // forward propagation
   int nObservations_;
+
+private:
+
+  void setConv2DDims(const std::array<int, 3>& inputSize);
 
 public:
 
@@ -141,14 +160,19 @@ public:
 
   int size() const override
   {
-    std::cerr << "Conv 2d layer cannot call size function" << std::endl;
-
-    return 0;
+    return  forwardConvDims_.outputRows
+          * forwardConvDims_.outputCols
+          * forwardConvDims_.outputChannels;
   }
 
   void size(std::array<int, 3>& sizes) const override
   {
-
+      sizes =
+      {
+        forwardConvDims_.outputRows,
+        forwardConvDims_.outputCols,
+        forwardConvDims_.outputChannels                
+      };
   }
 
   int inputStride() const override

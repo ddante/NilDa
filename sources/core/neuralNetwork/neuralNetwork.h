@@ -141,7 +141,7 @@ public:
     ~neuralNetwork()
     {
       for (int i = 0; i < numberOfLayers_; ++i)
-      {
+      {        
         delete layers_[i];
       }
     };

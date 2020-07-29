@@ -15,8 +15,7 @@ namespace NilDa
 enum class layerTypes {
   input,
   dense,
-  dropout,
-  flatten
+  conv2D,
 };
 
 class layer
@@ -123,13 +122,9 @@ public:
     {
       name = "dense";
     }
-    else if (inLayerType == layerTypes::dropout)
+    else if (inLayerType == layerTypes::conv2D)
     {
-      name = "drop out";
-    }
-    else if (inLayerType == layerTypes::flatten)
-    {
-      name = "flatten";
+      name = "conv 2D";
     }
     else
     {

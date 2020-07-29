@@ -41,7 +41,7 @@ neuralNetwork::neuralNetwork(const std::vector<layer*>& vLayers):
   for (int i = firstLayer_; i < numberOfLayers_; ++i)
   {
     layers_[i]->init(layers_[i - 1]);
-  }
+  }  
 }
 
 void neuralNetwork::forwardPropagation(const Matrix& obs) const

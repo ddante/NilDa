@@ -2,6 +2,9 @@
 #define CONV_2D_UTILS_H
 
 #include <iostream>
+#include <array>
+#include <string>
+#include <assert.h>
 
 // ---------------------------------------------------------------------------
 
