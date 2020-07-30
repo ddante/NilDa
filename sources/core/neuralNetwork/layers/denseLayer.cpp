@@ -29,16 +29,16 @@ denseLayer::denseLayer(
   {
     case activationFucntions::identity :
       activationFunction_ = std::make_unique<identity>();
-      break;
+    break;
     case activationFucntions::sigmoid :
       activationFunction_ = std::make_unique<sigmoid>();
-      break;
+    break;
     case activationFucntions::relu :
       activationFunction_ = std::make_unique<relu>();
-      break;
+    break;
     case activationFucntions::softmax :
       activationFunction_ = std::make_unique<softmax>();
-      break;
+    break;
     default :
      std::cerr << "Not valid activation function  "
                << activationName
@@ -61,12 +61,11 @@ void denseLayer::init(const layer* previousLayer)
 {
   // Check that the previous layer is compatible
   // with the current layer
-  if
-  (
-   previousLayer->layerType() != layerTypes::input &&
-   previousLayer->layerType() != layerTypes::dense &&
-   previousLayer->layerType() != layerTypes::conv2D
-  )
+  if (
+      previousLayer->layerType() != layerTypes::input &&
+      previousLayer->layerType() != layerTypes::dense &&
+      previousLayer->layerType() != layerTypes::conv2D
+     )
   {
     std::cerr << "Previous layer of type "
               <<  layerName(previousLayer->layerType())
@@ -126,8 +125,8 @@ void denseLayer::checkInputAndCacheSize(
     assert(false);
   }
 
-  if(cacheBackProp.rows() != activation_.rows() &&
-     cacheBackProp.cols() != activation_.cols() )
+  if (cacheBackProp.rows() != activation_.rows() &&
+      cacheBackProp.cols() != activation_.cols() )
   {
     std::cerr << "Size of the back propagation cache "
     << "(" << cacheBackProp.rows() << ", "

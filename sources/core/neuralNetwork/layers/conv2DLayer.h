@@ -48,8 +48,8 @@ private:
   Matrix activation_;
 
   // Weight and derivative w.r.t. weights matrices
-  Matrix weights_;
-  Matrix dWeights_;
+  Matrix filterWeights_;
+  Matrix dFilterWeights_;
 
   // Bias and derivative w.r.t. bias vectors
   Vector biases_;
@@ -66,10 +66,6 @@ private:
   // Store the number of observations seen in the
   // forward propagation
   int nObservations_;
-
-private:
-
-  void setConv2DDims(const std::array<int, 3>& inputSize);
 
 public:
 
@@ -113,14 +109,14 @@ public:
 
   void checkInputSize(const Matrix& inputData) const override;
 
-  void forwardPropagation(const Matrix& inputData)  override;
+  void forwardPropagation(const Matrix& input) override;
 
   void backwardPropagation(const Matrix& dActivationNex,
                            const Matrix& inputData) override;
 
   const Matrix& getWeights() const override
   {
-    return weights_;
+    return filterWeights_;
   }
 
   const Vector& getBiases() const override
@@ -130,7 +126,7 @@ public:
 
   const Matrix& getWeightsDerivative() const override
   {
-    return dWeights_;
+    return dFilterWeights_;
   }
 
   const Vector& getBiasesDerivative() const override
@@ -171,7 +167,7 @@ public:
       {
         forwardConvDims_.outputRows,
         forwardConvDims_.outputCols,
-        forwardConvDims_.outputChannels                
+        forwardConvDims_.outputChannels
       };
   }
 

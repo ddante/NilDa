@@ -6,15 +6,18 @@
 #include <string>
 #include <assert.h>
 
+#include "primitives/Vector.h"
+#include "primitives/Matrix.h"
+
 // ---------------------------------------------------------------------------
 
 namespace NilDa
 {
 
-class conv2DDimensions
+struct conv2DDimensions
 {
 
-private:
+public:
 
   int inputRows;
   int inputCols;
@@ -37,12 +40,11 @@ private:
   int outputCols;
   int outputChannels;
 
-private:
-
   conv2DDimensions() = default;
 
   conv2DDimensions(conv2DDimensions& other) = delete;
 
+  // Store the dimensions for the conv2d layer
   void setDimensions(
                      const int inR,  const int inC,  const int inCh,
                      const int inRStride, const int inChStride,
@@ -58,13 +60,6 @@ private:
   // in the backward propagation because the number
   // of channels of the input becomes the number of observations
   void setInputChannels(const int inCh);
-
-  friend class conv2DLayer;
-
-  friend std::ostream& operator << (
-                                    std::ostream& os,
-                                    const conv2DDimensions& dims
-                                   );
 };
 
 std::ostream& operator << (
@@ -72,8 +67,53 @@ std::ostream& operator << (
                            const conv2DDimensions& dims
                           );
 
+// Compute the ammount of padding  on the two sides of the matrix
 void paddingPartitioning(const int totalPad, int& pad1, int& pad2);
 
+// Compute the dimensions of the conv2d layer
+void setConv2DDims(
+                   const std::array<int, 3>& inputSize,
+                   const int numberOfFilters,
+                   const std::array<int, 2>& filterSize,
+                   const std::array<int, 2>& filterStride,
+                   const bool withPadding,
+                   conv2DDimensions& forwardConvDims,
+                   conv2DDimensions& backwardWeightsConvDims,
+                   conv2DDimensions& backwardInputConvDims
+                  );
+
+// Convolution of the input with the kernel
+void convolve(
+              const int nObservations,
+              const conv2DDimensions& dims,
+              const Scalar* Input,
+              const Scalar* Kernels,
+              Matrix& Output
+             );
+
+// Apply the padding to input according to the rules in dims
+Scalar* applyPadding(
+                     const conv2DDimensions& dims,
+                     const Scalar* input
+                    );
+
+// Extract the patches for the computation of the convolution
+// using a modified im2col algorithm
+void extractPatches(
+                    const int nObs,
+                    const conv2DDimensions& dims,
+						  	    const Scalar* obs,
+								    RowMatrix& mecMat
+                   );
+
+// Apply the convolution by multiplying the matrix of patches
+// with the kernel of the fileters
+void applyConvolution(
+                      const conv2DDimensions& dims,
+                      const RowMatrix& patches,
+		                  const Matrix& kernels,
+		                  Matrix& conv
+                     );
 } // namespace
 
 #endif
