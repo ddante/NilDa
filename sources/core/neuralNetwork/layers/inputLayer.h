@@ -6,6 +6,7 @@
 
 #include "primitives/Vector.h"
 #include "primitives/Matrix.h"
+#include "primitives/errors.h"
 
 #include "layer.h"
 
@@ -160,6 +161,20 @@ public:
   int inputStride() const override
   {
     return observationStride_;
+  }
+
+  errorCheck localChecks(
+                         const Matrix& input,
+                         Scalar errTol
+                        ) const override
+  {
+
+    std::cerr << "No localChecks for input layer" << std::endl;
+
+    assert(false);
+
+    errorCheck output;
+    return output;
   }
 
 };

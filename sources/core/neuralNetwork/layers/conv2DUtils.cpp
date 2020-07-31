@@ -331,7 +331,7 @@ void extractPatches(
        obs += dims.inputObservationStride
       )
   {
-    const Scalar* colR  eading =
+    const Scalar* colReading =
       padding ? applyPadding(dims, obs) : obs;
 
     for (int j = 0; j < dims.outputCols; ++j)
@@ -482,6 +482,112 @@ void convolve(const int nObservations,
   }
 
   //std::cout << Output << "\n----\n";
+}
+
+Scalar
+checkConvolution(
+                 const Matrix& input,
+                 const Matrix& kernels,
+                 const conv2DDimensions& forwardConvDims
+                )
+{
+  const int nObs = input.cols()
+                 / forwardConvDims.inputChannels;
+
+  Matrix origConv;
+
+  // MEC conv2D algorithm
+  convolve(
+           nObs,
+           forwardConvDims,
+           input.data(),
+           kernels.data(),
+           origConv
+          );
+
+  // Brute force convolution
+  int colOut = 0;
+
+  Scalar error = 0;
+
+  for (int nO = 0; nO < nObs; ++nO)
+  {
+    for (int chO = 0; chO < forwardConvDims.kernelNumber; ++ chO)
+    {
+      RowMatrix C;
+      C.setZero(
+                forwardConvDims.outputRows,
+                forwardConvDims.outputCols
+               );
+
+      int nColF = chO;
+      int nColI = nO*forwardConvDims.inputChannels;
+
+      for (int chI = 0; chI < forwardConvDims.inputChannels; ++chI,
+           ++nColI, nColF += forwardConvDims.kernelNumber)
+      {
+        Eigen::Map<const RowMatrix> tmp(
+                                        input.col(nColI).data(),
+                                        forwardConvDims.inputRows,
+                                        forwardConvDims.inputCols
+                                       );
+
+        Matrix A;
+        A.setZero(
+                  forwardConvDims.inputPaddedRows,
+                  forwardConvDims.inputPaddedCols
+                 );
+
+        A.block(
+                forwardConvDims.padColTop,
+                forwardConvDims.padRowLeft,
+                forwardConvDims.inputRows,
+                forwardConvDims.inputCols
+               ) = tmp;
+
+        Eigen::Map<const RowMatrix> W(
+                                      kernels.col(nColF).data(),
+                                      forwardConvDims.kernelRows,
+                                      forwardConvDims.kernelCols
+                                     );
+
+        for (
+             int i = 0;
+             i < forwardConvDims.outputRows;
+             i += forwardConvDims.kernelStrideRow
+            )
+        {
+          for (
+               int j = 0;
+               j < forwardConvDims.outputCols;
+               j += forwardConvDims.kernelStrideCol
+              )
+          {
+            Matrix tmp = A.block(
+                                 i,
+                                 j,
+                                 forwardConvDims.kernelRows,
+                                 forwardConvDims.kernelCols
+                                ).array() * W.array();
+
+            C(i, j) += tmp.sum();
+          }
+        }
+      }
+
+      Eigen::Map<Matrix> tmp(
+                             C.data(),
+                             forwardConvDims.outputRows * forwardConvDims.outputCols,
+                             1
+                            );
+
+      error += (origConv.col(colOut) - tmp).array().abs().sum();
+
+      colOut++;
+    }
+  }
+
+  return error;
 }
 
 

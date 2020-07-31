@@ -7,6 +7,7 @@
 
 #include "primitives/Vector.h"
 #include "primitives/Matrix.h"
+#include "primitives/errors.h"
 
 #include "activationFunctions/activationFunction.h"
 
@@ -178,6 +179,10 @@ public:
     assert(false);
   }
 
+  errorCheck localChecks(
+                         const Matrix& input,
+                         const Scalar errorLimit
+                        ) const override;
 };
 
 

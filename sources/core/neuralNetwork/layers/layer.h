@@ -6,6 +6,7 @@
 
 #include "primitives/Matrix.h"
 #include "primitives/Vector.h"
+#include "primitives/errors.h"
 
 // ---------------------------------------------------------------------------
 
@@ -93,6 +94,12 @@ public:
 
   // Coomput the sizes of the 2D layer
   virtual void size(std::array<int, 3>& sizes) const = 0;
+
+  // Perform local checks in the layers for debugging
+  virtual errorCheck localChecks(
+                                 const Matrix& input,
+                                 Scalar errTol
+                                ) const = 0;
 
   // Return the colum stride for each observation in the input
   virtual int inputStride() const = 0;

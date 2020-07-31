@@ -167,7 +167,20 @@ void conv2DLayer::init(const layer* previousLayer)
 }
 
 void conv2DLayer::checkInputSize(const Matrix& inputData) const
-{}
+{
+  if (inputData.cols() % forwardConvDims_.inputChannels != 0)
+  {
+    assert(false);
+  }
+
+  if (inputData.rows() !=
+      forwardConvDims_.inputRows * forwardConvDims_.inputCols
+     )
+  {
+    assert(false);
+  }
+
+}
 
 void conv2DLayer::forwardPropagation(const Matrix& input)
 {
@@ -234,6 +247,27 @@ void conv2DLayer::incrementWeightsAndBiases(
                                            )
 {}
 
+
+errorCheck conv2DLayer::localChecks(
+                                    const Matrix& input,
+                                    const Scalar errorLimit
+                                   ) const 
+{
+  checkInputSize(input);
+
+  Scalar error = checkConvolution(
+                                  input,
+                                  filterWeights_,
+                                  forwardConvDims_
+                                 );
+
+  errorCheck output;
+
+  output.code = (error < errorLimit) ? EXIT_OK : EXIT_FAIL;
+  output.error = error;
+
+  return output;
+}
 
 
 } // namespace

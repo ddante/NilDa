@@ -114,6 +114,18 @@ void applyConvolution(
 		                  const Matrix& kernels,
 		                  Matrix& conv
                      );
+
+// Check the MEC conv2d algorithm with the naive
+// implementation and return the difference between
+// the results of the two implementations
+Scalar
+checkConvolution(
+                 const Matrix& input,
+                 const Matrix& kernels,
+                 const conv2DDimensions& forwardConvDims
+                );
+
+
 } // namespace
 
 #endif

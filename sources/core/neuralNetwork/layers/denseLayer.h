@@ -6,6 +6,7 @@
 
 #include "primitives/Vector.h"
 #include "primitives/Matrix.h"
+#include "primitives/errors.h"
 
 #include "activationFunctions/activationFunction.h"
 
@@ -131,6 +132,20 @@ public:
     std::cerr << "Dense layer cannot call inputStride function" << std::endl;
 
     assert(false);
+  }
+
+  errorCheck localChecks(
+                         const Matrix& input,
+                         Scalar errTol
+                        ) const override
+  {
+
+    std::cerr << "No localChecks for dense layer" << std::endl;
+
+    assert(false);
+
+    errorCheck output;
+    return output;
   }
 
 };
