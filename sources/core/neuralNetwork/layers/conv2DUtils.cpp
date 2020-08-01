@@ -14,8 +14,8 @@ void
 conv2DDimensions::setDimensions(
                                 const int inR,  const int inC,  const int inCh,
                                 const int inRStride, const int inChStride,
-                                const int pRL,  const int pRR,
-                                const int pCT,  const int pCB,
+                                const int pT,  const int pB,
+                                const int pL,  const int pR,
                                 const int inPR, const int inPC,
                                 const int kR,   const int kC,   const int kN,
                                 const int kSR,  const int kSC,
@@ -24,10 +24,10 @@ conv2DDimensions::setDimensions(
 {
   inputRows = inR;
   inputCols = inC;
-  padRowLeft = pRL;
-  padRowRight = pRR;
-  padColTop = pCT;
-  padColBottom = pCB;
+  padTop = pT;
+  padBottom = pB;
+  padLeft = pL;
+  padRight = pR;
   inputPaddedRows = inPR;
   inputPaddedCols = inPC;
   inputChannels = inCh;
@@ -67,11 +67,14 @@ std::ostream& operator << (
   std::cout << "Filter stride: " << dims.kernelStrideRow<< ", "
                                  << dims.kernelStrideCol << std::endl;
 
-  std::cout << "Padding rows: " << dims.padRowLeft << ", "
-                                << dims.padRowRight << std::endl;
+  std::cout << "Padding top/bottom: " << dims.padTop << ", "
+                                      << dims.padBottom << std::endl;
 
-  std::cout << "Padding columns: " << dims.padColTop << ", "
-                                   << dims.padColBottom << std::endl;
+  std::cout << "Padding left/right: " << dims.padLeft << ", "
+                                      << dims.padRight << std::endl;
+
+  std::cout << "Padded input size: " << dims.inputPaddedRows << ", "
+                                     << dims.inputPaddedCols << std::endl;
 
   std::cout << "Output size: " << dims.outputRows << ", "
                                << dims.outputCols << std::endl;
@@ -81,8 +84,8 @@ std::ostream& operator << (
 
 void paddingPartitioning(const int totalPad, int& pad1, int& pad2)
 {
-  // It the total padding is even, split it equally
-  // between the two sides otherwise add more padding to the side_1
+  // If the total padding is even, split it equally
+  // between the two sides otherwise add more padding to side_1
   if (totalPad % 2 == 0)
   {
     pad1 = totalPad / 2;
@@ -128,40 +131,66 @@ setConv2DDims(
 
   // The general formula for the output size is:
   // 1 + (input - filter + 2*pad)/filterStride
-  int outputRows = floor(1 + (inputRows - filterRows) / filterStrideRow);
-  int outputCols = floor(1 + (inputCols - filterCols) / filterStrideCol);
+  int outputRows = floor(
+                         1 + (inputRows - filterRows)
+                           / static_cast<Scalar>(filterStrideRow)
+                        );
 
-  int padRowLeft = 0;
-  int padRowRight = 0;
-  int padColTop = 0;
-  int padColBottom = 0;
+
+  int outputCols = floor(
+                         1 + (inputCols - filterCols)
+                           / static_cast<Scalar>(filterStrideCol)
+                         );
+
+  int padLeft = 0;
+  int padRight = 0;
+  int padTop = 0;
+  int padBottom = 0;
 
   if (withPadding)
   {
-    const int totalPadRow = inputRows * (filterStrideRow - 1)
-                          - filterStrideRow
-                          + filterRows;
+    const int totalVertPad = inputRows * (filterStrideRow - 1)
+                           - filterStrideRow
+                           + filterRows;
 
-    paddingPartitioning(totalPadRow, padRowLeft, padRowRight);
+    // Compute the resulting output rows with the total padding
+    const int actualOutputRows = ceil(
+                                      1
+                                      + (inputRows - filterRows + totalVertPad)
+                                        / static_cast<Scalar>(filterStrideRow)
+                                     );
 
-    const int totalPadCol = inputCols * (filterStrideCol - 1)
-                          - filterStrideCol
-                          + filterCols;
+    assert(actualOutputRows == inputRows);
 
-    paddingPartitioning(totalPadCol, padColTop, padColBottom);
+    paddingPartitioning(totalVertPad, padTop, padBottom);
+
+    const int totalHorizPad = inputCols * (filterStrideCol - 1)
+                            - filterStrideCol
+                            + filterCols;
+
+    // Compute the resulting output cols with the total padding
+    const int actualOutputCols = ceil(
+                                      1
+                                      + (inputCols - filterCols + totalHorizPad)
+                                        / static_cast<Scalar>(filterStrideCol)
+                                     );
+
+    assert(actualOutputCols == inputCols);
+
+    paddingPartitioning(totalHorizPad, padLeft, padRight);
 
     // The output dimensions are the same as the input with padding
-    outputRows = inputRows;
-    outputCols = inputCols;
+    outputRows = actualOutputRows;
+    outputCols = actualOutputCols;
 }
 
   const int inputRowsPadded = inputRows
-                            + padRowLeft
-                            + padRowRight;
+                            + padTop
+                            + padBottom;
 
   const int inputColsPadded = inputCols
-                            + padColTop
-                            + padColBottom;
+                            + padLeft
+                            + padRight;
 
   const int inputObservationStride = inputRows
                                    * inputCols
@@ -172,8 +201,8 @@ setConv2DDims(
   forwardConvDims.setDimensions(
                                 inputRows, inputCols, inputChannels,
                                 inputObservationStride, inputChannelStride,
-                                padRowLeft, padRowRight,
-                                padColTop, padColBottom,
+                                padTop, padBottom,
+                                padLeft, padRight,
                                 inputRowsPadded, inputColsPadded,
                                 filterRows, filterCols, numberOfFilters,
                                 filterStrideRow, filterStrideCol,
@@ -197,8 +226,8 @@ setConv2DDims(
                                         inputRows, inputCols, 0,
                                         inputObservationStrideBkw,
                                         inputChannelStrideBkw,
-                                        padRowLeft, padRowRight,
-                                        padColTop, padColBottom,
+                                        padTop, padBottom,
+                                        padLeft, padLeft,
                                         inputRowsPadded, inputColsPadded,
                                         outputRows, outputCols, numberOfFilters,
                                         filterStrideRow, filterStrideCol,
@@ -216,49 +245,52 @@ setConv2DDims(
 
   const int outputChannelStrideBkw = outputRows * outputCols;
 
+  std::cerr << "This padding is probably wrong ******* \n";
+  // Check the correct dimensions of the paddingXXXXXXXXX
+
   // Padding such that the result of the convolution has the dimension
   // of the original input of the forward convolution
-  const int totalFullPadRow = (inputRows - 1)
-                            * filterStrideRow
-                            + filterRows
-                            - outputRows;
+  const int totalFullVertPad = (inputRows - 1)
+                             * filterStrideRow
+                             + filterRows
+                             - outputRows;
 
-  int fullPadRowLeft, fullPadRowRight;
+  int fullPadTop, fullPadBottom;
 
   paddingPartitioning(
-                      totalFullPadRow,
-                      fullPadRowLeft,
-                      fullPadRowRight
+                      totalFullVertPad,
+                      fullPadTop,
+                      fullPadBottom
                      );
 
   const int outputRowsFullPadded = outputRows
-                                 + fullPadRowLeft
-                                 + fullPadRowRight;
+                                 + fullPadTop
+                                 + fullPadBottom;
 
-  const int totalFullPadCol = (inputCols - 1)
-                            * filterStrideCol
-                            + filterCols
-                            - outputCols;
+  const int totalFullHorizPad = (inputCols - 1)
+                              * filterStrideCol
+                              + filterCols
+                              - outputCols;
 
-  int fullPadColTop, fullPadColBottom;
+  int fullPadLeft, fullPadRight;
 
   paddingPartitioning(
-                      totalFullPadCol,
-                      fullPadColTop,
-                      fullPadColBottom
+                      totalFullHorizPad,
+                      fullPadLeft,
+                      fullPadRight
                      );
 
   const int outputColsFullPadded = outputCols
-                                 + fullPadColTop
-                                 + fullPadColBottom;
+                                 + fullPadLeft
+                                 + fullPadRight;
 
   // Output and input are switched with respect to the forward convolution
   backwardInputConvDims.setDimensions(
                                       outputRows, outputCols, numberOfFilters,
                                       outputObservationStrideBkw,
                                       outputChannelStrideBkw,
-                                      fullPadRowLeft, fullPadRowRight,
-                                      fullPadColTop, fullPadColBottom,
+                                      fullPadTop, fullPadBottom,
+                                      fullPadLeft, fullPadRight,
                                       outputRowsFullPadded, outputColsFullPadded,
                                       filterRows, filterCols, inputChannels,
                                       filterStrideRow, filterStrideCol,
@@ -286,8 +318,8 @@ Scalar* applyPadding(
 
     const int stride = dims.inputPaddedCols;
 
-    writer += dims.inputPaddedCols * dims.padColTop
-            + dims.padRowLeft;
+    writer += dims.inputPaddedCols * dims.padTop
+            + dims.padLeft;
 
     for (
          int i = 0; i < dims.inputRows; ++i,
@@ -319,8 +351,8 @@ void extractPatches(
   bool padding = false;
 
   if (
-       dims.padRowLeft > 0 || dims.padRowRight  > 0 ||
-       dims.padColTop  > 0 || dims.padColBottom > 0
+       dims.padLeft > 0 || dims.padRight  > 0 ||
+       dims.padTop  > 0 || dims.padBottom > 0
      )
   {
       padding = true;
@@ -539,8 +571,8 @@ checkConvolution(
                  );
 
         A.block(
-                forwardConvDims.padColTop,
-                forwardConvDims.padRowLeft,
+                forwardConvDims.padTop,
+                forwardConvDims.padLeft,
                 forwardConvDims.inputRows,
                 forwardConvDims.inputCols
                ) = tmp;
@@ -551,21 +583,14 @@ checkConvolution(
                                       forwardConvDims.kernelCols
                                      );
 
-        for (
-             int i = 0;
-             i < forwardConvDims.outputRows;
-             i += forwardConvDims.kernelStrideRow
-            )
+        for (int i = 0; i < forwardConvDims.outputRows; ++i)
         {
-          for (
-               int j = 0;
-               j < forwardConvDims.outputCols;
-               j += forwardConvDims.kernelStrideCol
-              )
+          for (int j = 0; j < forwardConvDims.outputCols; ++j)
           {
+
             Matrix tmp = A.block(
-                                 i,
-                                 j,
+                                 i*forwardConvDims.kernelStrideRow,
+                                 j*forwardConvDims.kernelStrideCol,
                                  forwardConvDims.kernelRows,
                                  forwardConvDims.kernelCols
                                 ).array() * W.array();

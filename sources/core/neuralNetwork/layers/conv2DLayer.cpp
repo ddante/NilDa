@@ -251,7 +251,7 @@ void conv2DLayer::incrementWeightsAndBiases(
 errorCheck conv2DLayer::localChecks(
                                     const Matrix& input,
                                     const Scalar errorLimit
-                                   ) const 
+                                   ) const
 {
   checkInputSize(input);
 

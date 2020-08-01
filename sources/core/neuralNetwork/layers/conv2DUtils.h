@@ -21,10 +21,10 @@ public:
 
   int inputRows;
   int inputCols;
-  int padRowLeft;
-  int padRowRight;
-  int padColTop;
-  int padColBottom;
+  int padTop;
+  int padBottom;
+  int padLeft;
+  int padRight;
   int inputPaddedRows;
   int inputPaddedCols;
   int inputChannels;
@@ -48,8 +48,8 @@ public:
   void setDimensions(
                      const int inR,  const int inC,  const int inCh,
                      const int inRStride, const int inChStride,
-                     const int pRL,  const int pRR,
-                     const int pCT,  const int pCB,
+                     const int pT,  const int pB,
+                     const int pL,  const int pR,
                      const int inPR, const int inPC,
                      const int kR,   const int kC,   const int kN,
                      const int kSR,  const int kSC,
