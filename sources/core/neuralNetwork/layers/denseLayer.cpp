@@ -23,6 +23,12 @@ denseLayer::denseLayer(
 {
   type_ = layerTypes::dense;
 
+  size_.isFlat = true;
+  size_.size = inSize;
+  size_.rows = 0;
+  size_.cols = 0;
+  size_.channels = 0;
+
   trainable_ = true;
 
   switch (activationFunctionCode(activationName))
@@ -62,8 +68,8 @@ void denseLayer::init(const layer* previousLayer)
   // Check that the previous layer is compatible
   // with the current layer
   if (
-      previousLayer->layerType() != layerTypes::input &&
-      previousLayer->layerType() != layerTypes::dense &&
+      previousLayer->layerType() != layerTypes::input  &&
+      previousLayer->layerType() != layerTypes::dense  &&
       previousLayer->layerType() != layerTypes::conv2D
      )
   {
@@ -75,17 +81,32 @@ void denseLayer::init(const layer* previousLayer)
     assert(false);
   }
 
-  const int prevLayerSize = previousLayer->size();
+  const layerSizes prevLayer = previousLayer->size();
 
-  assert(prevLayerSize > 0);
+  inputSize_ = prevLayer.size;
+
+  assert(inputSize_ > 0);
+
+  inputChannels_ = 0;
+
+  needFlattening_ = false;
+
+  if (!prevLayer.isFlat)
+  {
+     needFlattening_ = true;
+
+     inputChannels_ = prevLayer.channels;
+
+     assert(inputChannels_ > 0);
+  }
 
   const Scalar epilonInit = sqrt(6.0)
-                          / sqrt(layerSize_ + prevLayerSize);
+                          / sqrt(layerSize_ + inputSize_);
 
-  weights_.setRandom(layerSize_, prevLayerSize);
+  weights_.setRandom(layerSize_, inputSize_);
   weights_ *= epilonInit;
 
-  dWeights_.setZero(layerSize_, prevLayerSize);
+  dWeights_.setZero(layerSize_, inputSize_);
 
   biases_.setZero(layerSize_);
 
@@ -142,19 +163,48 @@ void denseLayer::checkInputAndCacheSize(
 
 void denseLayer::forwardPropagation(const Matrix& inputData)
 {
+  if (needFlattening_)
+  {
+    // Factor out the channels from the number of colums
+    // for a not flat input
+    nObservations_ = inputData.cols() / inputChannels_;
+
+    // Constant map to get a flatten the input
+    ConstMapMatrix input(
+                         inputData.data(),
+                         inputSize_,
+                         nObservations_
+                        );
+
 #ifdef ND_DEBUG_CHECKS
-  checkInputSize(inputData);
+    checkInputSize(input);
 #endif
 
-  nObservations_ = inputData.cols();
+    linearOutput_.resize(
+                          weights_.rows(),
+                          input.cols()
+                         );
 
-  linearOutput_.resize(
-                       weights_.rows(),
-                       inputData.cols()
-                      );
+     // Apply the weights of the layer to the input
+     linearOutput_.noalias() = weights_ * input;
+  }
+  else
+  {
+#ifdef ND_DEBUG_CHECKS
+    checkInputSize(inputData);
+#endif
 
-  // Apply the weights of the layer to the input
-  linearOutput_.noalias() = weights_ * inputData;
+    // For a flat input layer the number of colums is nObs
+    nObservations_ = inputData.cols();
+
+    linearOutput_.resize(
+                          weights_.rows(),
+                          inputData.cols()
+                        );
+
+     // Apply the weights of the layer to the input
+     linearOutput_.noalias() = weights_ * inputData;
+  }
 
   // Add the biases
   linearOutput_.colwise() += biases_;

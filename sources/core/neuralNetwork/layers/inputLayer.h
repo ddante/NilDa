@@ -20,23 +20,10 @@ class inputLayer : public layer
 
 private:
 
-  // Number of neurons of the layer for a flatten (1D) input
-  int inputSize_;
-
-  // Layer sizes for a 2D input with channels
-  int inputRows_;
-  int inputCols_;
-  int inputChannels_;
-
   // Column stride for each observation.
   // It is 1 for flatten layer.
   // It is the number of channels for 2D input
   int observationStride_;
-
-  // Specify if it this a flatten (1D) input layer
-  bool flattenLayer_;
-
-  mutable int numberOfObservations_;
 
 public:
 
@@ -137,25 +124,6 @@ public:
     std::cerr << "Input layer cannot call incrementWeightsAndBiases." << std::endl;
 
     assert(false);
-  }
-
-  int size() const override
-  {
-    assert(flattenLayer_);
-
-    return inputSize_;
-  }
-
-  void size(std::array<int, 3>& inSizes) const override
-  {
-    assert(!flattenLayer_);
-
-    inSizes =
-    {
-        inputRows_,
-        inputCols_,
-        inputChannels_
-    };
   }
 
   int inputStride() const override

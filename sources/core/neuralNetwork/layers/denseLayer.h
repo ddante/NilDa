@@ -48,6 +48,15 @@ private:
   // forward propagation
   int nObservations_;
 
+  // Store if the flattening is needed when
+  // the input comes from a not flat layer
+  bool needFlattening_;
+
+  // Store the size and the number of channels of
+  // the previous not flat layers. Neded to flatten the input.
+  int inputSize_;
+  int inputChannels_;
+
 public:
 
   // Constructor
@@ -113,18 +122,6 @@ public:
   const Matrix& backPropCache() const override
   {
     return cacheBackProp_;
-  }
-
-  int size() const override
-  {
-    return layerSize_;
-  }
-
-  void size(std::array<int, 3>& sizes)  const override
-  {
-    std::cerr << "Dense layer cannot call multi-D size function" << std::endl;
-
-    assert(false);
   }
 
   int inputStride() const override

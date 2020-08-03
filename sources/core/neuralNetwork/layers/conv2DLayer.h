@@ -155,23 +155,6 @@ public:
     return cacheBackProp_;
   }
 
-  int size() const override
-  {
-    return  forwardConvDims_.outputRows
-          * forwardConvDims_.outputCols
-          * forwardConvDims_.outputChannels;
-  }
-
-  void size(std::array<int, 3>& sizes) const override
-  {
-      sizes =
-      {
-        forwardConvDims_.outputRows,
-        forwardConvDims_.outputCols,
-        forwardConvDims_.outputChannels
-      };
-  }
-
   int inputStride() const override
   {
     std::cerr << "Conv 2d layer cannot call inputStride function" << std::endl;

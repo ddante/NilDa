@@ -31,7 +31,7 @@ conv2DLayer::conv2DLayer(
   forwardConvDims_{},
   backwardWeightsConvDims_{}
 {
-  type_ = layerTypes::dense;
+  type_ = layerTypes::conv2D;
 
   trainable_ = true;
 }
@@ -50,7 +50,7 @@ conv2DLayer::conv2DLayer(
   forwardConvDims_{},
   backwardWeightsConvDims_{}
 {
-  type_ = layerTypes::dense;
+  type_ = layerTypes::conv2D;
 
   trainable_ = true;
 }
@@ -69,7 +69,7 @@ conv2DLayer::conv2DLayer(
   forwardConvDims_{},
   backwardWeightsConvDims_{}
 {
-  type_ = layerTypes::dense;
+  type_ = layerTypes::conv2D;
 
   trainable_ = true;
 }
@@ -87,7 +87,7 @@ conv2DLayer::conv2DLayer(
   forwardConvDims_{},
   backwardWeightsConvDims_{}
 {
-  type_ = layerTypes::dense;
+  type_ = layerTypes::conv2D;
 
   trainable_ = true;
 }
@@ -125,12 +125,23 @@ void conv2DLayer::init(const layer* previousLayer)
     assert(false);
   }
 
-  std::array<int, 3> prevLayerSize;
-  previousLayer->size(prevLayerSize);
+  const layerSizes prevLayer = previousLayer->size();
 
-  assert(prevLayerSize[0] > 0);
-  assert(prevLayerSize[1] > 0);
-  assert(prevLayerSize[2] > 0);
+  if (prevLayer.isFlat)
+  {
+    std::cerr << "Previous layer to " << layerName(type_)
+              << " cannot be flat." << std::endl;
+  }
+
+  assert(prevLayer.rows > 0);
+  assert(prevLayer.cols > 0);
+  assert(prevLayer.channels > 0);
+
+  const std::array<int, 3> prevLayerSize{
+                                         prevLayer.rows,
+                                         prevLayer.cols,
+                                         prevLayer.channels
+                                        };
 
   setConv2DDims(
                 prevLayerSize,
@@ -142,6 +153,16 @@ void conv2DLayer::init(const layer* previousLayer)
                 backwardWeightsConvDims_,
                 backwardInputConvDims_
                );
+
+  size_.isFlat = false;
+
+  size_.size = forwardConvDims_.outputRows
+             * forwardConvDims_.outputCols
+             * forwardConvDims_.outputChannels;
+
+  size_.rows = forwardConvDims_.outputRows;
+  size_.cols = forwardConvDims_.outputCols;
+  size_.channels = forwardConvDims_.outputChannels;
 
   const int kernelDimension = forwardConvDims_.kernelRows
                             * forwardConvDims_.kernelCols

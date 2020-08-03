@@ -16,39 +16,40 @@ int main(int argc, char const *argv[])
 
   const int rI = n;
   const int cI = n;
-  const int ChI = 1;
-  std::array<int, 3> inputSize = {rI, cI, ChI};
+  const int chI = 1;
 
   const int rF = 2;
   const int cF = 2;
-  std::array<int, 2> filterSize = {rF, cF};
 
-  const int numberOfFilters = 1;
+  const int rS = 1;
+  const int cS = 1;
 
-  std::array<int, 2> filterStride = {1, 1};
+  const int nFilters = 3;
 
-  bool padding = false;
+  const bool padding = true;
 
-  NilDa::layer* l0 = new NilDa::inputLayer(inputSize);
+  NilDa::layer* l0 = new NilDa::inputLayer({rI, cI, chI});
 
   NilDa::layer* l1 = new NilDa::conv2DLayer(
-                                            numberOfFilters,
-                                            filterSize,
-                                            filterStride,
+                                            nFilters,
+                                            {rF, cF},
+                                            {rS, cS},
                                             padding,
                                             "relu"
                                            );
 
-  NilDa::neuralNetwork nn({l0, l1});
+  NilDa::layer* l2 = new NilDa::denseLayer(10, "softmax");
 
-  const int nObs = 1;
-  NilDa::Matrix X(rI * cI, ChI * nObs);
+  NilDa::neuralNetwork nn({l0, l1, l2});
+
+  const int nObs = 3;
+  NilDa::Matrix X(rI * cI, chI * nObs);
 
   int l = 0;
 
   for (int i = 0; i < nObs; ++i)
   {
-    for (int j = 0; j < ChI; ++j, ++l)
+    for (int j = 0; j < chI; ++j, ++l)
     {
       for (int k = 0; k < rI * cI; ++k)
       {
@@ -57,9 +58,8 @@ int main(int argc, char const *argv[])
     }
   }
 
-  NilDa::errorCheck output = l1->localChecks(X, 1e-8);
 
-  std::cout << output.error << std::endl;
+  nn.forwardPropagation(X);
 
   return 0;
 }

@@ -41,7 +41,7 @@ neuralNetwork::neuralNetwork(const std::vector<layer*>& vLayers):
   for (int i = firstLayer_; i < numberOfLayers_; ++i)
   {
     layers_[i]->init(layers_[i - 1]);
-  }  
+  }
 }
 
 void neuralNetwork::forwardPropagation(const Matrix& obs) const
@@ -59,7 +59,7 @@ void neuralNetwork::forwardPropagation(const Matrix& obs) const
   layers_[firstLayer_]->forwardPropagation(obs);
 
   for (int i = firstLayer_ + 1; i < numberOfLayers_; ++i)
-  {
+  {    
     // The other layers take in the output of the previous layer
     layers_[i]->forwardPropagation(layers_[i - 1]->output());
   }

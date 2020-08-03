@@ -5,66 +5,69 @@ namespace NilDa
 {
 
 inputLayer::inputLayer(const int inSize):
-  inputSize_(inSize),
-  inputRows_(0),
-  inputCols_(0),
-  inputChannels_(1),
-  observationStride_(1),
-  flattenLayer_(true)
+  observationStride_(1)
 {
   type_ = layerTypes::input;
 
-  trainable_ = false;
+  size_.isFlat = true;
+  size_.size = inSize;
+  size_.rows = 0;
+  size_.cols = 0;
+  size_.channels = 0;
 
-  assert(inputSize_ > 0);
+  assert(size_.size > 0);
+
+  trainable_ = false;
 }
 
 inputLayer::inputLayer(const std::array<int,3>& inSize):
-  inputSize_(0),
-  inputRows_(inSize[0]),
-  inputCols_(inSize[1]),
-  inputChannels_(inSize[2]),
-  observationStride_(inSize[2]),
-  flattenLayer_(false)
+  observationStride_(inSize[2])
 {
   type_ = layerTypes::input;
 
-  assert(inputRows_ >0);
-  assert(inputCols_ > 0);
-  assert(inputChannels_ >0);
+  size_.isFlat = false;
+  size_.size = inSize[0]*inSize[1]*inSize[2];
+  size_.rows = inSize[0];
+  size_.cols = inSize[1];
+  size_.channels = inSize[2];
+
+  assert(size_.rows > 0);
+  assert(size_.cols > 0);
+  assert(size_.channels >0);
+
+  trainable_ = false;
 }
 
 void inputLayer::checkInputSize(const Matrix& obs) const
 {
-  if (flattenLayer_)
+  if (size_.isFlat)
   {
     // For a flatten layer:
     // number of rows = number of features
     // number of cols = number of observations
-    if (inputSize_ != obs.rows())
+    if (size_.size != obs.rows())
     {
       std::cerr << "Size of input data "
                 << "(" << obs.rows() << ") "
                 << " not consistent with input layer size"
-                << "(" << inputSize_ << ") "
+                << "(" << size_.size << ") "
                 << std::endl;
 
       assert(false);
     }
 
-    numberOfObservations_ = obs.cols();
   }
   else
   {
     // For a 2D layer:
     // number of rows = number of features
     // number of cols = number of observations * number of channels
-    const int channelSize = inputRows_*inputCols_;
+    const int channelSize = size_.rows * size_.cols;
 
     // TODO: how to check if the number of channels is correct?
 
-    if (channelSize  !=obs.rows() ||
-        obs.cols() % inputChannels_ != 0)
+    if (channelSize != obs.rows() ||
+        obs.cols() % size_.channels != 0)
     {
       std::cerr << "Size of input data "
                 << "(" << obs.rows() << ") "
@@ -72,8 +75,6 @@ void inputLayer::checkInputSize(const Matrix& obs) const
                 << "(" << channelSize << ") "
                 << std::endl;
     }
-
-    numberOfObservations_ = obs.cols() / inputChannels_;
   }
 }
 

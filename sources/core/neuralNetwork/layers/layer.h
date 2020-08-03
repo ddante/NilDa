@@ -19,10 +19,20 @@ enum class layerTypes {
   conv2D,
 };
 
+struct layerSizes {
+  bool isFlat;
+  int size;
+  int rows;
+  int cols;
+  int channels;
+};
+
 class layer
 {
 
 protected:
+
+  layerSizes size_;
 
   layerTypes type_;
 
@@ -89,12 +99,6 @@ public:
                                           const Vector& deltaB
                                          ) = 0;
 
-  // Return the size of the 1D layer
-  virtual int size() const = 0;
-
-  // Coomput the sizes of the 2D layer
-  virtual void size(std::array<int, 3>& sizes) const = 0;
-
   // Perform local checks in the layers for debugging
   virtual errorCheck localChecks(
                                  const Matrix& input,
@@ -109,6 +113,11 @@ public:
   layerTypes layerType() const
   {
     return type_;
+  }
+
+  layerSizes size() const
+  {
+    return size_;
   }
 
   bool isTrainable() const

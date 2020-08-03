@@ -34,7 +34,7 @@ private:
   std::unique_ptr<lossFunction> lossFunction_;
 
   // Pointer to the optimizer
-  const optimizer* optimizer_;
+  const optimizer* optimizer_ = nullptr;
 
   // Total number of layers (input + hidden + output)
   int numberOfLayers_;
@@ -141,7 +141,7 @@ public:
     ~neuralNetwork()
     {
       for (int i = 0; i < numberOfLayers_; ++i)
-      {        
+      {
         delete layers_[i];
       }
     };
