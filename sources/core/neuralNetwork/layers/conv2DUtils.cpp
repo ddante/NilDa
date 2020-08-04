@@ -245,20 +245,16 @@ setConv2DDims(
 
   const int outputChannelStrideBkw = outputRows * outputCols;
 
-  std::cerr << "This padding is probably wrong ******* \n";
-  // Check the correct dimensions of the paddingXXXXXXXXX
-
   // Padding such that the result of the convolution has the dimension
   // of the original input of the forward convolution
-  const int totalFullVertPad = (inputRows - 1)
-                             * filterStrideRow
-                             + filterRows
-                             - outputRows;
+  const int totalVertPad = (inputRows - 1) * filterStrideRow
+                         + filterRows
+                         - outputRows;
 
   int fullPadTop, fullPadBottom;
 
   paddingPartitioning(
-                      totalFullVertPad,
+                      totalVertPad,
                       fullPadTop,
                       fullPadBottom
                      );
@@ -267,15 +263,22 @@ setConv2DDims(
                                  + fullPadTop
                                  + fullPadBottom;
 
-  const int totalFullHorizPad = (inputCols - 1)
-                              * filterStrideCol
-                              + filterCols
-                              - outputCols;
+  const int actualInputRows = ceil(
+                                   1
+                                   + (outputRows - filterRows + totalVertPad)
+                                     / static_cast<Scalar>(filterStrideRow)
+                                  );
+
+  assert(actualInputRows == inputRows);
+
+  const int totalHorizPad = (inputCols - 1) * filterStrideCol
+                          + filterCols
+                          - outputCols;
 
   int fullPadLeft, fullPadRight;
 
   paddingPartitioning(
-                      totalFullHorizPad,
+                      totalHorizPad,
                       fullPadLeft,
                       fullPadRight
                      );
@@ -283,6 +286,14 @@ setConv2DDims(
   const int outputColsFullPadded = outputCols
                                  + fullPadLeft
                                  + fullPadRight;
+
+  const int actualInputCols = ceil(
+                                   1
+                                   + (outputCols - filterCols + totalHorizPad)
+                                     / static_cast<Scalar>(filterStrideCol)
+                                  );
+
+  assert(actualInputCols == inputCols);
 
   // Output and input are switched with respect to the forward convolution
   backwardInputConvDims.setDimensions(

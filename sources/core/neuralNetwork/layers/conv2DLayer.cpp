@@ -260,13 +260,73 @@ void conv2DLayer::setWeightsAndBiases(
                                       const Matrix& W,
                                       const Vector& b
                                      )
-{}
+{
+  if (W.rows() != filterWeights_.rows() ||
+      W.cols() != filterWeights_.cols())
+  {
+    std::cerr << "Size of the input weights matrix "
+              << "(" << W.rows() << ", "
+              << W.cols() << ") "
+              << " not consistent with the layer weights size "
+              << "(" << filterWeights_.rows() << ", "
+              << filterWeights_.cols() << ") "
+              << std::endl;
+
+    assert(false);
+  }
+
+  if (b.rows() != biases_.rows())
+  {
+    std::cerr << "Size of the input biases vector "
+              << "(" << b.rows() << ") "
+              << " not consistent with the layer biases size "
+              << "(" << biases_.rows() << ") "
+              << std::endl;
+
+    assert(false);
+  }
+
+  filterWeights_.noalias() = W;
+
+  biases_.noalias() = b;
+}
 
 void conv2DLayer::incrementWeightsAndBiases(
                                             const Matrix& deltaW,
                                             const Vector& deltaB
                                            )
-{}
+{
+#ifdef ND_DEBUG_CHECKS
+  if (deltaW.rows() != filterWeights_.rows() ||
+      deltaW.cols() != filterWeights_.cols())
+  {
+    std::cerr << "Size of the input weights matrix "
+              << "(" << deltaW.rows() << ", "
+              << deltaW.cols() << ") "
+              << " not consistent with the layer weights size "
+              << "(" << filterWeights_.rows() << ", "
+              << filterWeights_.cols() << ") "
+              << std::endl;
+
+    assert(false);
+  }
+
+  if (deltaB.rows() != biases_.rows())
+  {
+    std::cerr << "Size of the input biases vector "
+              << "(" << deltaB.rows() << ") "
+              << " not consistent with the layer biases size "
+              << "(" << biases_.rows() << ") "
+              << std::endl;
+
+    assert(false);
+  }
+#endif
+
+  filterWeights_ += deltaW;
+
+  biases_ += deltaB;
+}
 
 
 errorCheck conv2DLayer::localChecks(
