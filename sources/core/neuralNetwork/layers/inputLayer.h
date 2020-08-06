@@ -38,9 +38,17 @@ public:
   ~inputLayer()  = default;
 
   // Member functions
+
   void init(const layer* previousLayer) override
   {
     std::cerr << "Input layer cannot call the init." << std::endl;
+
+    assert(false);
+  }
+
+  void setupBackward(const layer* nextLayer) override
+  {
+    std::cerr << "Input layer cannot call setupBackward." << std::endl;
 
     assert(false);
   }

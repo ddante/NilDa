@@ -115,6 +115,13 @@ void applyConvolution(
 		                  Matrix& conv
                      );
 
+// Reeturn the rotated filters of the input filters
+void applyRotation(
+                   const Matrix& kernel,
+                   const conv2DDimensions& dims,
+                   Matrix& rotatedKernels
+                  );
+
 // Check the MEC conv2d algorithm with the naive
 // implementation and return the difference between
 // the results of the two implementations

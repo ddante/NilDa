@@ -49,6 +49,10 @@ public:
   // Initialize the layer
   virtual void init(const layer* previousLayer) = 0;
 
+  // Setup additional paramters in backward direction
+  // for the hidden layers
+  virtual void setupBackward(const layer* nextLayer) = 0;
+
   // Check if the dimensions of input data are consistent with the layer
   virtual void checkInputSize(const Matrix& inputData) const = 0;
 

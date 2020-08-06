@@ -187,6 +187,13 @@ void conv2DLayer::init(const layer* previousLayer)
   dBiases_.setZero(forwardConvDims_.kernelNumber);
 }
 
+void conv2DLayer::setupBackward(const layer* nextLayer)
+{
+  const layerSizes sLayer = nextLayer->size();
+
+  undoFlattening_ = (sLayer.isFlat) ? true : false;
+}
+
 void conv2DLayer::checkInputSize(const Matrix& inputData) const
 {
   if (inputData.cols() % forwardConvDims_.inputChannels != 0)
@@ -247,14 +254,151 @@ void conv2DLayer::forwardPropagation(const Matrix& input)
                                     linearOutput_,
                                     activation_
                                    );
+
+  nObservations_ = nObs;
 }
 
 
 void conv2DLayer::backwardPropagation(
-                                      const Matrix& dActivationNex,
-                                      const Matrix& inputData
+                                      const Matrix& dActivationNext,
+                                      const Matrix& input
                                      )
-{}
+{
+  Matrix dLinearOutput(
+                       linearOutput_.rows(),
+                       linearOutput_.cols()
+                      );
+
+  int nObs;
+
+  if (undoFlattening_)
+  {
+    // The next layer is a flatten layer (dense)
+    // so the cache must be rearranged in a 2D form
+    nObs = input.cols();
+
+    ConstMapMatrix dActivationNextM(
+                                    dActivationNext.data(),
+                                    linearOutput_.rows(),
+                                    linearOutput_.cols()
+                                   );
+
+   activationFunction_->applyBackward(
+                                      linearOutput_,
+                                      dActivationNextM,
+                                      dLinearOutput
+                                     );
+  }
+  else
+  {
+    // The next layer is 2D layer,
+    // no need to reshape the cache.
+    nObs = input.cols()
+         / forwardConvDims_.inputChannels;
+
+     activationFunction_->applyBackward(
+                                        linearOutput_,
+                                        dActivationNext,
+                                        dLinearOutput
+                                       );
+  }
+
+#ifdef ND_DEBUG_CHECKS
+    //checkInputAndCacheSize(inputData, dActivationNext);
+
+    assert(nObs == nObservations_);
+#endif
+
+  // In the backward convolution, the number of
+  // observation and number of input channels are swapped
+  backwardWeightsConvDims_.setInputChannels(nObs);
+
+  convolve(
+           forwardConvDims_.inputChannels,
+           backwardWeightsConvDims_,
+           input.data(),
+           dLinearOutput.data(),
+           dFilterWeights_
+          );
+
+  std::cout << "Backward Weights Conv Dim" << std::endl;
+  std::cout << backwardWeightsConvDims_ << std::endl;
+
+  dFilterWeights_ /= nObs;
+
+  //std::cout << "dWeights:\n";
+  //std::cout << dWeights << "\n\n";
+
+  // ----------------------------------------------------
+
+#ifdef ND_DEBUG_CHECKS
+  const int mappedOutupRows = forwardConvDims_.outputRows
+                            * forwardConvDims_.outputCols;
+
+  const int mappedOutupCols = forwardConvDims_.outputChannels
+                            * nObs;
+
+  assert(linearOutput_.rows() ==  mappedOutupRows);
+  assert(linearOutput_.cols() ==  mappedOutupCols);
+#endif
+
+  // The dZ  (output derivative) is first summed over the output size
+  // (i.e. linearOutput.Rows), the resulting vector has length
+  // linearOutput.Cols (i.e. output.Channels * nObservation).
+  // This vector is then arranged as a matrix
+  // (Channels , nObservation) and the row summed
+  // over the nObservations and then divided by the nObservation
+  // (i.e. the mean). Thus, the resulting vector
+  // (i.e the derivative of the biases) has size kernel.numberFilters
+  ConstMapMatrix mappedOutput(
+                              dLinearOutput.data(),
+                              linearOutput_.rows(),
+                              linearOutput_.cols()
+                             );
+
+  Vector sumOutputs = mappedOutput.colwise().sum();
+
+  ConstMapMatrix mappedSumOutputs(
+                                  sumOutputs.data(),
+                                  forwardConvDims_.outputChannels,
+                                  nObs
+                                 );
+
+  dBiases_.noalias() = mappedSumOutputs.rowwise().mean();
+
+  //std::cout << "dbiases: \n";
+  //std::cout << dbiases << "\n\n";
+  // ----------------------------------------------------
+
+  Matrix rotatedKernels;
+
+  applyRotation(
+                filterWeights_,
+                forwardConvDims_,
+                rotatedKernels
+               );
+
+  //std::cout << filterWeights_ << "\n--\n";
+  //std::cout << rotatedKernels << "\n--\n";
+
+  const int cacheRows = forwardConvDims_.inputRows
+                      * forwardConvDims_.inputCols;
+
+  const int cacheCols = forwardConvDims_.inputChannels
+                      * nObs;
+
+  cacheBackProp_.resize(cacheRows, cacheCols);
+
+  std::cout << "Backward Input Conv Dim" << std::endl;
+  std::cout << backwardInputConvDims_ << std::endl;
+
+  convolve(nObs,
+           backwardInputConvDims_,
+           dLinearOutput.data(),
+           rotatedKernels.data(),
+           cacheBackProp_);
+
+}
 
 void conv2DLayer::setWeightsAndBiases(
                                       const Matrix& W,

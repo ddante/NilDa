@@ -38,9 +38,17 @@ neuralNetwork::neuralNetwork(const std::vector<layer*>& vLayers):
   }
 
   // Initialize the hidden and the output layers
+  // in the forward direction
   for (int i = firstLayer_; i < numberOfLayers_; ++i)
   {
     layers_[i]->init(layers_[i - 1]);
+  }
+
+  // Setup additional paramters in backward direction
+  // for the hidden layers
+  for (int i = lastLayer_ - 1; i >= firstLayer_; --i)
+  {
+    layers_[i]->setupBackward(layers_[i + 1]);
   }
 }
 
@@ -59,7 +67,7 @@ void neuralNetwork::forwardPropagation(const Matrix& obs) const
   layers_[firstLayer_]->forwardPropagation(obs);
 
   for (int i = firstLayer_ + 1; i < numberOfLayers_; ++i)
-  {    
+  {
     // The other layers take in the output of the previous layer
     layers_[i]->forwardPropagation(layers_[i - 1]->output());
   }

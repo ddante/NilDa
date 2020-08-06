@@ -4,6 +4,8 @@
 
 #include "conv2DUtils.h"
 
+#include "primitives/Memory.h"
+
 // ---------------------------------------------------------------------------
 
 namespace NilDa
@@ -494,7 +496,7 @@ void convolve(const int nObservations,
 
   output.resize(
                 dims.outputRows* dims.outputCols,
-                nObservations * dims.kernelNumber
+                dims.kernelNumber * nObservations  
                );
 
   Scalar* writer = output.data();
@@ -525,6 +527,63 @@ void convolve(const int nObservations,
   }
 
   //std::cout << Output << "\n----\n";
+}
+
+void applyRotation(
+                   const Matrix& kernels,
+                   const conv2DDimensions& dims,
+                   Matrix& rotatedKernels
+                  )
+{
+  rotatedKernels.setZero(
+                         kernels.rows(),
+                         kernels.cols()
+                        );
+
+  const int kernelTotChannels = dims.inputChannels
+                              * dims.kernelNumber;
+
+  const int kernelSize = dims.kernelRows
+                       * dims.kernelCols;
+
+  const Scalar* reader = kernels.data();
+
+  // Rotate the kernels and store it in a a new arrangement
+  // because the number of filters and the input channels are switched
+  //
+  // Original arrangement:
+  // |f1 ch1|f2 ch1|...|fm ch1||f1 ch2|f2 ch2|...|fm ch2||f1 ch3|f2 ch3|...|fm ch3|
+  // {------------------------}{------------------------}{------------------------}
+  //          in channel 1             in channel 2              in channel 3
+  //
+  // New arrangement:
+  // |f1 ch1|f1 ch2||f1 ch3||f2 ch1|f2 ch2||f2 ch3|...|fm ch1|fm ch2||fm ch3|
+  // {---------------------}{---------------------}...{---------------------}
+  //         filter 1              filter 2                   filter 3
+  //
+
+  for (
+       int i = 0; i <  kernelTotChannels; ++i,
+       reader += kernelSize
+      )
+  {
+      // To be refactored
+      const int stride = floor(i / dims.kernelNumber)
+                       + (
+                          (i % dims.kernelNumber)
+                          * dims.inputChannels
+                         );
+
+      Scalar* writer = rotatedKernels.data()
+                     + (stride * kernelSize);
+
+      // WTF! std::reverse_copy does not work in release mode,
+      // so a special function has been implemented
+      memcpy_reverse(writer,
+                     reader,
+                     reader + kernelSize);
+  }
+
 }
 
 Scalar

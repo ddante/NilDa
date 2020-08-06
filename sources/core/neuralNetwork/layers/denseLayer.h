@@ -74,6 +74,11 @@ public:
 
   void init(const layer* previousLayer) override;
 
+  void setupBackward(const layer* nextLayer) override
+  {
+    // Nothing to be done here   
+  }
+
   void checkInputSize(const Matrix& inputData) const override;
 
   void checkInputAndCacheSize(const Matrix& inputData,
