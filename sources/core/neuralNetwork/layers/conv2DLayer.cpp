@@ -118,9 +118,9 @@ void conv2DLayer::init(const layer* previousLayer)
      )
   {
     std::cerr << "Previous layer of type "
-             <<  layerName(previousLayer->layerType())
+             <<  getLayerName(previousLayer->layerType())
              << " not compatible with current layer of type "
-             << layerName(type_) << "." << std::endl;
+             << getLayerName(type_) << "." << std::endl;
 
     assert(false);
   }
@@ -129,7 +129,7 @@ void conv2DLayer::init(const layer* previousLayer)
 
   if (prevLayer.isFlat)
   {
-    std::cerr << "Previous layer to " << layerName(type_)
+    std::cerr << "Previous layer to " << getLayerName(type_)
               << " cannot be flat." << std::endl;
   }
 
@@ -269,14 +269,13 @@ void conv2DLayer::backwardPropagation(
                        linearOutput_.cols()
                       );
 
-  int nObs;
+  const int nObs = input.cols()
+                 / forwardConvDims_.inputChannels;
 
   if (undoFlattening_)
   {
     // The next layer is a flatten layer (dense)
     // so the cache must be rearranged in a 2D form
-    nObs = input.cols();
-
     ConstMapMatrix dActivationNextM(
                                     dActivationNext.data(),
                                     linearOutput_.rows(),
@@ -288,20 +287,23 @@ void conv2DLayer::backwardPropagation(
                                       dActivationNextM,
                                       dLinearOutput
                                      );
+
+    std::cout << "dA_c +++ \n";
+    std::cout << dActivationNextM << "\n----\n";
   }
   else
   {
-    // The next layer is 2D layer,
-    // no need to reshape the cache.
-    nObs = input.cols()
-         / forwardConvDims_.inputChannels;
-
+     // The next layer is a 2d layer
+     // no need to rearrange the cache
      activationFunction_->applyBackward(
                                         linearOutput_,
                                         dActivationNext,
                                         dLinearOutput
                                        );
   }
+
+  std::cout << "dZ_c +++ \n";
+  std::cout << dLinearOutput<< "\n----\n";
 
 #ifdef ND_DEBUG_CHECKS
     //checkInputAndCacheSize(inputData, dActivationNext);
@@ -326,8 +328,8 @@ void conv2DLayer::backwardPropagation(
 
   dFilterWeights_ /= nObs;
 
-  //std::cout << "dWeights:\n";
-  //std::cout << dWeights << "\n\n";
+  std::cout << "dWeights:\n";
+  std::cout << dFilterWeights_ << "\n\n";
 
   // ----------------------------------------------------
 
@@ -366,8 +368,8 @@ void conv2DLayer::backwardPropagation(
 
   dBiases_.noalias() = mappedSumOutputs.rowwise().mean();
 
-  //std::cout << "dbiases: \n";
-  //std::cout << dbiases << "\n\n";
+  std::cout << "dbiases: \n";
+  std::cout << dBiases_ << "\n\n";
   // ----------------------------------------------------
 
   Matrix rotatedKernels;
@@ -398,6 +400,8 @@ void conv2DLayer::backwardPropagation(
            rotatedKernels.data(),
            cacheBackProp_);
 
+  std::cout << "cache cv: \n";
+  std::cout << cacheBackProp_ << "\n\n";
 }
 
 void conv2DLayer::setWeightsAndBiases(

@@ -130,7 +130,7 @@ public:
   }
 
   // Return the string name of the type layer from the enum name
-  std::string layerName(const layerTypes inLayerType) const
+  std::string getLayerName(const layerTypes inLayerType) const
   {
     std::string name;
 
@@ -154,6 +154,14 @@ public:
 
     return name;
   }
+
+  // Return the string name of the type layer from the enum name
+  std::string layerName() const
+  {
+    return getLayerName(type_);
+  }
+
+  virtual int numberOfParameters() const = 0;
 
   // Destructor
   virtual ~layer()  = default;

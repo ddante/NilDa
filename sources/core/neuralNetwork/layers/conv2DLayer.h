@@ -170,6 +170,11 @@ public:
     assert(false);
   }
 
+  int numberOfParameters() const override
+  {
+    return filterWeights_.size();
+  }
+
   errorCheck localChecks(
                          const Matrix& input,
                          const Scalar errorLimit

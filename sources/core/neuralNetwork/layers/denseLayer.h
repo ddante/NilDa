@@ -76,7 +76,7 @@ public:
 
   void setupBackward(const layer* nextLayer) override
   {
-    // Nothing to be done here   
+    // Nothing to be done here
   }
 
   void checkInputSize(const Matrix& inputData) const override;
@@ -134,6 +134,11 @@ public:
     std::cerr << "Dense layer cannot call inputStride function" << std::endl;
 
     assert(false);
+  }
+
+  int numberOfParameters() const override
+  {
+    return weights_.size();
   }
 
   errorCheck localChecks(

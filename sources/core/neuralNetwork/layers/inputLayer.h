@@ -139,6 +139,11 @@ public:
     return observationStride_;
   }
 
+  int numberOfParameters() const override
+  {
+    return 0;
+  }
+
   errorCheck localChecks(
                          const Matrix& input,
                          Scalar errTol

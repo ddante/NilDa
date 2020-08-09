@@ -16,7 +16,7 @@ int main(int argc, char const *argv[])
 
   const int rI = n;
   const int cI = n;
-  const int chI = 1;
+  const int chI = 3;
 
   const int rF = 2;
   const int cF = 2;
@@ -38,28 +38,33 @@ int main(int argc, char const *argv[])
                                             "relu"
                                            );
 
-  NilDa::layer* l2 = new NilDa::denseLayer(10, "softmax");
+  NilDa::layer* l2 = new NilDa::conv2DLayer(
+                                            nFilters,
+                                            {rF, cF},
+                                            {rS, cS},
+                                            padding,
+                                            "relu"
+                                           );
 
-  NilDa::neuralNetwork nn({l0, l1, l2});
+  NilDa::layer* l3 = new NilDa::denseLayer(3, "softmax");
+
+  NilDa::neuralNetwork nn({l0, l1, l2, l3});
+
+  nn.summary();
+
+  nn.setLossFunction("sparse_categorical_crossentropy");
 
   const int nObs = 3;
   NilDa::Matrix X(rI * cI, chI * nObs);
 
-  int l = 0;
+  X.setRandom(rI * cI, chI * nObs);
 
-  for (int i = 0; i < nObs; ++i)
-  {
-    for (int j = 0; j < chI; ++j, ++l)
-    {
-      for (int k = 0; k < rI * cI; ++k)
-      {
-        X(k, l) = (k + 1) * (j + 1) * (i+1);
-      }
-    }
-  }
+  NilDa::Matrix Y(3, nObs);
+  Y << 1,0,0,
+       0,1,0,
+       0,0,1;
 
-
-  nn.forwardPropagation(X);
+  int out = nn.gradientsSanityCheck(X, Y, true);
 
   return 0;
 }

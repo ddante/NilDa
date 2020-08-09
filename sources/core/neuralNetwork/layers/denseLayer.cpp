@@ -74,9 +74,9 @@ void denseLayer::init(const layer* previousLayer)
      )
   {
     std::cerr << "Previous layer of type "
-              <<  layerName(previousLayer->layerType())
+              <<  getLayerName(previousLayer->layerType())
               << " not compatible with current layer of type "
-              << layerName(type_) << "." << std::endl;
+              << getLayerName(type_) << "." << std::endl;
 
     assert(false);
   }
@@ -226,12 +226,6 @@ void denseLayer::backwardPropagation(
                                      const Matrix& inputData
                                     )
 {
-#ifdef ND_DEBUG_CHECKS
-  checkInputAndCacheSize(inputData, dActivationNext);
-
-  assert(inputData.cols() == nObservations_);
-#endif
-
   Matrix dLinearOutput(
                        linearOutput_.rows(),
                        linearOutput_.cols()
@@ -242,12 +236,42 @@ void denseLayer::backwardPropagation(
                                      dActivationNext,
                                      dLinearOutput
                                     );
+  int nObs;
 
-  const int nObs = activation_.cols();
+  if (needFlattening_)
+  {
+    nObs = inputData.cols() / inputChannels_;
 
-  dWeights_.noalias() = (1.0/nObs)
-                      * dLinearOutput
-                      * inputData.transpose();
+    ConstMapMatrix input(
+                         inputData.data(),
+                         inputSize_,
+                         nObservations_
+                        );
+
+#ifdef ND_DEBUG_CHECKS
+  checkInputAndCacheSize(input, dActivationNext);
+
+  assert(nObs == nObservations_);
+#endif
+
+    dWeights_.noalias() = (1.0/nObs)
+                        * dLinearOutput
+                        * input.transpose();
+  }
+  else
+  {
+    nObs = inputData.cols();
+
+#ifdef ND_DEBUG_CHECKS
+  checkInputAndCacheSize(inputData, dActivationNext);
+
+  assert(nObs == nObservations_);
+#endif
+
+    dWeights_.noalias() = (1.0/nObs)
+                        * dLinearOutput
+                        * inputData.transpose();
+  }
 
   dBiases_.noalias() = (1.0/nObs)
                      * dLinearOutput.rowwise().sum();

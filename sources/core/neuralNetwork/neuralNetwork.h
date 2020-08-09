@@ -97,6 +97,9 @@ public:
 
     //void addLayer(const layer singleLayer);
 
+    void summary() const;
+
+
     void forwardPropagation(const Matrix& obs) const;
 
     void backwardPropagation(

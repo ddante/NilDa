@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <memory>
 #include <chrono>
 
@@ -50,6 +51,75 @@ neuralNetwork::neuralNetwork(const std::vector<layer*>& vLayers):
   {
     layers_[i]->setupBackward(layers_[i + 1]);
   }
+}
+
+void neuralNetwork::summary() const
+{
+  std::cout << "===========================================================\n";
+  std::cout << " Layer  Type         Size         Parameters     Trainable \n";
+  std::cout << "===========================================================\n";
+
+  int totalParameters = 0;
+  int totalTrainableParameters = 0;
+
+  for (int i = 0; i < numberOfLayers_; ++i)
+  {
+    std::cout << std::left << std::setfill(' ')
+              << std::setw(3) << " "
+              << i << "    ";
+
+    std::cout << std::setw(12) << std::left
+              << layers_[i]->layerName() << " ";
+
+    layerSizes sizes = layers_[i]->size();
+
+    if (sizes.isFlat)
+    {
+      std::cout << std::setw(12) << sizes.size << " ";
+    }
+    else
+    {
+      std::cout << std::setw(13)
+                << std::to_string(sizes.rows) + ", " +
+                   std::to_string(sizes.cols) + ", " +
+                   std::to_string(sizes.channels);
+    }
+
+    std::cout << std::setw(14)
+              << layers_[i]->numberOfParameters()
+              << " ";
+
+    totalParameters += layers_[i]->numberOfParameters();
+
+    if (layers_[i]->isTrainable())
+    {
+      totalTrainableParameters += layers_[i]->numberOfParameters();
+
+      std::cout << "Yes";
+    }
+    else
+    {
+      std::cout << "No";
+    }
+
+    std::cout << "\n";
+    if (i != lastLayer_)
+    {
+      std::cout << "-----------------------------------------------------------\n";
+    }
+  }
+
+  std::cout << "===========================================================\n";
+
+  std::cout << "Total parameters: "
+            << totalParameters << std::endl;
+
+  std::cout << "Total trainable parameters: "
+            << totalTrainableParameters << std::endl;
+
+  std::cout << "Non-trainale parameters: "
+            << totalParameters - totalTrainableParameters << "\n\n";
+
 }
 
 void neuralNetwork::forwardPropagation(const Matrix& obs) const
