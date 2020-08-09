@@ -100,15 +100,16 @@ void denseLayer::init(const layer* previousLayer)
      assert(inputChannels_ > 0);
   }
 
-  const Scalar epilonInit = sqrt(6.0)
-                          / sqrt(layerSize_ + inputSize_);
+  const Scalar epsilonInit = sqrt(6.0)
+                           / sqrt(layerSize_ + inputSize_);
 
   weights_.setRandom(layerSize_, inputSize_);
-  weights_ *= epilonInit;
+  weights_ *= epsilonInit;
 
   dWeights_.setZero(layerSize_, inputSize_);
 
-  biases_.setZero(layerSize_);
+  biases_.setRandom(layerSize_);
+  biases_ *= epsilonInit;
 
   dBiases_.setZero(layerSize_);
 }
@@ -283,6 +284,8 @@ void denseLayer::backwardPropagation(
 
   cacheBackProp_.noalias() = weights_.transpose()
                            * dLinearOutput;
+std::cout << "Cache dense\n";
+std::cout << cacheBackProp_ << "\n\n";
 }
 
 void denseLayer::setWeightsAndBiases(

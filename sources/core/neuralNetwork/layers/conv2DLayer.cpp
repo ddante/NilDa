@@ -182,7 +182,8 @@ void conv2DLayer::init(const layer* previousLayer)
 
   dFilterWeights_.setZero(kernelSize, kernelChannels);
 
-  biases_.setZero(forwardConvDims_.kernelNumber);
+  biases_.setRandom(forwardConvDims_.kernelNumber);
+  biases_ *= epsilonInit;
 
   dBiases_.setZero(forwardConvDims_.kernelNumber);
 }
@@ -272,6 +273,9 @@ void conv2DLayer::backwardPropagation(
   const int nObs = input.cols()
                  / forwardConvDims_.inputChannels;
 
+  std::cout << "input\n";
+  std::cout << input << "\n\n";
+
   if (undoFlattening_)
   {
     // The next layer is a flatten layer (dense)
@@ -288,8 +292,8 @@ void conv2DLayer::backwardPropagation(
                                       dLinearOutput
                                      );
 
-    std::cout << "dA_c +++ \n";
-    std::cout << dActivationNextM << "\n----\n";
+    std::cout << "dA_M \n";
+    std::cout << dActivationNextM << "\n\n";
   }
   else
   {
@@ -300,10 +304,12 @@ void conv2DLayer::backwardPropagation(
                                         dActivationNext,
                                         dLinearOutput
                                        );
+    std::cout << "dA \n";
+    std::cout << dActivationNext << "\n\n";
   }
 
-  std::cout << "dZ_c +++ \n";
-  std::cout << dLinearOutput<< "\n----\n";
+  std::cout << "dZ \n";
+  std::cout << dLinearOutput<< "\n\n";
 
 #ifdef ND_DEBUG_CHECKS
     //checkInputAndCacheSize(inputData, dActivationNext);
@@ -323,8 +329,8 @@ void conv2DLayer::backwardPropagation(
            dFilterWeights_
           );
 
-  std::cout << "Backward Weights Conv Dim" << std::endl;
-  std::cout << backwardWeightsConvDims_ << std::endl;
+//  std::cout << "Backward Weights Conv Dim" << std::endl;
+//  std::cout << backwardWeightsConvDims_ << std::endl;
 
   dFilterWeights_ /= nObs;
 
@@ -391,8 +397,8 @@ void conv2DLayer::backwardPropagation(
 
   cacheBackProp_.resize(cacheRows, cacheCols);
 
-  std::cout << "Backward Input Conv Dim" << std::endl;
-  std::cout << backwardInputConvDims_ << std::endl;
+  //std::cout << "Backward Input Conv Dim" << std::endl;
+  //std::cout << backwardInputConvDims_ << std::endl;
 
   convolve(nObs,
            backwardInputConvDims_,
