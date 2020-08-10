@@ -255,10 +255,14 @@ setConv2DDims(
 
   int fullPadTop, fullPadBottom;
 
+  // Note that the order of Top and Bottom padding are switched.
+  // For asymmetric padding, the padding on the two sides
+  // must be reverted compared to the forward step
+  // (No idea why)
   paddingPartitioning(
                       totalVertPad,
-                      fullPadTop,
-                      fullPadBottom
+                      fullPadBottom,
+                      fullPadTop
                      );
 
   const int outputRowsFullPadded = outputRows
@@ -279,10 +283,14 @@ setConv2DDims(
 
   int fullPadLeft, fullPadRight;
 
+  // Note that the order of Left and Right padding are switched.
+  // For asymmetric padding, the padding on the two sides
+  // must be reverted compared to the forward step
+  // (No idea why)
   paddingPartitioning(
                       totalHorizPad,
-                      fullPadLeft,
-                      fullPadRight
+                      fullPadRight,
+                      fullPadLeft
                      );
 
   const int outputColsFullPadded = outputCols
@@ -311,38 +319,37 @@ setConv2DDims(
                                      );
 }
 
-Scalar* applyPadding(
+//Scalar*
+void applyPadding(
                      const conv2DDimensions& dims,
-                     const Scalar* input
+                     const Scalar* input,
+                     RowMatrix& paddedInput
                     )
 {
-    const Scalar* reader = input;
+  const Scalar* reader = input;
 
-    RowMatrix paddedInput;
+  paddedInput.setZero(
+                      dims.inputPaddedRows,
+                      dims.inputPaddedCols
+                     );
 
-    paddedInput.setZero(
-                        dims.inputPaddedRows,
-                        dims.inputPaddedCols
-                       );
+  Scalar* writer = paddedInput.data();
 
-    Scalar* writer = paddedInput.data();
+  const std::size_t copyBytes = sizeof(Scalar) * dims.inputCols;
 
-    const std::size_t copyBytes = sizeof(Scalar) * dims.inputCols;
+  const int stride = dims.inputPaddedCols;
 
-    const int stride = dims.inputPaddedCols;
+  writer += dims.inputPaddedCols * dims.padTop
+          + dims.padLeft;
 
-    writer += dims.inputPaddedCols * dims.padTop
-            + dims.padLeft;
-
-    for (
-         int i = 0; i < dims.inputRows; ++i,
-         reader += dims.inputCols, writer += stride
-        )
-    {
-        std::memcpy(writer, reader, copyBytes);
-    }
-
-    return paddedInput.data();
+  for (
+       int i = 0; i < dims.inputRows; ++i,
+       reader += dims.inputCols,
+       writer += stride
+      )
+  {
+      std::memcpy(writer, reader, copyBytes);
+  }
 }
 
 void extractPatches(
@@ -376,8 +383,20 @@ void extractPatches(
        obs += dims.inputObservationStride
       )
   {
-    const Scalar* colReading =
-      padding ? applyPadding(dims, obs) : obs;
+    const Scalar* colReading = nullptr;
+
+    RowMatrix padObs;
+
+    if (padding)
+    {
+      applyPadding(dims, obs, padObs);
+
+      colReading = padObs.data();
+    }
+    else
+    {
+      colReading = obs;
+    }
 
     for (int j = 0; j < dims.outputCols; ++j)
   	{
@@ -438,11 +457,13 @@ void applyConvolution(
   }
 }
 
-void convolve(const int nObservations,
+void convolve(
+              const int nObservations,
               const conv2DDimensions& dims,
               const Scalar* input,
               const Scalar* kernels,
-              Matrix& output)
+              Matrix& output
+             )
 {
   /*
   Input Shape:
@@ -482,7 +503,7 @@ void convolve(const int nObservations,
       )
   {
       extractPatches(nObservations, dims, input, patches);
-      //std::cout << patches << "\n\n";
+      // std::cout << patches << "\n\n";
 
       ConstMapMatrix mappedKernels(
                                    kernels,
@@ -491,12 +512,12 @@ void convolve(const int nObservations,
                                   );
 
       applyConvolution(dims, patches, mappedKernels, conv);
-      //std::cout << Conv << "\n\n";
+      // std::cout << conv << "\n\n";
   }
 
   output.resize(
                 dims.outputRows* dims.outputCols,
-                dims.kernelNumber * nObservations  
+                dims.kernelNumber * nObservations
                );
 
   Scalar* writer = output.data();
@@ -525,8 +546,7 @@ void convolve(const int nObservations,
           }
      }
   }
-
-  //std::cout << Output << "\n----\n";
+  //std::cout << output << "\n----\n";
 }
 
 void applyRotation(

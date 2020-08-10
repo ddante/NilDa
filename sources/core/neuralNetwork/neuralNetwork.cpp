@@ -182,7 +182,7 @@ void neuralNetwork::backwardPropagation(
       layers_[i]->backwardPropagation(
                                       layers_[i + 1]->backPropCache(),
                                       layers_[i - 1]->output()
-                                      );
+                                     );
     }
   }
 

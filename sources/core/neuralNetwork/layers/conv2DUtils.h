@@ -92,9 +92,10 @@ void convolve(
              );
 
 // Apply the padding to input according to the rules in dims
-Scalar* applyPadding(
+void applyPadding(
                      const conv2DDimensions& dims,
-                     const Scalar* input
+                     const Scalar* input,
+                     RowMatrix& paddedInput
                     );
 
 // Extract the patches for the computation of the convolution

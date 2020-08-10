@@ -284,8 +284,6 @@ void denseLayer::backwardPropagation(
 
   cacheBackProp_.noalias() = weights_.transpose()
                            * dLinearOutput;
-std::cout << "Cache dense\n";
-std::cout << cacheBackProp_ << "\n\n";
 }
 
 void denseLayer::setWeightsAndBiases(

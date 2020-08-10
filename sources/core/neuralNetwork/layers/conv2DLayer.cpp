@@ -273,9 +273,6 @@ void conv2DLayer::backwardPropagation(
   const int nObs = input.cols()
                  / forwardConvDims_.inputChannels;
 
-  std::cout << "input\n";
-  std::cout << input << "\n\n";
-
   if (undoFlattening_)
   {
     // The next layer is a flatten layer (dense)
@@ -291,9 +288,6 @@ void conv2DLayer::backwardPropagation(
                                       dActivationNextM,
                                       dLinearOutput
                                      );
-
-    std::cout << "dA_M \n";
-    std::cout << dActivationNextM << "\n\n";
   }
   else
   {
@@ -304,12 +298,7 @@ void conv2DLayer::backwardPropagation(
                                         dActivationNext,
                                         dLinearOutput
                                        );
-    std::cout << "dA \n";
-    std::cout << dActivationNext << "\n\n";
   }
-
-  std::cout << "dZ \n";
-  std::cout << dLinearOutput<< "\n\n";
 
 #ifdef ND_DEBUG_CHECKS
     //checkInputAndCacheSize(inputData, dActivationNext);
@@ -333,9 +322,6 @@ void conv2DLayer::backwardPropagation(
 //  std::cout << backwardWeightsConvDims_ << std::endl;
 
   dFilterWeights_ /= nObs;
-
-  std::cout << "dWeights:\n";
-  std::cout << dFilterWeights_ << "\n\n";
 
   // ----------------------------------------------------
 
@@ -374,8 +360,6 @@ void conv2DLayer::backwardPropagation(
 
   dBiases_.noalias() = mappedSumOutputs.rowwise().mean();
 
-  std::cout << "dbiases: \n";
-  std::cout << dBiases_ << "\n\n";
   // ----------------------------------------------------
 
   Matrix rotatedKernels;
@@ -385,9 +369,6 @@ void conv2DLayer::backwardPropagation(
                 forwardConvDims_,
                 rotatedKernels
                );
-
-  //std::cout << filterWeights_ << "\n--\n";
-  //std::cout << rotatedKernels << "\n--\n";
 
   const int cacheRows = forwardConvDims_.inputRows
                       * forwardConvDims_.inputCols;
@@ -400,14 +381,13 @@ void conv2DLayer::backwardPropagation(
   //std::cout << "Backward Input Conv Dim" << std::endl;
   //std::cout << backwardInputConvDims_ << std::endl;
 
-  convolve(nObs,
+  convolve(
+           nObs,
            backwardInputConvDims_,
            dLinearOutput.data(),
            rotatedKernels.data(),
-           cacheBackProp_);
-
-  std::cout << "cache cv: \n";
-  std::cout << cacheBackProp_ << "\n\n";
+           cacheBackProp_
+         );
 }
 
 void conv2DLayer::setWeightsAndBiases(
