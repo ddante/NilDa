@@ -3,6 +3,7 @@ add_library(layers
             denseLayer.cpp
             conv2DLayer.cpp
             conv2DUtils.cpp
+            maxPool2DLayer.cpp
             activationFunctions/activationFunctionUtils.cpp
             activationFunctions/identity.cpp
             activationFunctions/relu.cpp

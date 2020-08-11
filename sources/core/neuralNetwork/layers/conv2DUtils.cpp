@@ -319,12 +319,11 @@ setConv2DDims(
                                      );
 }
 
-//Scalar*
 void applyPadding(
-                     const conv2DDimensions& dims,
-                     const Scalar* input,
-                     RowMatrix& paddedInput
-                    )
+                  const conv2DDimensions& dims,
+                  const Scalar* input,
+                  RowMatrix& paddedInput
+                 )
 {
   const Scalar* reader = input;
 

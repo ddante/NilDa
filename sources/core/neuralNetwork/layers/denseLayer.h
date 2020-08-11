@@ -146,7 +146,6 @@ public:
                          Scalar errTol
                         ) const override
   {
-
     std::cerr << "No localChecks for dense layer" << std::endl;
 
     assert(false);

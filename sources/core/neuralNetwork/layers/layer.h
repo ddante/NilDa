@@ -17,6 +17,7 @@ enum class layerTypes {
   input,
   dense,
   conv2D,
+  maxPool2D
 };
 
 struct layerSizes {
@@ -136,15 +137,19 @@ public:
 
     if (inLayerType == layerTypes::input)
     {
-      name = "input";
+      name = "Input";
     }
     else if (inLayerType == layerTypes::dense)
     {
-      name = "dense";
+      name = "Dense";
     }
     else if (inLayerType == layerTypes::conv2D)
     {
-      name = "conv 2D";
+      name = "Conv 2D";
+    }
+    else if (inLayerType == layerTypes::maxPool2D)
+    {
+      name = "Max pool 2D";
     }
     else
     {
