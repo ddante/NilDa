@@ -1,8 +1,7 @@
 #include <iostream>
 
 #include "maxPool2DLayer.h"
-
-#include "conv2DUtils.h"
+#include "pool2DUtils.h"
 
 // ---------------------------------------------------------------------------
 
@@ -68,19 +67,13 @@ void maxPool2DLayer::init(const layer* previousLayer)
                                          prevLayer.channels
                                         };
 
-  // Dummy variables that will be disregarded
-  conv2DDimensions tmp1, tmp2;
-
   // This is not OK. Padding here means a different think
-  setConv2DDims(
+  setPool2DDims(
                 prevLayerSize,
-                1,
                 kernelSize_,
                 kernelStride_,
                 withPadding_,
-                poolDims_,
-                tmp1,
-                tmp2
+                poolDims_
                );
 
   size_.isFlat = false;

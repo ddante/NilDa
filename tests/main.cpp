@@ -6,6 +6,7 @@
 #include "core/neuralNetwork/layers/inputLayer.h"
 #include "core/neuralNetwork/layers/denseLayer.h"
 #include "core/neuralNetwork/layers/conv2DLayer.h"
+#include "core/neuralNetwork/layers/maxPool2DLayer.h"
 
 #include "core/neuralNetwork/neuralNetwork.h"
 #include "core/neuralNetwork/optimizers/sgd.h"
@@ -38,17 +39,23 @@ int main(int argc, char const *argv[])
                                             "relu"
                                            );
 
-  NilDa::layer* l2 = new NilDa::conv2DLayer(
-                                            nFilters,
+  NilDa::layer* l2 = new NilDa::maxPool2DLayer(
+                                               {2, 2},
+                                               {1, 1},
+                                               true
+                                              );
+
+  NilDa::layer* l3 = new NilDa::conv2DLayer(
+                                            2*nFilters,
                                             {rF, cF},
                                             {rS, cS},
                                             padding,
                                             "relu"
                                            );
 
-  NilDa::layer* l3 = new NilDa::denseLayer(3, "softmax");
+  NilDa::layer* l4 = new NilDa::denseLayer(3, "softmax");
 
-  NilDa::neuralNetwork nn({l0, l1, l2, l3});
+  NilDa::neuralNetwork nn({l0, l1, l2, l3, l4});
 
   nn.summary();
 
@@ -67,7 +74,7 @@ int main(int argc, char const *argv[])
 //nn.forwardPropagation(X);
 //nn.backwardPropagation(X,Y);
 
-  int out = nn.gradientsSanityCheck(X, Y, true);
+//  int out = nn.gradientsSanityCheck(X, Y, true);
 
   return 0;
 }

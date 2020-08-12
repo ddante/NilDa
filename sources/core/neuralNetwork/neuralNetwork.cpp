@@ -55,9 +55,9 @@ neuralNetwork::neuralNetwork(const std::vector<layer*>& vLayers):
 
 void neuralNetwork::summary() const
 {
-  std::cout << "===========================================================\n";
-  std::cout << " Layer  Type         Size         Parameters     Trainable \n";
-  std::cout << "===========================================================\n";
+  std::cout << "============================================================\n";
+  std::cout << " Layer  Type         Output size     Parameters   Trainable \n";
+  std::cout << "============================================================\n";
 
   int totalParameters = 0;
   int totalTrainableParameters = 0;
@@ -75,11 +75,11 @@ void neuralNetwork::summary() const
 
     if (sizes.isFlat)
     {
-      std::cout << std::setw(12) << sizes.size << " ";
+      std::cout << std::setw(12) << sizes.size << "    ";
     }
     else
     {
-      std::cout << std::setw(13)
+      std::cout << std::setw(16)
                 << std::to_string(sizes.rows) + ", " +
                    std::to_string(sizes.cols) + ", " +
                    std::to_string(sizes.channels);
@@ -105,11 +105,11 @@ void neuralNetwork::summary() const
     std::cout << "\n";
     if (i != lastLayer_)
     {
-      std::cout << "-----------------------------------------------------------\n";
+      std::cout << "------------------------------------------------------------\n";
     }
   }
 
-  std::cout << "===========================================================\n";
+  std::cout << "============================================================\n";
 
   std::cout << "Total parameters: "
             << totalParameters << std::endl;

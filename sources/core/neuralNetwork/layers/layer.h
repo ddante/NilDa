@@ -149,7 +149,7 @@ public:
     }
     else if (inLayerType == layerTypes::maxPool2D)
     {
-      name = "Max pool 2D";
+      name = "MaxPool 2D";
     }
     else
     {

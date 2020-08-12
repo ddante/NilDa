@@ -4,7 +4,7 @@
 #include <iostream>
 #include <array>
 
-#include "conv2DUtils.h"
+#include "pool2DUtils.h"
 
 #include "layer.h"
 
@@ -34,7 +34,7 @@ private:
   // ???
   Matrix cacheBackProp_;
 
-  conv2DDimensions poolDims_;
+  pool2DDimensions poolDims_;
 
   // Store the number of observations seen in the
   // forward propagation

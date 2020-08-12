@@ -4,6 +4,7 @@ add_library(layers
             conv2DLayer.cpp
             conv2DUtils.cpp
             maxPool2DLayer.cpp
+            pool2DUtils.cpp
             activationFunctions/activationFunctionUtils.cpp
             activationFunctions/identity.cpp
             activationFunctions/relu.cpp
