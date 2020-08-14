@@ -27,7 +27,7 @@ namespace NilDa
 
 namespace NilDa
 {
-  typedef long  double Scalar;
+  typedef longdouble Scalar;
 }
 
 #else

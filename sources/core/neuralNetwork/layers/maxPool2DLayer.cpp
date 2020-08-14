@@ -39,7 +39,8 @@ maxPool2DLayer::maxPool2DLayer(
 
 void maxPool2DLayer::init(const layer* previousLayer)
 {
-  if (previousLayer->layerType() != layerTypes::conv2D)
+  if (previousLayer->layerType() != layerTypes::conv2D &&
+      previousLayer->layerType() != layerTypes::input  ) // temp
   {
     std::cerr << "Previous layer of type "
              <<  getLayerName(previousLayer->layerType())
@@ -91,7 +92,24 @@ void maxPool2DLayer::checkInputSize(const Matrix& inputData) const
 {}
 
 void maxPool2DLayer::forwardPropagation(const Matrix& input)
-{}
+{
+#ifdef ND_DEBUG_CHECKS
+  checkInputSize(input);
+#endif
+
+  maxPool2D(poolDims_, input, linearOutput_, maxIndices_);
+
+  std::cout << "\n---------\n";
+  std::cout << linearOutput_ << "\n---------\n";
+
+  const Scalar* in = input.data();
+  int* id = maxIndices_.data();
+
+  for (int i = 0; i < maxIndices_.size(); ++i)
+  {
+    std::cout << in[id[i]] << "\n";
+  }
+}
 
 void maxPool2DLayer::backwardPropagation(const Matrix& dActivationNext,
                                          const Matrix& input)

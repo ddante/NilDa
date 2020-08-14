@@ -13,7 +13,7 @@
 
 int main(int argc, char const *argv[])
 {
-  const int n = 5;
+  const int n = 3;
 
   const int rI = n;
   const int cI = n;
@@ -31,47 +31,36 @@ int main(int argc, char const *argv[])
 
   NilDa::layer* l0 = new NilDa::inputLayer({rI, cI, chI});
 
-  NilDa::layer* l1 = new NilDa::conv2DLayer(
-                                            nFilters,
-                                            {rF, cF},
-                                            {rS, cS},
-                                            padding,
-                                            "relu"
-                                           );
-
-  NilDa::layer* l2 = new NilDa::maxPool2DLayer(
+  NilDa::layer* l1 = new NilDa::maxPool2DLayer(
                                                {2, 2},
-                                               {1, 1},
+                                               {2, 2},
                                                true
                                               );
 
-  NilDa::layer* l3 = new NilDa::conv2DLayer(
-                                            2*nFilters,
-                                            {rF, cF},
-                                            {rS, cS},
-                                            padding,
-                                            "relu"
-                                           );
-
-  NilDa::layer* l4 = new NilDa::denseLayer(3, "softmax");
-
-  NilDa::neuralNetwork nn({l0, l1, l2, l3, l4});
+  NilDa::neuralNetwork nn({l0, l1});
 
   nn.summary();
 
-  nn.setLossFunction("sparse_categorical_crossentropy");
+  const int nObs = 1;
 
-  const int nObs = 4;
   NilDa::Matrix X(rI * cI, chI * nObs);
 
-  X.setRandom(rI * cI, chI * nObs);
+  int l = 0;
+  for (int i = 0; i < nObs; ++i)
+  {
+    for (int j = 0; j < chI; ++j, ++l)
+    {
+        for (int k = 0; k < rI * cI; ++k)
+        {
+            X(k, l) = (k + 1) * (j + 1) * (i+1) - 1;
+        }
+    }
+  }
+  std::cout << X << "\n---------\n";
 
-  NilDa::Matrix Y(3, nObs);
-  Y << 1,0,0,0,
-       0,1,0,1,
-       0,0,1,0;
+  //X.setRandom(rI * cI, chI * nObs);
 
-//nn.forwardPropagation(X);
+  nn.forwardPropagation(X);
 //nn.backwardPropagation(X,Y);
 
 //  int out = nn.gradientsSanityCheck(X, Y, true);

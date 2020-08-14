@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <math.h>
+#include <limits>
 
 #include "conv2DUtils.h"
 
@@ -11,6 +12,7 @@
 namespace NilDa
 {
 
+const Scalar infty = std::numeric_limits<Scalar>::infinity();
 
 void
 pool2DDimensions::setDimensions(
@@ -170,5 +172,198 @@ setPool2DDims(
                         );
 }
 
+void getBlockHead(
+                  const pool2DDimensions& dims,
+                  VectorI& indices
+                 )
+{
+  const int poolRows = dims.outputRows
+                     * dims.outputCols;
+
+  indices.resize(poolRows);
+
+  const int strideRow = dims.inputPaddedCols
+                      * dims.kernelStrideRow;
+
+  int id = 0;
+
+  for (int i = 0; i < dims.outputRows; ++i)
+  {
+    for (int j = 0; j < dims.outputCols; ++j, ++id)
+    {
+      indices[id] = (i * strideRow)
+                  + (j * dims.kernelStrideCol);
+    }
+  }
+}
+
+void applyPoolPadding(
+                      const pool2DDimensions& dims,
+                      const Scalar* input,
+                      const Scalar initVal,
+                      RowMatrix& paddedInput
+                     )
+{
+  const Scalar* reader = input;
+
+  paddedInput.setOnes(
+                      dims.inputPaddedRows,
+                      dims.inputPaddedCols
+                     );
+
+  paddedInput *= initVal;
+
+  Scalar* writer = paddedInput.data();
+
+  const std::size_t copyBytes = sizeof(Scalar) * dims.inputCols;
+
+  const int stride = dims.inputPaddedCols;
+
+  writer += dims.inputPaddedCols * dims.padTop
+          + dims.padLeft;
+
+  for (
+       int i = 0; i < dims.inputRows; ++i,
+       reader += dims.inputCols,
+       writer += stride
+      )
+  {
+      std::memcpy(writer, reader, copyBytes);
+  }
+}
+
+void findMax(
+             const pool2DDimensions& dims,
+             const Scalar* input,
+             const int col,
+             int* mId,
+             Scalar* out
+            )
+{
+  const int poolSize = dims.outputRows * dims.outputCols;
+
+  const int strideRow = dims.inputRows
+                      * dims.inputCols;
+  for (
+       int pool = 0; pool < poolSize; ++pool,
+       ++mId, out++
+      )
+  {
+    Scalar maxVal = -infty;
+
+    int locMaxId = -1;
+
+    const int idStart = *mId;
+
+    for (int i = 0; i < dims.kernelRows; ++i)
+    {
+      for (int j = 0; j < dims.kernelCols; ++j)
+      {
+        const int shift = i*dims.inputPaddedCols + j;
+
+        const int ofset = idStart + shift;
+
+        const Scalar val = *(input + ofset);
+
+        if(val > maxVal)
+        {
+          maxVal = val;
+
+          locMaxId = ofset;
+
+          std::cout << "i=" <<  i << ", j=" << j
+                    << "p=" <<  p << ", off=" << ofset << " | "
+                    << locMaxId  << ", " << val << "\n";
+        }
+      }
+    }
+
+    *mId = locMaxId + col*strideRow;
+
+    *out = maxVal;
+  }
+}
+
+void getMaxPool(
+                const pool2DDimensions& dims,
+                const Matrix& input,
+                Matrix& output,
+                MatrixI& maxIds
+               )
+{
+  VectorI ofsets;
+
+  getBlockHead(dims, ofsets);
+
+  bool padding = false;
+
+  if (
+       dims.padLeft > 0 || dims.padRight  > 0 ||
+       dims.padTop  > 0 || dims.padBottom > 0
+     )
+  {
+      padding = true;
+  }
+
+  const int poolRows = dims.outputRows * dims.outputCols;
+
+  const int strideCol = dims.inputRows * dims.inputCols;
+
+  const int nCols = input.cols();
+
+  const std::size_t copyBytes = sizeof(int) * poolRows;
+
+  const Scalar* src = input.data();
+
+  int* mId = maxIds.data();
+
+  Scalar* out = output.data();
+
+  for (
+       int col = 0; col < nCols; ++col,
+       src += strideCol,
+       mId += poolRows,
+       out += poolRows
+      )
+  {
+    const Scalar* colReading = nullptr;
+
+    RowMatrix padSrc;
+
+    if (padding)
+    {
+      applyPoolPadding(dims, src, -infty, padSrc);
+
+      colReading = padSrc.data();
+    }
+    else
+    {
+      colReading = src;
+    }
+
+    std::memcpy(mId, ofsets.data(), copyBytes);
+
+    findMax(dims, colReading, col, mId, out);
+  }
+}
+
+void maxPool2D(
+               const pool2DDimensions& poolDims,
+               const Matrix& input,
+               Matrix& maxPool,
+               MatrixI& maxIds
+              )
+{
+  const int poolRows = poolDims.outputRows
+                     * poolDims.outputCols;
+
+  const int poolCols = input.cols();
+
+  maxIds.resize(poolRows, poolCols);
+
+  maxPool.resize(poolRows, poolCols);
+
+  getMaxPool(poolDims, input, maxPool, maxIds);
+}
 
 } // namespace

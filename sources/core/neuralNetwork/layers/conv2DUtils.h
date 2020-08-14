@@ -83,20 +83,20 @@ void setConv2DDims(
                   );
 
 // Convolution of the input with the kernel
-void convolve(
-              const int nObservations,
-              const conv2DDimensions& dims,
-              const Scalar* Input,
-              const Scalar* Kernels,
-              Matrix& Output
-             );
+void convolve2D(
+                const int nObservations,
+                const conv2DDimensions& dims,
+                const Scalar* input,
+                const Scalar* kernels,
+                Matrix& output
+               );
 
 // Apply the padding to input according to the rules in dims
 void applyPadding(
-                     const conv2DDimensions& dims,
-                     const Scalar* input,
-                     RowMatrix& paddedInput
-                    );
+                  const conv2DDimensions& dims,
+                  const Scalar* input,
+                  RowMatrix& paddedInput
+                 );
 
 // Extract the patches for the computation of the convolution
 // using a modified im2col algorithm

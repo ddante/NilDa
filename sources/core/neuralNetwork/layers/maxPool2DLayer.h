@@ -28,8 +28,12 @@ private:
   // Is padding used?
   bool withPadding_;
 
-  // Output of the polling
-  Matrix output_;
+  // Output of the polling and activation
+  Matrix linearOutput_;
+  //Matrix activation_;
+
+ // Stroe the indices of the max values
+  MatrixI maxIndices_;
 
   // ???
   Matrix cacheBackProp_;
@@ -143,7 +147,7 @@ public:
 
   const Matrix& output() const override
   {
-    return output_;
+    return linearOutput_;
   }
 
   const Matrix& backPropCache() const override

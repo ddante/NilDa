@@ -67,6 +67,39 @@ void setPool2DDims(
                    pool2DDimensions& poolDims
                   );
 
+void getBlockHead(
+                  const pool2DDimensions& dims,
+                  VectorI& indices
+                 );
+
+void applyPoolPadding(
+                      const pool2DDimensions& dims,
+                      const Scalar* input,
+                      const Scalar initVal,
+                      RowMatrix& paddedInput
+                     );
+
+void findMax(
+             const pool2DDimensions& dims,
+             const Scalar* colReading,
+             const int col,
+             int* mId,
+             Scalar* out
+            );
+
+void maxPool2D(
+               const pool2DDimensions& poolDims,
+               const Matrix& input,
+               Matrix& output,
+               MatrixI& maxIds
+              );
+
+void getMaxPool(
+                const pool2DDimensions& poolDims,
+                const Matrix& input,
+                Matrix& maxPool,
+                MatrixI& maxIds
+               );
 
 } // namespace
 

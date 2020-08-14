@@ -222,13 +222,13 @@ void conv2DLayer::forwardPropagation(const Matrix& input)
                  / forwardConvDims_.inputChannels;
 
   // Convolve Input with the filters
-  convolve(
-           nObs,
-           forwardConvDims_,
-           input.data(),
-           filterWeights_.data(),
-           linearOutput_
-          );
+  convolve2D(
+             nObs,
+             forwardConvDims_,
+             input.data(),
+             filterWeights_.data(),
+             linearOutput_
+            );
 
   // Add the biases
   int colObs = 0;
@@ -311,13 +311,13 @@ void conv2DLayer::backwardPropagation(
   // observation and number of input channels are swapped
   backwardWeightsConvDims_.setInputChannels(nObs);
 
-  convolve(
-           forwardConvDims_.inputChannels,
-           backwardWeightsConvDims_,
-           input.data(),
-           dLinearOutput.data(),
-           dFilterWeights_
-          );
+  convolve2D(
+             forwardConvDims_.inputChannels,
+             backwardWeightsConvDims_,
+             input.data(),
+             dLinearOutput.data(),
+             dFilterWeights_
+            );
 
 //  std::cout << "Backward Weights Conv Dim" << std::endl;
 //  std::cout << backwardWeightsConvDims_ << std::endl;
@@ -382,13 +382,13 @@ void conv2DLayer::backwardPropagation(
   //std::cout << "Backward Input Conv Dim" << std::endl;
   //std::cout << backwardInputConvDims_ << std::endl;
 
-  convolve(
-           nObs,
-           backwardInputConvDims_,
-           dLinearOutput.data(),
-           rotatedKernels.data(),
-           cacheBackProp_
-         );
+  convolve2D(
+             nObs,
+             backwardInputConvDims_,
+             dLinearOutput.data(),
+             rotatedKernels.data(),
+             cacheBackProp_
+            );
 }
 
 void conv2DLayer::setWeightsAndBiases(

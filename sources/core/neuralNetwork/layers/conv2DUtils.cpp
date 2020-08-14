@@ -456,13 +456,13 @@ void applyConvolution(
   }
 }
 
-void convolve(
-              const int nObservations,
-              const conv2DDimensions& dims,
-              const Scalar* input,
-              const Scalar* kernels,
-              Matrix& output
-             )
+void convolve2D(
+                const int nObservations,
+                const conv2DDimensions& dims,
+                const Scalar* input,
+                const Scalar* kernels,
+                Matrix& output
+               )
 {
   /*
   Input Shape:
@@ -618,13 +618,13 @@ checkConvolution(
   Matrix origConv;
 
   // MEC conv2D algorithm
-  convolve(
-           nObs,
-           forwardConvDims,
-           input.data(),
-           kernels.data(),
-           origConv
-          );
+  convolve2D(
+             nObs,
+             forwardConvDims,
+             input.data(),
+             kernels.data(),
+             origConv
+            );
 
   // Brute force convolution
   int colOut = 0;
