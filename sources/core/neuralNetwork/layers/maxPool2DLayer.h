@@ -25,9 +25,6 @@ private:
   // Stride of the kernel (rows, cols)
   std::array<int, 2> kernelStride_;
 
-  // Is padding used?
-  bool withPadding_;
-
   // Output of the polling and activation
   Matrix linearOutput_;
   //Matrix activation_;
@@ -47,12 +44,6 @@ private:
 public:
 
   // Constructor
-
-  maxPool2DLayer(
-                 const std::array<int, 2>& poolSize,
-    			       const std::array<int, 2>& poolStride,
-    			       const bool withPadding
-                );
 
   maxPool2DLayer(
                  const std::array<int, 2>& poolSize,

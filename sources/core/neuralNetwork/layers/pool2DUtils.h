@@ -44,9 +44,6 @@ public:
   // Store the dimensions for the conv2d layer
   void setDimensions(
                      const int inR,  const int inC,  const int inCh,
-                     const int pT,   const int pB,
-                     const int pL,   const int pR,
-                     const int inPR, const int inPC,
                      const int kR,   const int kC,
                      const int kSR,  const int kSC,
                      const int outR, const int outC
@@ -63,22 +60,17 @@ void setPool2DDims(
                    const std::array<int, 3>& inputSize,
                    const std::array<int, 2>& kernelSize,
                    const std::array<int, 2>& kernelStride,
-                   const bool withPadding,
                    pool2DDimensions& poolDims
                   );
 
+// Get the start index of each pooling block
 void getBlockHead(
                   const pool2DDimensions& dims,
                   VectorI& indices
                  );
 
-void applyPoolPadding(
-                      const pool2DDimensions& dims,
-                      const Scalar* input,
-                      const Scalar initVal,
-                      RowMatrix& paddedInput
-                     );
-
+// Compute the max value in each pooling blokc
+// and return the correspondin index
 void findMax(
              const pool2DDimensions& dims,
              const Scalar* colReading,
@@ -87,19 +79,13 @@ void findMax(
              Scalar* out
             );
 
+// Perform the max pooling
 void maxPool2D(
                const pool2DDimensions& poolDims,
                const Matrix& input,
                Matrix& output,
                MatrixI& maxIds
               );
-
-void getMaxPool(
-                const pool2DDimensions& poolDims,
-                const Matrix& input,
-                Matrix& maxPool,
-                MatrixI& maxIds
-               );
 
 } // namespace
 

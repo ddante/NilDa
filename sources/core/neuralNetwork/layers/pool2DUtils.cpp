@@ -17,9 +17,6 @@ const Scalar infty = std::numeric_limits<Scalar>::infinity();
 void
 pool2DDimensions::setDimensions(
                                 const int inR,  const int inC,  const int inCh,
-                                const int pT,   const int pB,
-                                const int pL,   const int pR,
-                                const int inPR, const int inPC,
                                 const int kR,   const int kC,
                                 const int kSR,  const int kSC,
                                 const int outR, const int outC
@@ -28,12 +25,6 @@ pool2DDimensions::setDimensions(
   inputRows = inR;
   inputCols = inC;
   inputChannels = inCh;
-  padTop = pT;
-  padBottom = pB;
-  padLeft = pL;
-  padRight = pR;
-  inputPaddedRows = inPR;
-  inputPaddedCols = inPC;
   kernelRows = kR;
   kernelCols = kC;
   kernelChannels = inCh;
@@ -60,15 +51,6 @@ std::ostream& operator << (
   std::cout << "Kernel stride: " << dims.kernelStrideRow << ", "
                                  << dims.kernelStrideCol << std::endl;
 
-  std::cout << "Padding top/bottom: " << dims.padTop << ", "
-                                      << dims.padBottom << std::endl;
-
-  std::cout << "Padding left/right: " << dims.padLeft << ", "
-                                      << dims.padRight << std::endl;
-
-  std::cout << "Padded input size: " << dims.inputPaddedRows << ", "
-                                     << dims.inputPaddedCols << std::endl;
-
   std::cout << "Output size: " << dims.outputRows << ", "
                                << dims.outputCols << std::endl;
 
@@ -80,7 +62,6 @@ setPool2DDims(
               const std::array<int, 3>& inputSize,
               const std::array<int, 2>& kernelSize,
               const std::array<int, 2>& kernelStride,
-              const bool withPadding,
               pool2DDimensions& poolDims
              )
 {
@@ -102,70 +83,20 @@ setPool2DDims(
   assert(kernelCols <= inputCols);
 
   // The general formula for the output size is:
-  // 1 + (input - kernel + 2*pad)/kernelStride
-  Scalar rows = 1 + (inputRows - kernelRows)
-                 / static_cast<Scalar>(kernelStrideRow);
+  // 1 + (input - kernel + 2*pad)/kernelStride.
+  // Round the number down.
+  int outputRows = floor(
+                         1 + (inputRows - kernelRows)
+                           / static_cast<Scalar>(kernelStrideRow)
+                        );
 
-  Scalar cols = 1 + (inputCols - kernelCols)
-                  / static_cast<Scalar>(kernelStrideCol);
-
-  int outputRows = floor(rows);
-  int outputCols = floor(cols);
-
-  int upOutputRows = ceil(rows);
-  int upOutputCols = ceil(cols);
-
-  int padLeft = 0;
-  int padRight = 0;
-  int padTop = 0;
-  int padBottom = 0;
-
-  if (withPadding)
-  {
-    const int totalVertPad = (upOutputRows - 1) * kernelStrideRow
-                           - inputRows
-                           + kernelRows;
-
-    paddingPartitioning(totalVertPad, padTop, padBottom);
-
-    const int actualOutputRows = ceil(1
-                                      + (inputRows - kernelRows + totalVertPad)
-                                        / static_cast<Scalar>(kernelStrideRow)
-                                     );
-
-    assert(actualOutputRows == upOutputRows);
-
-    const int totalHorizPad = (upOutputCols - 1) * kernelStrideCol
-                            - inputCols
-                            + kernelCols;
-
-    paddingPartitioning(totalHorizPad, padLeft, padRight);
-
-    const int actualOutputCols = ceil(1
-                                      + (inputCols - kernelCols + totalHorizPad)
-                                        / static_cast<Scalar>(kernelStrideCol)
-                                     );
-
-    assert(actualOutputCols == upOutputCols);
-
-    // Update the output dimensions
-    outputRows = upOutputRows;
-    outputCols = upOutputCols;
-}
-
-  const int inputRowsPadded = inputRows
-                            + padTop
-                            + padBottom;
-
-  const int inputColsPadded = inputCols
-                            + padLeft
-                            + padRight;
+  int outputCols = floor(
+                         1 + (inputCols - kernelCols)
+                           / static_cast<Scalar>(kernelStrideCol)
+                        );
 
   poolDims.setDimensions(
                          inputRows, inputCols, inputChannels,
-                         padTop, padBottom,
-                         padLeft, padRight,
-                         inputRowsPadded, inputColsPadded,
                          kernelRows, kernelCols,
                          kernelStrideRow, kernelStrideCol,
                          outputRows, outputCols
@@ -174,63 +105,37 @@ setPool2DDims(
 
 void getBlockHead(
                   const pool2DDimensions& dims,
-                  VectorI& indices
+                  MatrixI& indices
                  )
 {
-  const int poolRows = dims.outputRows
-                     * dims.outputCols;
+#ifdef ND_DEBUG_CHECKS
+  assert(indices.rows() == dims.outputRows * dims.outputCols);
+#endif
 
-  indices.resize(poolRows);
-
-  const int strideRow = dims.inputPaddedCols
+  const int strideRow = dims.inputCols
                       * dims.kernelStrideRow;
 
-  int id = 0;
+  const int strideInput = dims.inputRows
+                        * dims.inputCols;
 
-  for (int i = 0; i < dims.outputRows; ++i)
+  const int nCols = indices.cols();
+
+  int* id = indices.data();
+
+  for (int col = 0; col < nCols; ++col)
   {
-    for (int j = 0; j < dims.outputCols; ++j, ++id)
+    for (int i = 0; i < dims.outputRows; ++i)
     {
-      indices[id] = (i * strideRow)
-                  + (j * dims.kernelStrideCol);
+      for (int j = 0; j < dims.outputCols; ++j, ++id)
+      {
+        *id = (i * strideRow)
+            + (j * dims.kernelStrideCol)
+            + (col * strideInput);
+      }
     }
   }
 }
 
-void applyPoolPadding(
-                      const pool2DDimensions& dims,
-                      const Scalar* input,
-                      const Scalar initVal,
-                      RowMatrix& paddedInput
-                     )
-{
-  const Scalar* reader = input;
-
-  paddedInput.setOnes(
-                      dims.inputPaddedRows,
-                      dims.inputPaddedCols
-                     );
-
-  paddedInput *= initVal;
-
-  Scalar* writer = paddedInput.data();
-
-  const std::size_t copyBytes = sizeof(Scalar) * dims.inputCols;
-
-  const int stride = dims.inputPaddedCols;
-
-  writer += dims.inputPaddedCols * dims.padTop
-          + dims.padLeft;
-
-  for (
-       int i = 0; i < dims.inputRows; ++i,
-       reader += dims.inputCols,
-       writer += stride
-      )
-  {
-      std::memcpy(writer, reader, copyBytes);
-  }
-}
 
 void findMax(
              const pool2DDimensions& dims,
@@ -242,25 +147,33 @@ void findMax(
 {
   const int poolSize = dims.outputRows * dims.outputCols;
 
-  const int strideRow = dims.inputRows
-                      * dims.inputCols;
+  // For each block, start from the first index (mId) and
+  // look for the max value in the neighbour cols and rows.
+  // The max value is stroed in out and the correspondid index
+  // is store in mId
   for (
        int pool = 0; pool < poolSize; ++pool,
-       ++mId, out++
+       ++mId, ++out
       )
   {
     Scalar maxVal = -infty;
 
-    int locMaxId = -1;
+    int maxId = -1;
 
+    // mId contains the index of the first element of the block.
+    // Because it is update, this index must be store in a
+    // separate variable (idStart)
     const int idStart = *mId;
 
     for (int i = 0; i < dims.kernelRows; ++i)
     {
       for (int j = 0; j < dims.kernelCols; ++j)
       {
-        const int shift = i*dims.inputPaddedCols + j;
+        // shift is local index shift w.r.t the first
+        // index of the BLOCK
+        const int shift = i*dims.inputCols + j;
 
+        // ofset is global index of the element in the INPUT
         const int ofset = idStart + shift;
 
         const Scalar val = *(input + ofset);
@@ -269,81 +182,14 @@ void findMax(
         {
           maxVal = val;
 
-          locMaxId = ofset;
-
-          std::cout << "i=" <<  i << ", j=" << j
-                    << "p=" <<  p << ", off=" << ofset << " | "
-                    << locMaxId  << ", " << val << "\n";
+          maxId = ofset;
         }
       }
     }
 
-    *mId = locMaxId + col*strideRow;
+    *mId = maxId;
 
     *out = maxVal;
-  }
-}
-
-void getMaxPool(
-                const pool2DDimensions& dims,
-                const Matrix& input,
-                Matrix& output,
-                MatrixI& maxIds
-               )
-{
-  VectorI ofsets;
-
-  getBlockHead(dims, ofsets);
-
-  bool padding = false;
-
-  if (
-       dims.padLeft > 0 || dims.padRight  > 0 ||
-       dims.padTop  > 0 || dims.padBottom > 0
-     )
-  {
-      padding = true;
-  }
-
-  const int poolRows = dims.outputRows * dims.outputCols;
-
-  const int strideCol = dims.inputRows * dims.inputCols;
-
-  const int nCols = input.cols();
-
-  const std::size_t copyBytes = sizeof(int) * poolRows;
-
-  const Scalar* src = input.data();
-
-  int* mId = maxIds.data();
-
-  Scalar* out = output.data();
-
-  for (
-       int col = 0; col < nCols; ++col,
-       src += strideCol,
-       mId += poolRows,
-       out += poolRows
-      )
-  {
-    const Scalar* colReading = nullptr;
-
-    RowMatrix padSrc;
-
-    if (padding)
-    {
-      applyPoolPadding(dims, src, -infty, padSrc);
-
-      colReading = padSrc.data();
-    }
-    else
-    {
-      colReading = src;
-    }
-
-    std::memcpy(mId, ofsets.data(), copyBytes);
-
-    findMax(dims, colReading, col, mId, out);
   }
 }
 
@@ -354,16 +200,40 @@ void maxPool2D(
                MatrixI& maxIds
               )
 {
-  const int poolRows = poolDims.outputRows
+  const int nCols = input.cols();
+
+  const int poolSize = poolDims.outputRows
                      * poolDims.outputCols;
 
-  const int poolCols = input.cols();
+  maxIds.resize(poolSize, nCols);
 
-  maxIds.resize(poolRows, poolCols);
+  // Store the indices of the first element of the pool
+  // block in maxIds
+  getBlockHead(poolDims, maxIds);
 
-  maxPool.resize(poolRows, poolCols);
+  const Scalar* src = input.data();
 
-  getMaxPool(poolDims, input, maxPool, maxIds);
+  int* mId = maxIds.data();
+
+  maxPool.resize(poolSize, nCols);
+
+#ifdef ND_DEBUG_CHECKS
+  assert(maxPool.rows() == maxIds.rows());
+  assert(maxPool.cols() == maxIds.cols());
+#endif
+
+  Scalar* out = maxPool.data();
+
+  // Find the max values in each pool block and store
+  // the corrspondidn index in maxIds
+  for (
+       int col = 0; col < input.cols(); ++col,
+       mId += poolSize,
+       out += poolSize
+      )
+  {
+    findMax(poolDims, src, col, mId, out);
+  }
 }
 
 } // namespace

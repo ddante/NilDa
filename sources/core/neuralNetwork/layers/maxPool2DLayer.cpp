@@ -10,26 +10,10 @@ namespace NilDa
 
 maxPool2DLayer::maxPool2DLayer(
                                const std::array<int, 2>& kernelSize,
-  			                       const std::array<int, 2>& kernelStride,
-  			                       const bool withPadding
-                             ) :
-  kernelSize_(kernelSize),
-  kernelStride_(kernelStride),
-  withPadding_(withPadding),
-  poolDims_{}
-{
-  type_ = layerTypes::maxPool2D;
-
-  trainable_ = false;
-}
-
-maxPool2DLayer::maxPool2DLayer(
-                               const std::array<int, 2>& kernelSize,
   			                       const std::array<int, 2>& kernelStride
                               ) :
   kernelSize_(kernelSize),
   kernelStride_(kernelStride),
-  withPadding_(false),
   poolDims_{}
 {
   type_ = layerTypes::maxPool2D;
@@ -73,7 +57,6 @@ void maxPool2DLayer::init(const layer* previousLayer)
                 prevLayerSize,
                 kernelSize_,
                 kernelStride_,
-                withPadding_,
                 poolDims_
                );
 
@@ -98,7 +81,7 @@ void maxPool2DLayer::forwardPropagation(const Matrix& input)
 #endif
 
   maxPool2D(poolDims_, input, linearOutput_, maxIndices_);
-
+/*
   std::cout << "\n---------\n";
   std::cout << linearOutput_ << "\n---------\n";
 
@@ -109,6 +92,7 @@ void maxPool2DLayer::forwardPropagation(const Matrix& input)
   {
     std::cout << in[id[i]] << "\n";
   }
+*/
 }
 
 void maxPool2DLayer::backwardPropagation(const Matrix& dActivationNext,

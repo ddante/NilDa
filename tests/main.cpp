@@ -17,7 +17,7 @@ int main(int argc, char const *argv[])
 
   const int rI = n;
   const int cI = n;
-  const int chI = 1;
+  const int chI = 3;
 
   const int rF = 2;
   const int cF = 2;
@@ -33,26 +33,26 @@ int main(int argc, char const *argv[])
 
   NilDa::layer* l1 = new NilDa::maxPool2DLayer(
                                                {2, 2},
-                                               {2, 2},
-                                               true
+                                               {2, 2}
                                               );
 
   NilDa::neuralNetwork nn({l0, l1});
 
   nn.summary();
 
-  const int nObs = 1;
+  const int nObs = 2;
 
   NilDa::Matrix X(rI * cI, chI * nObs);
 
   int l = 0;
+  int p = 0;
   for (int i = 0; i < nObs; ++i)
   {
     for (int j = 0; j < chI; ++j, ++l)
     {
-        for (int k = 0; k < rI * cI; ++k)
+        for (int k = 0; k < rI * cI; ++k, ++p)
         {
-            X(k, l) = (k + 1) * (j + 1) * (i+1) - 1;
+            X(k, l) = p;//(k + 1) * (j + 1) * (i+1) - 1;
         }
     }
   }
