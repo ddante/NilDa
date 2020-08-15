@@ -135,28 +135,17 @@ void denseLayer::checkInputAndCacheSize(
                                         const Matrix& cacheBackProp
                                        ) const
 {
-  if (weights_.cols() != inputData.rows())
-  {
-    std::cerr << "Size of input data "
-    << "(" << inputData.rows() << ") "
-    << " not consistent with dense layer size"
-    << " not consistent with dense layer weights size"
-    << "(" << weights_.rows() << ", "
-    << weights_.cols() << ") "
-    << std::endl;
-
-    assert(false);
-  }
+  checkInputSize(inputData);
 
   if (cacheBackProp.rows() != activation_.rows() &&
       cacheBackProp.cols() != activation_.cols() )
   {
     std::cerr << "Size of the back propagation cache "
     << "(" << cacheBackProp.rows() << ", "
-              << cacheBackProp.cols() << ") "
+           << cacheBackProp.cols() << ") "
     << " not consistent with the activation size "
     << "(" << activation_.rows() << ", "
-              << activation_.cols() << ") "
+           << activation_.cols() << ") "
     << std::endl;
 
     assert(false);

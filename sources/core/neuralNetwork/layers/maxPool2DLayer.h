@@ -27,12 +27,11 @@ private:
 
   // Output of the polling and activation
   Matrix linearOutput_;
-  //Matrix activation_;
 
- // Stroe the indices of the max values
+  // Stroe the indices of the max values
   MatrixI maxIndices_;
 
-  // ???
+  // cache for the back propagation
   Matrix cacheBackProp_;
 
   pool2DDimensions poolDims_;
@@ -65,6 +64,11 @@ public:
 
   void checkInputSize(const Matrix& inputData) const override;
 
+  void checkInputAndCacheSize(
+                              const Matrix& input,
+                              const Matrix& cacheBackProp
+                             ) const;
+
   void forwardPropagation(const Matrix& input) override;
 
   void backwardPropagation(const Matrix& dActivationNext,
@@ -76,9 +80,6 @@ public:
               << "getWeights function" << std::endl;
 
     assert(false);
-
-    //Matrix tmp;
-    //return tmp;
   }
 
   const Vector& getBiases() const override
@@ -87,9 +88,6 @@ public:
               << "getBiases function" << std::endl;
 
     assert(false);
-
-    //Vector tmp;
-    //return tmp;
   }
 
   const Matrix& getWeightsDerivative() const override
@@ -98,9 +96,6 @@ public:
               << "getWeightsDerivative function" << std::endl;
 
     assert(false);
-
-    //Matrix tmp;
-    //return tmp;
   }
 
   const Vector& getBiasesDerivative() const override
@@ -109,9 +104,6 @@ public:
               << "getBiasesDerivative function" << std::endl;
 
     assert(false);
-
-    //Vector tmp;
-    //return tmp;
   }
 
   void setWeightsAndBiases(

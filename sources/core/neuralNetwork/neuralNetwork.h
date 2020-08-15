@@ -44,7 +44,7 @@ private:
   int lastLayer_;
 
   mutable bool validState_;
-
+  
   mutable bool finalizedNetwork_;
 
   // Number of the input layer

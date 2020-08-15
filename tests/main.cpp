@@ -13,11 +13,11 @@
 
 int main(int argc, char const *argv[])
 {
-  const int n = 3;
+  const int n = 4;
 
   const int rI = n;
   const int cI = n;
-  const int chI = 3;
+  const int chI = 1;
 
   const int rF = 2;
   const int cF = 2;
@@ -36,11 +36,16 @@ int main(int argc, char const *argv[])
                                                {2, 2}
                                               );
 
-  NilDa::neuralNetwork nn({l0, l1});
+
+  NilDa::layer* l2 = new NilDa::denseLayer(3, "softmax");
+
+  NilDa::neuralNetwork nn({l0, l1, l2});
+
+  nn.setLossFunction("sparse_categorical_crossentropy");
 
   nn.summary();
 
-  const int nObs = 2;
+  const int nObs = 3;
 
   NilDa::Matrix X(rI * cI, chI * nObs);
 
@@ -59,9 +64,14 @@ int main(int argc, char const *argv[])
   std::cout << X << "\n---------\n";
 
   //X.setRandom(rI * cI, chI * nObs);
+  NilDa::Matrix Y(3, nObs);
+
+  Y << 1,0,0,
+       0,1,0,
+       0,0,1;
 
   nn.forwardPropagation(X);
-//nn.backwardPropagation(X,Y);
+  nn.backwardPropagation(X, Y);
 
 //  int out = nn.gradientsSanityCheck(X, Y, true);
 

@@ -23,8 +23,10 @@ maxPool2DLayer::maxPool2DLayer(
 
 void maxPool2DLayer::init(const layer* previousLayer)
 {
-  if (previousLayer->layerType() != layerTypes::conv2D &&
-      previousLayer->layerType() != layerTypes::input  ) // temp
+  if (
+      previousLayer->layerType() != layerTypes::input &&
+      previousLayer->layerType() != layerTypes::conv2D
+     )
   {
     std::cerr << "Previous layer of type "
              <<  getLayerName(previousLayer->layerType())
@@ -71,8 +73,46 @@ void maxPool2DLayer::init(const layer* previousLayer)
   size_.channels = poolDims_.outputChannels;
 }
 
-void maxPool2DLayer::checkInputSize(const Matrix& inputData) const
-{}
+void maxPool2DLayer::checkInputSize(const Matrix& input) const
+{
+  const int inputSize = poolDims_.inputRows
+                      * poolDims_.inputCols;
+
+  if (input.rows() != inputSize)
+  {
+    std::cerr << "Size of input data "
+    << "(" << input.rows() << ") "
+    << " not consistent with maxPool2D layer size"
+    << "(" << poolDims_.inputRows << ", "
+    << poolDims_.inputCols << ") "
+    << std::endl;
+
+    assert(false);
+  }
+
+}
+
+void maxPool2DLayer::checkInputAndCacheSize(
+                                            const Matrix& input,
+                                            const Matrix& cacheBackProp
+                                          ) const
+{
+  checkInputSize(input);
+
+  if (cacheBackProp.rows() != linearOutput_.rows() &&
+      cacheBackProp.cols() != linearOutput_.cols() )
+  {
+    std::cerr << "Size of the back propagation cache "
+    << "(" << cacheBackProp.rows() << ", "
+           << cacheBackProp.cols() << ") "
+    << " not consistent with the activation size "
+    << "(" << linearOutput_.rows() << ", "
+           << linearOutput_.cols() << ") "
+    << std::endl;
+
+    assert(false);
+  }
+}
 
 void maxPool2DLayer::forwardPropagation(const Matrix& input)
 {
@@ -81,23 +121,51 @@ void maxPool2DLayer::forwardPropagation(const Matrix& input)
 #endif
 
   maxPool2D(poolDims_, input, linearOutput_, maxIndices_);
-/*
-  std::cout << "\n---------\n";
-  std::cout << linearOutput_ << "\n---------\n";
 
-  const Scalar* in = input.data();
-  int* id = maxIndices_.data();
+  std::cout << linearOutput_ << "\n~~~~\n";
 
-  for (int i = 0; i < maxIndices_.size(); ++i)
-  {
-    std::cout << in[id[i]] << "\n";
-  }
-*/
+  std::cout << maxIndices_<< "\n-------\n";
+
 }
 
 void maxPool2DLayer::backwardPropagation(const Matrix& dActivationNext,
                                          const Matrix& input)
-{}
+{
+#ifdef ND_DEBUG_CHECKS
+  checkInputAndCacheSize(input, dActivationNext);
+#endif
+
+  Matrix dLinearOutput(
+                       linearOutput_.rows(),
+                       linearOutput_.cols()
+                      );
+
+  dLinearOutput = linearOutput_.array()
+                * dActivationNext.array();
+
+  std::cout << dLinearOutput << "\n~~~~\n";
+
+  const int cacheRows = poolDims_.inputRows
+                      * poolDims_.inputCols;
+
+  cacheBackProp_.setZero(
+                         cacheRows,
+                         dLinearOutput.cols()
+                        );
+
+  const Scalar* dout = dLinearOutput.data();
+
+  const int* id = maxIndices_.data();
+
+  Scalar* cache = cacheBackProp_.data();
+
+  for (int i = 0; i < maxIndices_.size(); ++i)
+  {
+    cache[id[i]] += dout[i];
+  }
+
+  std::cout << cacheBackProp_ << "\n~~~~\n";
+}
 
 
 } // namespace

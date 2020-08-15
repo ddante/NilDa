@@ -85,15 +85,15 @@ setPool2DDims(
   // The general formula for the output size is:
   // 1 + (input - kernel + 2*pad)/kernelStride.
   // Round the number down.
-  int outputRows = floor(
-                         1 + (inputRows - kernelRows)
-                           / static_cast<Scalar>(kernelStrideRow)
-                        );
+  const int outputRows = floor(
+                               1 + (inputRows - kernelRows)
+                                 / static_cast<Scalar>(kernelStrideRow)
+                              );
 
-  int outputCols = floor(
-                         1 + (inputCols - kernelCols)
-                           / static_cast<Scalar>(kernelStrideCol)
-                        );
+  const int outputCols = floor(
+                               1 + (inputCols - kernelCols)
+                                 / static_cast<Scalar>(kernelStrideCol)
+                              );
 
   poolDims.setDimensions(
                          inputRows, inputCols, inputChannels,

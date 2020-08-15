@@ -152,6 +152,8 @@ void neuralNetwork::backwardPropagation(
 {
 #ifdef ND_DEBUG_CHECKS
   assert(validState_);
+
+  assert(lossFunction_);
 #endif
 
   // Derivative of the cost function w.r.t the activation
