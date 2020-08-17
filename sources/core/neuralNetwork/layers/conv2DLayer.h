@@ -66,6 +66,10 @@ private:
   // to a dense layer
   bool undoFlattening_;
 
+  // Store all the quanities required for conv2D in:
+  //  - the forward step
+  //  - computation of the weight derivative
+  //  - compuation of input derivative (cache backprop)
   conv2DDimensions forwardConvDims_;
   conv2DDimensions backwardWeightsConvDims_;
   conv2DDimensions backwardInputConvDims_;

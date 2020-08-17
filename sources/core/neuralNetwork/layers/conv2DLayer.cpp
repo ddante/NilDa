@@ -258,6 +258,9 @@ void conv2DLayer::forwardPropagation(const Matrix& input)
                                    );
 
   nObservations_ = nObs;
+
+  //  std::cout << "activation conv2d\n"
+  //            << activation_.array() << "\n\n";
 }
 
 
@@ -388,7 +391,7 @@ void conv2DLayer::backwardPropagation(
              dLinearOutput.data(),
              rotatedKernels.data(),
              cacheBackProp_
-            );
+           );
 }
 
 void conv2DLayer::setWeightsAndBiases(

@@ -93,13 +93,27 @@ void neuralNetwork::summary() const
 
     if (layers_[i]->isTrainable())
     {
-      totalTrainableParameters += layers_[i]->numberOfParameters();
+      if (layers_[i]->numberOfParameters() > 0)
+      {
+        totalTrainableParameters += layers_[i]->numberOfParameters();
 
-      std::cout << "Yes";
+        std::cout << "Yes";
+      }
+      else
+      {
+        std::cout << "-";
+      }
     }
     else
     {
-      std::cout << "No";
+      if (layers_[i]->numberOfParameters() > 0)
+      {
+        std::cout << "NO";
+      }
+      else
+      {
+        std::cout << "-";
+      }
     }
 
     std::cout << "\n";
@@ -117,7 +131,7 @@ void neuralNetwork::summary() const
   std::cout << "Total trainable parameters: "
             << totalTrainableParameters << std::endl;
 
-  std::cout << "Non-trainale parameters: "
+  std::cout << "Non-trainable parameters: "
             << totalParameters - totalTrainableParameters << "\n\n";
 
 }
@@ -345,10 +359,14 @@ void neuralNetwork::initOptimizer() const
 {
   for (int i = firstLayer_; i < lastLayer_; ++i)
   {
-    optimizer_->init(
-                     layers_[i]->getWeightsDerivative(),
-                     layers_[i]->getBiasesDerivative()
-                    );
+    if (layers_[i]->numberOfParameters() > 0 &&
+        layers_[i]->isTrainable())
+    {
+        optimizer_->init(
+                         layers_[i]->getWeightsDerivative(),
+                         layers_[i]->getBiasesDerivative()
+                        );
+    }
   }
 }
 
@@ -360,17 +378,21 @@ void neuralNetwork::update() const
 
   for (int i = firstLayer_; i < lastLayer_; ++i)
   {
-    optimizer_->update(
-                       layers_[i]->getWeightsDerivative(),
-                       layers_[i]->getBiasesDerivative(),
-                       deltaWeights,
-                       deltaBiases
-                      );
+    if (layers_[i]->numberOfParameters() > 0 &&
+        layers_[i]->isTrainable())
+    {
+      optimizer_->update(
+                         layers_[i]->getWeightsDerivative(),
+                         layers_[i]->getBiasesDerivative(),
+                         deltaWeights,
+                         deltaBiases
+                        );
 
-    layers_[i]->incrementWeightsAndBiases(
-                                          deltaWeights,
-                                          deltaBiases
-                                         );
+      layers_[i]->incrementWeightsAndBiases(
+                                            deltaWeights,
+                                            deltaBiases
+                                           );
+    }
   }
 }
 
@@ -566,24 +588,27 @@ int neuralNetwork::gradientsSanityCheck(
 
   for(int i = lastLayer_; i >= firstLayer_; --i)
   {
-    const errorCheck outputW =
-      checkWeightsGradients(i, obs, labels, eps, errorLimit);
-
-    const errorCheck outputB =
-      checkBiasesGradients(i, obs, labels, eps, errorLimit);
-
-    if(outputW.code == EXIT_FAIL || outputW.code == EXIT_FAIL)
+    if (layers_[i]->numberOfParameters() > 0)
     {
-      code = EXIT_FAIL;
-    }
+      const errorCheck outputW =
+        checkWeightsGradients(i, obs, labels, eps, errorLimit);
 
-    if(printError || code == EXIT_FAIL)
-    {
-      std::cout << "Error weights = "
-                << outputW.error << " "
-                << ", Error biases = "
-                << outputB.error
-                << std::endl;
+      const errorCheck outputB =
+        checkBiasesGradients(i, obs, labels, eps, errorLimit);
+
+      if(outputW.code == EXIT_FAIL || outputW.code == EXIT_FAIL)
+      {
+        code = EXIT_FAIL;
+      }
+
+      if(printError || code == EXIT_FAIL)
+      {
+        std::cout << "Error weights = "
+                  << outputW.error << " "
+                  << ", Error biases = "
+                  << outputB.error
+                  << std::endl;
+      }
     }
   }
 

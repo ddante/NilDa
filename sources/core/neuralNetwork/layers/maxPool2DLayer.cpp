@@ -73,6 +73,13 @@ void maxPool2DLayer::init(const layer* previousLayer)
   size_.channels = poolDims_.outputChannels;
 }
 
+void maxPool2DLayer::setupBackward(const layer* nextLayer)
+{
+  const layerSizes sLayer = nextLayer->size();
+
+  undoFlattening_ = (sLayer.isFlat) ? true : false;
+}
+
 void maxPool2DLayer::checkInputSize(const Matrix& input) const
 {
   const int inputSize = poolDims_.inputRows
@@ -105,7 +112,7 @@ void maxPool2DLayer::checkInputAndCacheSize(
     std::cerr << "Size of the back propagation cache "
     << "(" << cacheBackProp.rows() << ", "
            << cacheBackProp.cols() << ") "
-    << " not consistent with the activation size "
+    << " not consistent with the ouput size "
     << "(" << linearOutput_.rows() << ", "
            << linearOutput_.cols() << ") "
     << std::endl;
@@ -121,29 +128,41 @@ void maxPool2DLayer::forwardPropagation(const Matrix& input)
 #endif
 
   maxPool2D(poolDims_, input, linearOutput_, maxIndices_);
-
-  std::cout << linearOutput_ << "\n~~~~\n";
-
-  std::cout << maxIndices_<< "\n-------\n";
-
 }
 
 void maxPool2DLayer::backwardPropagation(const Matrix& dActivationNext,
                                          const Matrix& input)
 {
-#ifdef ND_DEBUG_CHECKS
-  checkInputAndCacheSize(input, dActivationNext);
-#endif
-
   Matrix dLinearOutput(
                        linearOutput_.rows(),
                        linearOutput_.cols()
                       );
 
-  dLinearOutput = linearOutput_.array()
-                * dActivationNext.array();
+  if (undoFlattening_)
+  {
+    // The next layer is a flatten layer (dense)
+    // so the cache must be rearranged in a 2D form
+    ConstMapMatrix dActivationNextM(
+                                    dActivationNext.data(),
+                                    linearOutput_.rows(),
+                                    linearOutput_.cols()
+                                   );
+#ifdef ND_DEBUG_CHECKS
+  checkInputAndCacheSize(input, dActivationNextM);
+#endif
 
-  std::cout << dLinearOutput << "\n~~~~\n";
+    dLinearOutput = dActivationNextM.array();
+  }
+  else
+  {
+#ifdef ND_DEBUG_CHECKS
+  checkInputAndCacheSize(input, dActivationNext);
+#endif
+
+    // The next layer is a 2d layer
+    // no need to rearrange the cache
+    dLinearOutput = dActivationNext.array();
+  }
 
   const int cacheRows = poolDims_.inputRows
                       * poolDims_.inputCols;
@@ -163,8 +182,6 @@ void maxPool2DLayer::backwardPropagation(const Matrix& dActivationNext,
   {
     cache[id[i]] += dout[i];
   }
-
-  std::cout << cacheBackProp_ << "\n~~~~\n";
 }
 
 

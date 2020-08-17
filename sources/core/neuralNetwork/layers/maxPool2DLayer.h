@@ -34,6 +34,13 @@ private:
   // cache for the back propagation
   Matrix cacheBackProp_;
 
+  // Specify if, in the back propagation, the output
+  // the input from next layer must be reshaped.
+  // This is necessary if the conv2D layer is connected
+  // to a dense layer
+  bool undoFlattening_;
+
+  // Store all the quanities required for the pooling
   pool2DDimensions poolDims_;
 
   // Store the number of observations seen in the
@@ -57,10 +64,7 @@ public:
 
   void init(const layer* previousLayer) override;
 
-  void setupBackward(const layer* nextLayer) override
-  {
-    // Nothing to be done here.
-  }
+  void setupBackward(const layer* nextLayer) override;
 
   void checkInputSize(const Matrix& inputData) const override;
 

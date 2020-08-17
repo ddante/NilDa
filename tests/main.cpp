@@ -17,7 +17,7 @@ int main(int argc, char const *argv[])
 
   const int rI = n;
   const int cI = n;
-  const int chI = 1;
+  const int chI = 3;
 
   const int rF = 2;
   const int cF = 2;
@@ -25,27 +25,47 @@ int main(int argc, char const *argv[])
   const int rS = 1;
   const int cS = 1;
 
-  const int nFilters = 3;
+  const int nFilters = 5;
 
   const bool padding = true;
 
   NilDa::layer* l0 = new NilDa::inputLayer({rI, cI, chI});
 
-  NilDa::layer* l1 = new NilDa::maxPool2DLayer(
+  NilDa::layer* l1 = new NilDa::conv2DLayer(
+                                            nFilters,
+                                            {rF, cF},
+                                            {rS, cS},
+                                            padding,
+                                            "relu"
+                                           );
+
+  NilDa::layer* l2 = new NilDa::maxPool2DLayer(
                                                {2, 2},
                                                {2, 2}
                                               );
 
+  NilDa::layer* l3 = new NilDa::conv2DLayer(
+                                            2*nFilters,
+                                            {rF, cF},
+                                            {rS, cS},
+                                            padding,
+                                            "relu"
+                                           );
 
-  NilDa::layer* l2 = new NilDa::denseLayer(3, "softmax");
+  NilDa::layer* l4 = new NilDa::maxPool2DLayer(
+                                               {2, 2},
+                                               {2, 2}
+                                              );
 
-  NilDa::neuralNetwork nn({l0, l1, l2});
+  NilDa::layer* l5 = new NilDa::denseLayer(3, "softmax");
+
+  NilDa::neuralNetwork nn({l0, l1, l2, l3, l4, l5});
 
   nn.setLossFunction("sparse_categorical_crossentropy");
 
   nn.summary();
 
-  const int nObs = 3;
+  const int nObs = 4;
 
   NilDa::Matrix X(rI * cI, chI * nObs);
 
@@ -57,23 +77,25 @@ int main(int argc, char const *argv[])
     {
         for (int k = 0; k < rI * cI; ++k, ++p)
         {
-            X(k, l) = p;//(k + 1) * (j + 1) * (i+1) - 1;
+            X(k, l) = (k + 1) * (j + 1) * (i+1) - 1;
         }
     }
   }
-  std::cout << X << "\n---------\n";
 
-  //X.setRandom(rI * cI, chI * nObs);
+  X.setRandom(rI * cI, chI * nObs);
+
+  //std::cout << X << "\n---------\n";
+
   NilDa::Matrix Y(3, nObs);
 
-  Y << 1,0,0,
-       0,1,0,
-       0,0,1;
+  Y << 1,0,0,0,
+       0,1,0,1,
+       0,0,1,0;
 
-  nn.forwardPropagation(X);
-  nn.backwardPropagation(X, Y);
+  //nn.forwardPropagation(X);
+  //nn.backwardPropagation(X, Y);
 
-//  int out = nn.gradientsSanityCheck(X, Y, true);
+  int out = nn.gradientsSanityCheck(X, Y, true);
 
   return 0;
 }
