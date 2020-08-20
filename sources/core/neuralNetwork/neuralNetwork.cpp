@@ -603,11 +603,12 @@ int neuralNetwork::gradientsSanityCheck(
 
       if(printError || code == EXIT_FAIL)
       {
-        std::cout << "Error weights = "
+        std::cout << "Layer: "
+                  << layers_[i]->layerName() << "\n"
+                  << "Error weights = "
                   << outputW.error << " "
                   << ", Error biases = "
-                  << outputB.error
-                  << std::endl;
+                  << outputB.error << "\n\n";
       }
     }
   }

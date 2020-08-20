@@ -14,6 +14,7 @@ maxPool2DLayer::maxPool2DLayer(
                               ) :
   kernelSize_(kernelSize),
   kernelStride_(kernelStride),
+  undoFlattening_(false),
   poolDims_{}
 {
   type_ = layerTypes::maxPool2D;
@@ -182,6 +183,25 @@ void maxPool2DLayer::backwardPropagation(const Matrix& dActivationNext,
   {
     cache[id[i]] += dout[i];
   }
+}
+
+
+errorCheck
+maxPool2DLayer::localChecks(
+                            const Matrix& input,
+                            const Scalar errorLimit
+                           ) const
+{
+  checkInputSize(input);
+
+  Scalar error = checkPooling(input, poolDims_, "max");
+
+  errorCheck output;
+
+  output.code = (error < errorLimit) ? EXIT_OK : EXIT_FAIL;
+  output.error = error;
+
+  return output;
 }
 
 

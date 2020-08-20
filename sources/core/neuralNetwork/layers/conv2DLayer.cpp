@@ -28,6 +28,8 @@ conv2DLayer::conv2DLayer(
   filterStride_(filterStride),
   withPadding_(withPadding),
   activationName_(activationName),
+  undoFlattening_(false),
+  nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
 {
@@ -47,6 +49,8 @@ conv2DLayer::conv2DLayer(
   filterStride_(filterStride),
   withPadding_(false),
   activationName_(activationName),
+  undoFlattening_(false),
+  nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
 {
@@ -66,6 +70,8 @@ conv2DLayer::conv2DLayer(
   filterStride_({1,1}),
   withPadding_(withPadding),
   activationName_(activationName),
+  undoFlattening_(false),
+  nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
 {
@@ -84,6 +90,8 @@ conv2DLayer::conv2DLayer(
   filterStride_({1,1}),
   withPadding_(false),
   activationName_(activationName),
+  undoFlattening_(false),
+  nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
 {

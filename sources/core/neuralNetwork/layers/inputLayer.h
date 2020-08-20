@@ -29,9 +29,9 @@ public:
 
   // Constructors
 
-  inputLayer(const int inSize);
+  explicit inputLayer(const int inSize);
 
-  inputLayer(const std::array<int,3>& inSize);
+  explicit inputLayer(const std::array<int,3>& inSize);
 
   // Destructor
 

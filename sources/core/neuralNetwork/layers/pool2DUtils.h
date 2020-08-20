@@ -22,12 +22,6 @@ public:
   int inputRows;
   int inputCols;
   int inputChannels;
-  int padTop;
-  int padBottom;
-  int padLeft;
-  int padRight;
-  int inputPaddedRows;
-  int inputPaddedCols;
   int kernelRows;
   int kernelCols;
   int kernelChannels;
@@ -86,6 +80,15 @@ void maxPool2D(
                Matrix& output,
                MatrixI& maxIds
               );
+
+// Perform a sanity check
+Scalar
+checkPooling(
+             const Matrix& input,
+             const pool2DDimensions& poolDims,
+             const std::string& poolType
+            );
+
 
 } // namespace
 

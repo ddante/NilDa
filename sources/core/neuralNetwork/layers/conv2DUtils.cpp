@@ -647,7 +647,7 @@ checkConvolution(
       for (int chI = 0; chI < forwardConvDims.inputChannels; ++chI,
            ++nColI, nColF += forwardConvDims.kernelNumber)
       {
-        Eigen::Map<const RowMatrix> tmp(
+        Eigen::Map<const RowMatrix> tmpI(
                                         input.col(nColI).data(),
                                         forwardConvDims.inputRows,
                                         forwardConvDims.inputCols
@@ -664,7 +664,7 @@ checkConvolution(
                 forwardConvDims.padLeft,
                 forwardConvDims.inputRows,
                 forwardConvDims.inputCols
-               ) = tmp;
+               ) = tmpI;
 
         Eigen::Map<const RowMatrix> W(
                                       kernels.col(nColF).data(),
@@ -676,7 +676,6 @@ checkConvolution(
         {
           for (int j = 0; j < forwardConvDims.outputCols; ++j)
           {
-
             Matrix tmp = A.block(
                                  i*forwardConvDims.kernelStrideRow,
                                  j*forwardConvDims.kernelStrideCol,
@@ -689,13 +688,13 @@ checkConvolution(
         }
       }
 
-      Eigen::Map<Matrix> tmp(
-                             C.data(),
-                             forwardConvDims.outputRows * forwardConvDims.outputCols,
-                             1
-                            );
+      Eigen::Map<Matrix> tmpC(
+                              C.data(),
+                              forwardConvDims.outputRows * forwardConvDims.outputCols,
+                              1
+                             );
 
-      error += (origConv.col(colOut) - tmp).array().abs().sum();
+      error += (origConv.col(colOut) - tmpC).array().abs().mean();
 
       colOut++;
     }

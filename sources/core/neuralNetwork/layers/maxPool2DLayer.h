@@ -40,12 +40,12 @@ private:
   // to a dense layer
   bool undoFlattening_;
 
-  // Store all the quanities required for the pooling
-  pool2DDimensions poolDims_;
-
   // Store the number of observations seen in the
   // forward propagation
-  int nObservations_;
+  //int nObservations_;
+
+  // Store all the quanities required for the pooling
+  pool2DDimensions poolDims_;
 
 public:
 
@@ -158,15 +158,7 @@ public:
   errorCheck localChecks(
                          const Matrix& input,
                          const Scalar errorLimit
-                        ) const override
-  {
-    std::cerr << "No localChecks for dMax pool 2D layer" << std::endl;
-
-    assert(false);
-
-    errorCheck output;
-    return output;
-  }
+                        ) const override;
 };
 
 

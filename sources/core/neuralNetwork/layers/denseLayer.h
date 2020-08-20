@@ -44,10 +44,6 @@ private:
   // of the previous level during the back propagation
   Matrix cacheBackProp_;
 
-  // Store the number of observations seen in the
-  // forward propagation
-  int nObservations_;
-
   // Store if the flattening is needed when
   // the input comes from a not flat layer
   bool needFlattening_;
@@ -56,6 +52,10 @@ private:
   // the previous not flat layers. Neded to flatten the input.
   int inputSize_;
   int inputChannels_;
+
+  // Store the number of observations seen in the
+  // forward propagation
+  int nObservations_;
 
 public:
 

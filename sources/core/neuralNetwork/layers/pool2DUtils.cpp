@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <math.h>
+#include <algorithm>
 #include <limits>
 
 #include "conv2DUtils.h"
@@ -234,6 +235,84 @@ void maxPool2D(
   {
     findMax(poolDims, src, col, mId, out);
   }
+}
+
+Scalar
+checkPooling(
+             const Matrix& input,
+             const pool2DDimensions& poolDims,
+             const std::string& poolType
+            )
+{
+  const int strideRow = poolDims.inputCols
+                      * poolDims.kernelStrideRow;
+
+  const int strideInput = poolDims.inputRows
+                        * poolDims.inputCols;
+
+  Matrix maxPool;
+
+  MatrixI maxIds;
+
+  maxPool2D(poolDims, input, maxPool, maxIds);
+
+  Matrix maxPoolCheck;
+  maxPoolCheck.setZero(maxPool.rows(), maxPool.cols());
+
+  MatrixI maxIdsCheck;
+  maxIdsCheck.setZero(maxIds.rows(), maxIds.cols());
+
+  for (int col = 0; col < input.cols(); ++col)
+  {
+    Eigen::Map<const RowMatrix> A(
+                                  input.col(col).data(),
+                                  poolDims.inputRows,
+                                  poolDims.inputCols
+                                 );
+    int l = 0;
+    for (int i = 0; i < poolDims.outputRows; ++i)
+    {
+      for (int j = 0; j < poolDims.outputCols; ++j, ++l)
+      {
+        Matrix tmp = A.block(
+                             i*poolDims.kernelStrideRow,
+                             j*poolDims.kernelStrideCol,
+                             poolDims.kernelRows,
+                             poolDims.kernelCols
+                            );
+         if (poolType == "max")
+         {
+           Matrix::Index maxRow, maxCol;
+           Scalar max = tmp.maxCoeff(&maxRow, &maxCol);
+
+           const int loc = i * strideRow
+                         + maxRow * poolDims.inputCols
+                         + j * poolDims.kernelStrideCol
+                         + maxCol
+                         + col * strideInput;
+
+           maxPoolCheck(l, col) = max;
+
+           maxIdsCheck(l, col) = loc;
+         }
+         else
+         {
+           std::cerr << "Unknown pooling operation "
+                     << poolType << std::endl;
+
+           return infty;
+
+           assert(false);
+         }
+      }
+    }
+  }
+
+  Scalar err1 = (maxPoolCheck - maxPool).array().abs().mean();
+
+  Scalar err2 = (maxIdsCheck - maxIds).array().abs().mean();
+
+  return std::max(err1, err2);
 }
 
 } // namespace

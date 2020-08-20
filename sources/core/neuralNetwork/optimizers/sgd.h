@@ -38,7 +38,7 @@ public:
 
   sgd() = delete;
 
-  sgd(Scalar alpha);
+  explicit sgd(Scalar alpha);
 
   sgd(Scalar alpha, Scalar m);
 

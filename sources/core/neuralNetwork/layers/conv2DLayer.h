@@ -66,6 +66,10 @@ private:
   // to a dense layer
   bool undoFlattening_;
 
+  // Store the number of observations seen in the
+  // forward propagation
+  int nObservations_;
+
   // Store all the quanities required for conv2D in:
   //  - the forward step
   //  - computation of the weight derivative
@@ -73,10 +77,6 @@ private:
   conv2DDimensions forwardConvDims_;
   conv2DDimensions backwardWeightsConvDims_;
   conv2DDimensions backwardInputConvDims_;
-
-  // Store the number of observations seen in the
-  // forward propagation
-  int nObservations_;
 
 public:
 

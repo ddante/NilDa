@@ -19,7 +19,11 @@ denseLayer::denseLayer(
                        const int inSize,
                        const std::string& activationName
                       ):
-    layerSize_(inSize)
+    layerSize_(inSize),
+    needFlattening_(false),
+    inputSize_(0),
+    inputChannels_(0),
+    nObservations_(0)
 {
   type_ = layerTypes::dense;
 
