@@ -13,67 +13,61 @@
 
 int main(int argc, char const *argv[])
 {
-  const int n = 4;
+  const std::string mnistImagesTrainFile
+    = "/home/dante/dev/NilDa/datasets/mnist/train-images-idx3-ubyte";
 
-  const int rI = n;
-  const int cI = n;
-  const int chI = 1;
+  const std::string mnistLabelsTrainFile
+    = "/home/dante/dev/NilDa/datasets/mnist/train-labels-idx1-ubyte";
 
-  const int rF = 2;
-  const int cF = 2;
+	NilDa::Matrix trainingImages;
+	NilDa::Matrix trainingLabels;
 
-  const int rS = 1;
-  const int cS = 1;
+	const NilDa::Scalar imgScaling = 1.0/255.0;
 
-  const int nFilters = 1;
+	NilDa::importMNISTDatabase(
+                             mnistImagesTrainFile,
+		                 			   mnistLabelsTrainFile,
+		       			             imgScaling,
+		       			             /*shuffle=*/ true,
+			                       trainingImages,
+			                       trainingLabels
+                            );
 
-  const bool padding = true;
 
-  NilDa::layer* l0 = new NilDa::inputLayer({rI, cI, chI});
+  NilDa::layer* l0 = new NilDa::inputLayer({28, 28, 1});
 
-  NilDa::layer* l1 = new NilDa::maxPool2DLayer(
-                                               {2, 2},
-                                               {2, 2}
-                                              );
+  NilDa::layer* l1 = new NilDa::conv2DLayer(32, {3,3}, true, "relu");
 
-  NilDa::neuralNetwork nn({l0, l1});
+  NilDa::layer* l2 = new NilDa::maxPool2DLayer({2, 2}, {2, 2});
 
-  nn.setLossFunction("sparse_categorical_crossentropy");
+  NilDa::layer* l3 = new NilDa::conv2DLayer(64, {3,3}, true, "relu");
+
+  NilDa::layer* l4 = new NilDa::maxPool2DLayer({2, 2}, {2, 2});
+
+  NilDa::layer* l5 = new NilDa::denseLayer(128, "relu");
+
+  NilDa::layer* l6 = new NilDa::denseLayer(10, "softmax");
+
+  NilDa::neuralNetwork nn({l0, l1, l2, l3, l4, l5, l6});
 
   nn.summary();
 
-  const int nObs = 5;
+  //
 
-  NilDa::Matrix X(rI * cI, chI * nObs);
+	const NilDa::Scalar learningRate = 0.05;
 
-  int l = 0;
-  int p = 0;
-  for (int i = 0; i < nObs; ++i)
-  {
-    for (int j = 0; j < chI; ++j, ++l)
-    {
-        for (int k = 0; k < rI * cI; ++k, ++p)
-        {
-            X(k, l) = (k + 1) * (j + 1) * (i+1) - 1;
-        }
-    }
-  }
+	const NilDa::Scalar momentum = 0.90;
 
-  X.setRandom(rI * cI, chI * nObs);
+  NilDa::sgd opt(learningRate, momentum);
 
-  std::cout << X << "\n---------\n";
-/*
-  NilDa::Matrix Y(3, nObs);
-  Y << 1,0,0,0,
-       0,1,0,1,
-       0,0,1,0;
-*/
-  nn.forwardPropagation(X);
-  l1->localChecks(X, 1e-8);
+  nn.configure(opt, "sparse_categorical_crossentropy");
 
-  //nn.backwardPropagation(X, Y);
+  //
 
-  //std::cout << nn.gradientsSanityCheck(X, Y, true);
+	const int epochs = 7;
+	const int batchSize = 32;
+
+  nn.train(trainingImages, trainingLabels, epochs, batchSize);
 
   return 0;
 }

@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(NilDa VERSION 0.1)
 
 ######################################
-option(NILDA_DEBUG_BUILD  "Enable debug build" ON)
+option(NILDA_DEBUG_BUILD  "Enable debug build" OFF)
 
 set(NILDA_PRECISION_OPTION "DP")
 
@@ -41,6 +41,13 @@ set(CMAKE_CXX_FLAGS_RELEASE "-march=native")
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 message("${EIGEN3_INCLUDE_DIR}")
+
+#find_package(FDCL_HDF5 REQUIRED)
+find_package(HDF5 REQUIRED)
+include_directories(${HDF5_INCLUDE_DIR})
+#message("${HDF5_INCLUDE_DIR}")
+#add_executable(<your_target> <source_files>)
+#target_link_libraries(<your_target> fdcl_hdf5)
 
 if(NOT TARGET spdlog)
     # Stand-alone build

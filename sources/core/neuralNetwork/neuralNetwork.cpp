@@ -18,6 +18,7 @@
 
 #include "optimizers/sgd.h"
 
+#include "H5Cpp.h"
 // ---------------------------------------------------------------------------
 
 namespace NilDa
@@ -299,20 +300,41 @@ void neuralNetwork::train(
 
     auto startTime = std::chrono::high_resolution_clock::now();
 
+    Scalar totErr = 0;
+
+    int totN = 0;
+
     for (int j = 0; j < epochSteps; ++j)
     {
-      Scalar loss = propagate(
-                              obs(
-                                  Eigen::all,
-                                  Eigen::seqN(j*batchStride, batchStride)
-                                ),
-                              labels(
-                                  Eigen::all,
-                                  Eigen::seqN(j*batchStride, batchStride)
-                                 )
-                             );
+      ConstMapMatrix obsBatched(
+                                obs(
+                                    Eigen::all,
+                                    Eigen::seqN(j*batchStride, batchStride)
+                                  ).data(),
+                                obs.rows(),
+                                batchStride
+                               );
+
+     ConstMapMatrix labelsBatched(
+                                  labels(
+                                         Eigen::all,
+                                         Eigen::seqN(j*batchStride, batchStride)
+                                       ).data(),
+                                  labels.rows(),
+                                  batchStride
+                                 );
+
+      Scalar loss = propagate(obsBatched, labelsBatched);
 
       update();
+
+      totErr += getSumError(
+                            obsBatched,
+                            labelsBatched,
+                            /*runForward=*/false
+                           );
+
+      totN += labelsBatched.size();
 
       if (verbosity > 1)
       {
@@ -335,14 +357,12 @@ void neuralNetwork::train(
     auto elapsedTime =
       std::chrono::duration_cast<std::chrono::milliseconds>(stopTime - startTime);
 
-    Matrix predictedLabels;
+    Scalar accuracy = 1.0 - (totErr/totN);
 
-    std::cout << "Accuracy: " << getAccuracy(obs, labels) << " -- "
+    std::cout << "Accuracy: " << accuracy
+              << " -- "
    	          << 0.001*elapsedTime.count() << " s: "
-   	          << (float)elapsedTime.count()/epochSteps << " ms/steps"
-   	          << std::endl;
-
-
+   	          << (float)elapsedTime.count()/epochSteps << " ms/steps\n";
   }
 }
 
@@ -398,10 +418,14 @@ void neuralNetwork::update() const
 
 void neuralNetwork::predict(
                             const Matrix& obs,
-                            Matrix& predictions
+                            Matrix& predictions,
+                            const bool runForward
                            ) const
 {
-  forwardPropagation(obs);
+  if(runForward)
+  {
+    forwardPropagation(obs);
+  }
 
   lossFunction_->predict(
                          layers_[lastLayer_]->output(),
@@ -409,20 +433,68 @@ void neuralNetwork::predict(
                         );
 }
 
+Scalar neuralNetwork::getSumError(
+                                  const Matrix& obs,
+                                  const Matrix& trueData,
+                                  const bool runForward
+                                 ) const
+{
+  Matrix predictions;
+
+  predict(obs, predictions, runForward);
+
+  Matrix err = predictions - trueData;
+
+  return err.array().abs().sum();
+}
+
 Scalar neuralNetwork::getAccuracy(
                                   const Matrix& obs,
                                   const Matrix& trueData
                                  ) const
 {
-  Matrix predictions;
+  // Sum of all the errors
+  Scalar err = getSumError(obs, trueData);
 
-  predict(obs, predictions);
+  // Mean error
+  return 1.0 - (err/trueData.size());
+}
 
-  Matrix err(trueData.rows(), trueData.cols());
+Scalar neuralNetwork::getAccuracy(
+                                  const Matrix& obs,
+                                  const Matrix& trueData,
+                                  const int batchSize
+                                 ) const
+{
+  const int batchStride = batchSize
+                        * layers_[inputLayer_]->inputStride();
 
-  err.array() = ((predictions - trueData).array()).abs();
+  const int nObs = obs.cols()
+                 / layers_[inputLayer_]->inputStride();
 
-  return 1.0 - err.mean();
+  const int nObsBatch = floor((float)nObs/(float)batchSize);
+
+  Scalar totErr = 0;
+
+  int totN = 0;
+
+  for (int j = 0; j < nObsBatch; ++j)
+  {
+    totErr += getSumError(
+                          obs(
+                              Eigen::all,
+                              Eigen::seqN(j*batchStride, batchStride)
+                             ),
+                          trueData(
+                                   Eigen::all,
+                                   Eigen::seqN(j*batchStride, batchStride)
+                                  )
+                         );
+
+    totN += batchStride;
+  }
+
+  return 1.0 - (totErr/totN);
 }
 
 errorCheck

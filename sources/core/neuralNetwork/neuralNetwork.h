@@ -44,7 +44,7 @@ private:
   int lastLayer_;
 
   mutable bool validState_;
-  
+
   mutable bool finalizedNetwork_;
 
   // Number of the input layer
@@ -126,10 +126,28 @@ public:
     Scalar getLoss(const Matrix& labels) const;
 
     // Compute the prediciton for the given data
-    void predict(const Matrix& obs, Matrix& predictions) const;
+    void predict(
+                 const Matrix& obs,
+                 Matrix& predictions,
+                 const bool runForward = true
+                ) const;
+
+    // Compute the difference between the prediction and
+    // the true data. The return value is the sum of all the errors
+    Scalar getSumError(
+                       const Matrix& predictions,
+                       const Matrix& trueData,
+                       const bool runForward = true
+                      ) const;
 
     // Return the accuracy of the trained model
     Scalar getAccuracy(const Matrix& obs, const Matrix& trueData) const;
+
+    Scalar getAccuracy(
+                       const Matrix& obs,
+                       const Matrix& trueData,
+                       const int batchSize
+                     ) const;
 
     // Check if the analytical gradients matches numerical ones
     int gradientsSanityCheck(
