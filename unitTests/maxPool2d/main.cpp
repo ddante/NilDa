@@ -4,28 +4,24 @@
 #include "core/neuralNetwork/layers/inputLayer.h"
 #include "core/neuralNetwork/layers/denseLayer.h"
 #include "core/neuralNetwork/layers/conv2DLayer.h"
+#include "core/neuralNetwork/layers/maxPool2DLayer.h"
 #include "core/neuralNetwork/neuralNetwork.h"
 
 const NilDa::Scalar errTol = 1e-10;
 
 int runTest(
             const std::array<int, 3>& inputSize,
-            const std::array<int, 2>& filterSize,
-            const std::array<int, 2>& filterStride,
-            const int nFilters,
-            const bool padding,
+            const std::array<int, 2>& kernelSize,
+            const std::array<int, 2>& kernelStride,
             const int nObs
            )
 {
   NilDa::layer* l0 = new NilDa::inputLayer(inputSize);
 
-  NilDa::layer* l1 = new NilDa::conv2DLayer(
-                                            nFilters,
-                                            filterSize,
-                                            filterStride,
-                                            padding,
-                                            "relu"
-                                           );
+  NilDa::layer* l1 = new NilDa::maxPool2DLayer(
+                                               kernelSize,
+                                               kernelStride
+                                              );
 
   NilDa::neuralNetwork nn({l0, l1});
 
@@ -48,6 +44,7 @@ int runTest(
     }
   }
 */
+
   NilDa::errorCheck output = l1->localChecks(X, 1e-8);
 
   std::cout << "Difference: " << output.error << " ";
@@ -68,111 +65,75 @@ int main(int argc, char const *argv[])
 
 #endif
 
-  // Test 1
-  std::array<int, 3> inputSize{7, 7, 1};
-  std::array<int, 2> filterSize{3, 3};
-  std::array<int, 2> filterStride{1, 1};
-
-  bool padding = false;
-
-  int nFilters = 1;
+  std::array<int, 3> inputSize{6, 6, 1};
+  std::array<int, 2> kernelSize{2, 2};
+  std::array<int, 2> kernelStride{1, 1};
   int nObs = 1;
 
   int test1 = runTest(
                       inputSize,
-                      filterSize, filterStride, nFilters,
-                      padding, nObs
+                      kernelSize, kernelStride, nObs
                      );
-
+                     
   inputSize = {7, 7, 3};
+  kernelSize = {2, 2};
+  kernelStride = {2, 2};
+  nObs = 1;
 
   int test2 = runTest(
                       inputSize,
-                      filterSize, filterStride, nFilters,
-                      padding, nObs
+                      kernelSize, kernelStride, nObs
                      );
 
-  padding = true;
+  inputSize = {7, 7, 3};
+  kernelSize = {2, 2};
+  kernelStride = {2, 2};
+  nObs = 4;
 
   int test3 = runTest(
                       inputSize,
-                      filterSize, filterStride, nFilters,
-                      padding, nObs
+                      kernelSize, kernelStride, nObs
                      );
 
-  nFilters = 5;
+  inputSize = {7, 7, 3};
+  kernelSize = {2, 2};
+  kernelStride = {1, 1};
+  nObs = 4;
 
   int test4 = runTest(
-                     inputSize,
-                     filterSize, filterStride, nFilters,
-                     padding, nObs
-                    );
+                      inputSize,
+                      kernelSize, kernelStride, nObs
+                     );
 
-  filterSize = {2, 3};
+  inputSize = {7, 7, 3};
+  kernelSize = {3, 3};
+  kernelStride = {1, 1};
+  nObs = 4;
 
   int test5 = runTest(
-                     inputSize,
-                     filterSize, filterStride, nFilters,
-                     padding,nObs
-                    );
+                      inputSize,
+                      kernelSize, kernelStride,nObs
+                     );
 
-  filterSize = {3, 2};
+  inputSize = {6, 7, 3};
+  kernelSize = {2, 3};
+  kernelStride = {2, 1};
+  nObs = 4;
 
   int test6 = runTest(
                       inputSize,
-                      filterSize, filterStride, nFilters,
-                      padding,nObs
+                      kernelSize, kernelStride,nObs
                      );
 
-  inputSize = {5, 7, 4};
+  inputSize = {7, 6, 3};
+  kernelSize = {3, 2};
+  kernelStride = {1, 2};
+  nObs = 4;
 
   int test7 = runTest(
-                      inputSize,
-                      filterSize, filterStride, nFilters,
-                      padding,nObs
-                     );
-
-  inputSize = {7, 8, 4};
-
-  int test8 = runTest(
-                      inputSize,
-                      filterSize, filterStride, nFilters,
-                      padding,nObs
-                     );
-
-  inputSize = {7, 8, 3};
-  filterSize = {3, 2};
-  padding = true;
-  nFilters = 5;
-  nObs = 1;
-  filterStride = {2, 2};
-
-  int test9 = runTest(
-                      inputSize,
-                      filterSize, filterStride, nFilters,
-                      padding,nObs
-                     );
-
-  filterStride = {2, 1};
-
-  int test10 = runTest(
-                       inputSize,
-                       filterSize, filterStride, nFilters,
-                       padding,nObs
-                      );
-
-  inputSize = {8, 7, 1};
-  filterSize = {3, 2};
-  padding = false;
-  nFilters = 1;
-  nObs = 1;
-  filterStride = {2, 2};
-
-  int test11 = runTest(
-                       inputSize,
-                       filterSize, filterStride, nFilters,
-                       padding,nObs
-                      );
+                     inputSize,
+                     kernelSize, kernelStride,nObs
+                    );
 
   if (
       test1  == NilDa::EXIT_FAIL ||
@@ -181,11 +142,7 @@ int main(int argc, char const *argv[])
       test4  == NilDa::EXIT_FAIL ||
       test5  == NilDa::EXIT_FAIL ||
       test6  == NilDa::EXIT_FAIL ||
-      test7  == NilDa::EXIT_FAIL ||
-      test8  == NilDa::EXIT_FAIL ||
-      test9  == NilDa::EXIT_FAIL ||
-      test10 == NilDa::EXIT_FAIL ||
-      test11 == NilDa::EXIT_FAIL
+      test7  == NilDa::EXIT_FAIL
      )
   {
     return NilDa::EXIT_FAIL;

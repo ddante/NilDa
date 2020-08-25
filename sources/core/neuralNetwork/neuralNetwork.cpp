@@ -18,7 +18,7 @@
 
 #include "optimizers/sgd.h"
 
-#include "H5Cpp.h"
+//#include "H5Cpp.h"
 // ---------------------------------------------------------------------------
 
 namespace NilDa
@@ -495,6 +495,16 @@ Scalar neuralNetwork::getAccuracy(
   }
 
   return 1.0 - (totErr/totN);
+}
+
+void neuralNetwork::saveModel() const
+{
+    Matrix matrix(3, 3);
+    matrix << 1, 2, 3, 4, 5, 6, 7, 8, 9;
+
+    std::cout << "Original Matrix: " << std::endl;
+    std::cout << matrix << std::endl;
+
 }
 
 errorCheck

@@ -141,13 +141,18 @@ public:
                       ) const;
 
     // Return the accuracy of the trained model
+    // using the whole dataset at once
     Scalar getAccuracy(const Matrix& obs, const Matrix& trueData) const;
 
+    // Return the accuracy of the trained model
+    // splitting the dataset in batches
     Scalar getAccuracy(
                        const Matrix& obs,
                        const Matrix& trueData,
                        const int batchSize
                      ) const;
+
+    void saveModel() const;
 
     // Check if the analytical gradients matches numerical ones
     int gradientsSanityCheck(
