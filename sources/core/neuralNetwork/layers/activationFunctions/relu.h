@@ -27,6 +27,14 @@ public:
                     ) override;
 
   ~relu()  = default;
+
+  int type() const override
+  {
+    return
+      static_cast<std::underlying_type_t<activationFucntions>>(
+        activationFucntions::relu
+      );
+  }
 };
 
 } // namespace

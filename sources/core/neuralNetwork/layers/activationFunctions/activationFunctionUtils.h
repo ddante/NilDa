@@ -22,6 +22,9 @@ enum class activationFucntions
 activationFucntions
 activationFunctionCode(const std::string& inName);
 
+// Return the string name of the activation function from enum name
+std::string 
+activationFunctionName(const activationFucntions type);
 
 } // namespace
 

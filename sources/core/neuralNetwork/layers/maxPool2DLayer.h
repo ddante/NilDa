@@ -154,6 +154,8 @@ public:
   {
     return 0;
   }
+  
+  void saveLayer(std::ofstream& ofs) const override;
 
   errorCheck localChecks(
                          const Matrix& input,

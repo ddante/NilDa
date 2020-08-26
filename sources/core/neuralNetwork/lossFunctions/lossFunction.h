@@ -5,6 +5,8 @@
 #include "primitives/Matrix.h"
 #include "primitives/Vector.h"
 
+#include "lossFunctionUtils.h"
+
 // ---------------------------------------------------------------------------
 
 namespace NilDa
@@ -40,6 +42,8 @@ public:
   // Destructors
 
   virtual ~lossFunction() = default;
+
+  virtual int type() const = 0;
 };
 
 

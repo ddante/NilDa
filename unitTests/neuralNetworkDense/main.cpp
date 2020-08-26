@@ -47,10 +47,12 @@ int main(int argc, char const *argv[])
 
   //
 
-	const int epochs = 10;
+	const int epochs = 1;
 	const int batchSize = 32;
 
   nn.train(trainingImages, trainingLabels, epochs, batchSize);
+
+  nn.saveModel("file.ccc");
 
   return 0;
 }

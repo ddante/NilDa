@@ -44,6 +44,14 @@ conv2DDimensions::setDimensions(
   outputRows = outR;
   outputCols = outC;
   outputChannels = kN;
+
+  padding = false;
+
+  if(padTop  > 0 || padBottom > 0 ||
+     padLeft > 0 || padRight  > 0)
+  {
+    padding = true;
+  }
 }
 
 void conv2DDimensions::setInputChannels(const int inCh)
@@ -367,16 +375,6 @@ void extractPatches(
 
   const std::size_t copyBytes = sizeof(Scalar) * segmentSize;
 
-  bool padding = false;
-
-  if (
-       dims.padLeft > 0 || dims.padRight  > 0 ||
-       dims.padTop  > 0 || dims.padBottom > 0
-     )
-  {
-      padding = true;
-  }
-
   for (
        int i = 0;  i < nObs; ++i,
        obs += dims.inputObservationStride
@@ -386,7 +384,7 @@ void extractPatches(
 
     RowMatrix padObs;
 
-    if (padding)
+    if (dims.padding)
     {
       applyPadding(dims, obs, padObs);
 

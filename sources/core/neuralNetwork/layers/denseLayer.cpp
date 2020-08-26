@@ -352,5 +352,33 @@ void denseLayer::incrementWeightsAndBiases(
   biases_ += deltaB;
 }
 
+void denseLayer::saveLayer(std::ofstream& ofs) const
+{
+
+  ofs.write((char*) (&type_),      sizeof(int));
+  ofs.write((char*) (&trainable_), sizeof(bool));
+  ofs.write((char*) (&size_.size), sizeof(int));
+
+  const int activationCode = activationFunction_->type();
+  ofs.write((char*) (&activationCode), sizeof(int));
+
+  const int wRows = weights_.rows();
+  const int wCols = weights_.cols();
+
+  const std::size_t weightsBytes = sizeof(Scalar)
+                                 * wRows
+                                 * wCols;
+
+  ofs.write((char*) (&wRows), sizeof(int));
+  ofs.write((char*) (&wCols), sizeof(int));
+  ofs.write((char*) weights_.data(), weightsBytes);
+
+  const int bRows = biases_.rows();
+
+  const std::size_t biasesBytes = sizeof(Scalar) * bRows;
+
+  ofs.write((char*) (&bRows), sizeof(int));
+  ofs.write((char*) biases_.data(), biasesBytes);
+}
 
 } // namespace

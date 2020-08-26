@@ -1,8 +1,8 @@
 #ifndef ACTVIVATION_FUNCTION_H
 #define ACTVIVATION_FUNCTION_H
 
-# include <iostream>
-
+#include <iostream>
+#include "activationFunctionUtils.h"
 #include "primitives/Vector.h"
 #include "primitives/Matrix.h"
 
@@ -40,6 +40,7 @@ public:
 
   virtual ~activationFunction() = default;
 
+  virtual int type() const = 0;
 };
 
 } // namespace

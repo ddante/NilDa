@@ -474,6 +474,37 @@ void conv2DLayer::incrementWeightsAndBiases(
   biases_ += deltaB;
 }
 
+void conv2DLayer::saveLayer(std::ofstream& ofs) const
+{
+  ofs.write((char*) (&type_),      sizeof(int));
+  ofs.write((char*) (&trainable_), sizeof(bool));
+
+  ofs.write((char*) (&(forwardConvDims_.outputChannels)), sizeof(int));
+  ofs.write((char*) (&(forwardConvDims_.kernelRows)), sizeof(int));
+  ofs.write((char*) (&(forwardConvDims_.kernelCols)), sizeof(int));
+  ofs.write((char*) (&(forwardConvDims_.padding)), sizeof(bool));
+
+  const int activationCode = activationFunction_->type();
+  ofs.write((char*) (&activationCode), sizeof(int));
+
+  const int wRows = filterWeights_.rows();
+  const int wCols = filterWeights_.cols();
+
+  const std::size_t weightsBytes = sizeof(Scalar)
+                                 * wRows
+                                 * wCols;
+
+  ofs.write((char*) (&wRows), sizeof(int));
+  ofs.write((char*) (&wCols), sizeof(int));
+  ofs.write((char*) filterWeights_.data(), weightsBytes);
+
+  const int bRows = biases_.rows();
+
+  const std::size_t biasesBytes = sizeof(Scalar) * bRows;
+
+  ofs.write((char*) (&bRows), sizeof(int));
+  ofs.write((char*) biases_.data(), biasesBytes);
+}
 
 errorCheck conv2DLayer::localChecks(
                                     const Matrix& input,

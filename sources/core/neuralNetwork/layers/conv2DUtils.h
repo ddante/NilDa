@@ -39,6 +39,7 @@ public:
   int outputRows;
   int outputCols;
   int outputChannels;
+  bool padding;
 
   conv2DDimensions() = default;
 

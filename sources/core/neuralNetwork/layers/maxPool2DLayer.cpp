@@ -185,6 +185,16 @@ void maxPool2DLayer::backwardPropagation(const Matrix& dActivationNext,
   }
 }
 
+void maxPool2DLayer::saveLayer(std::ofstream& ofs) const
+{
+  ofs.write((char*) (&type_),      sizeof(int));
+  ofs.write((char*) (&trainable_), sizeof(bool));
+
+  ofs.write((char*) (&(poolDims_.kernelRows)), sizeof(int));
+  ofs.write((char*) (&(poolDims_.kernelCols)), sizeof(int));
+  ofs.write((char*) (&(poolDims_.kernelStrideRow)), sizeof(int));
+  ofs.write((char*) (&(poolDims_.kernelStrideCol)), sizeof(int));
+}
 
 errorCheck
 maxPool2DLayer::localChecks(

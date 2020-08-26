@@ -35,8 +35,37 @@ activationFunctionCode(const std::string& inName)
   else
   {
     std::cerr << "Unknown activation function name "
-              << inName
-              << "." << std::endl;
+              << inName << "\n";
+    assert(false);
+  }
+}
+
+std::string
+activationFunctionName(const activationFucntions type)
+{
+  if (type == activationFucntions::identity)
+  {
+    return "identity";
+  }
+  else if (type == activationFucntions::sigmoid)
+  {
+    return "sigmoid";
+  }
+  else if (type == activationFucntions::relu)
+  {
+    return "relu";
+  }
+  else if (type == activationFucntions::softmax)
+  {
+    return "softmax";
+  }
+  else if (type == activationFucntions::tanh)
+  {
+    return "tanh";
+  }
+  else
+  {
+    std::cerr << "Invalid activation function code.\n";
     assert(false);
   }
 }

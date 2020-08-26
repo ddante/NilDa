@@ -87,89 +87,89 @@ private:
 
 public:
 
-    // Constructor
+  // Constructor
 
-    neuralNetwork() = delete;
+  neuralNetwork() = delete;
 
-    neuralNetwork(const std::vector<layer*>& vectorLayer);
+  neuralNetwork(const std::vector<layer*>& vectorLayer);
 
-    // Member functions
+  // Member functions
 
-    //void addLayer(const layer singleLayer);
+  //void addLayer(const layer singleLayer);
 
-    void summary() const;
+  void summary() const;
 
-    void forwardPropagation(const Matrix& obs) const;
+  void forwardPropagation(const Matrix& obs) const;
 
-    void backwardPropagation(
-                             const Matrix& obs,
-                             const Matrix& label
-                            ) const;
+  void backwardPropagation(
+                           const Matrix& obs,
+                           const Matrix& label
+                          ) const;
 
-    void configure(
-                   const optimizer& opt,
-                   const std::string& lossName
-                  );
+  void configure(
+                 const optimizer& opt,
+                 const std::string& lossName
+                );
 
-    void train(
+  void train(
+             const Matrix& obs,
+             const Matrix& labes,
+             const int epochs,
+             const int batchSize,
+             const int verbosity = 2
+            ) const;
+
+  // Set the loss function
+  void setLossFunction(const std::string& lossName);
+
+  // Return the value of the loss function at the current state
+  Scalar getLoss(const Matrix& labels) const;
+
+  // Compute the prediciton for the given data
+  void predict(
                const Matrix& obs,
-               const Matrix& labes,
-               const int epochs,
-               const int batchSize,
-               const int verbosity = 2
+               Matrix& predictions,
+               const bool runForward = true
               ) const;
 
-    // Set the loss function
-    void setLossFunction(const std::string& lossName);
+  // Compute the difference between the prediction and
+  // the true data. The return value is the sum of all the errors
+  Scalar getSumError(
+                     const Matrix& predictions,
+                     const Matrix& trueData,
+                     const bool runForward = true
+                    ) const;
 
-    // Return the value of the loss function at the current state
-    Scalar getLoss(const Matrix& labels) const;
+  // Return the accuracy of the trained model
+  // using the whole dataset at once
+  Scalar getAccuracy(const Matrix& obs, const Matrix& trueData) const;
 
-    // Compute the prediciton for the given data
-    void predict(
-                 const Matrix& obs,
-                 Matrix& predictions,
-                 const bool runForward = true
-                ) const;
+  // Return the accuracy of the trained model
+  // splitting the dataset in batches
+  Scalar getAccuracy(
+                     const Matrix& obs,
+                     const Matrix& trueData,
+                     const int batchSize
+                    ) const;
 
-    // Compute the difference between the prediction and
-    // the true data. The return value is the sum of all the errors
-    Scalar getSumError(
-                       const Matrix& predictions,
-                       const Matrix& trueData,
-                       const bool runForward = true
-                      ) const;
+  void saveModel(std::string outputFile) const;
 
-    // Return the accuracy of the trained model
-    // using the whole dataset at once
-    Scalar getAccuracy(const Matrix& obs, const Matrix& trueData) const;
+  // Check if the analytical gradients matches numerical ones
+  int gradientsSanityCheck(
+                           const Matrix& obs,
+                           const Matrix& label,
+                           const bool printError
+                          ) const;
 
-    // Return the accuracy of the trained model
-    // splitting the dataset in batches
-    Scalar getAccuracy(
-                       const Matrix& obs,
-                       const Matrix& trueData,
-                       const int batchSize
-                     ) const;
+  // Destructor
 
-    void saveModel() const;
-
-    // Check if the analytical gradients matches numerical ones
-    int gradientsSanityCheck(
-                             const Matrix& obs,
-                             const Matrix& label,
-                             const bool printError
-                            ) const;
-
-    // Destructor
-
-    ~neuralNetwork()
+  ~neuralNetwork()
+  {
+    for (int i = 0; i < numberOfLayers_; ++i)
     {
-      for (int i = 0; i < numberOfLayers_; ++i)
-      {
-        delete layers_[i];
-      }
-    };
+      delete layers_[i];
+    }
+  };
 
 };
 

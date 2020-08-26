@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <array>
+#include <fstream>
 
 #include "primitives/Matrix.h"
 #include "primitives/Vector.h"
@@ -103,6 +104,9 @@ public:
                                           const Matrix& deltaW,
                                           const Vector& deltaB
                                          ) = 0;
+
+  // Save the layer informations and weights to a file
+  virtual void saveLayer(std::ofstream& ofs) const = 0;
 
   // Perform local checks in the layers for debugging
   virtual errorCheck localChecks(

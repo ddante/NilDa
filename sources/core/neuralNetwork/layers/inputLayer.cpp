@@ -78,5 +78,23 @@ void inputLayer::checkInputSize(const Matrix& obs) const
   }
 }
 
+void inputLayer::saveLayer(std::ofstream& ofs) const
+{
+  ofs.write((char*) (&type_),        sizeof(int));
+  ofs.write((char*) (&trainable_),   sizeof(bool));
+  ofs.write((char*) (&size_.isFlat), sizeof(bool));
+
+  if (size_.isFlat)
+  {
+    ofs.write((char*) (&size_.size), sizeof(int));
+  }
+  else
+  {
+    ofs.write((char*) (&size_.rows),     sizeof(int));
+    ofs.write((char*) (&size_.cols),     sizeof(int));
+    ofs.write((char*) (&size_.channels), sizeof(int));
+  }
+}
+
 
 } // namespace

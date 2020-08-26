@@ -1,5 +1,6 @@
 add_library(
   loss
+  lossFunctionUtils.cpp
   sparseCategoricalCrossentropy.cpp
 )
 

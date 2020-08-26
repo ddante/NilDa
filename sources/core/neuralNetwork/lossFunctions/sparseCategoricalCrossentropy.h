@@ -42,6 +42,14 @@ public:
   // Destructor
 
   ~sparseCategoricalCrossentropy() = default;
+
+  int type() const override
+  {
+    return
+      static_cast<std::underlying_type_t<lossFunctions>>(
+        lossFunctions::sparseCategoricalCrossentropy
+      );
+  }
 };
 
 

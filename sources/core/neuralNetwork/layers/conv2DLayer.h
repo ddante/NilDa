@@ -178,6 +178,8 @@ public:
   {
     return filterWeights_.size();
   }
+  
+  void saveLayer(std::ofstream& ofs) const override;
 
   errorCheck localChecks(
                          const Matrix& input,

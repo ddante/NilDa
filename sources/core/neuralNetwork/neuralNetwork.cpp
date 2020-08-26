@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <memory>
 #include <chrono>
@@ -214,7 +215,7 @@ void neuralNetwork::backwardPropagation(
 void neuralNetwork::configure(
                               const optimizer& opt,
                               const std::string& lossName
-                              )
+                             )
 {
   if (numberOfLayers_ <= 0)
   {
@@ -497,14 +498,32 @@ Scalar neuralNetwork::getAccuracy(
   return 1.0 - (totErr/totN);
 }
 
-void neuralNetwork::saveModel() const
+void neuralNetwork::saveModel(std::string outputFile) const
 {
-    Matrix matrix(3, 3);
-    matrix << 1, 2, 3, 4, 5, 6, 7, 8, 9;
+  std::ofstream ofs(
+                    outputFile,
+                    std::ofstream::out |
+                    std::ofstream::binary |
+                    std::ofstream::trunc
+                   );
 
-    std::cout << "Original Matrix: " << std::endl;
-    std::cout << matrix << std::endl;
+  if (!ofs)
+  {
+    std::cerr << "Impossible to save the model to "
+              << outputFile << "\n";
+  }
 
+  ofs.write((char*) (&numberOfLayers_ ), sizeof(int));
+
+  for (int i = 0; i < numberOfLayers_; ++i)
+  {
+    layers_[i]->saveLayer(ofs);
+  }
+
+  const int lossCode = lossFunction_->type();
+  ofs.write((char*) (&lossCode), sizeof(int));
+
+  ofs.close();
 }
 
 errorCheck
