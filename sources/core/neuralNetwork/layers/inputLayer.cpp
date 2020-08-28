@@ -4,6 +4,20 @@
 namespace NilDa
 {
 
+inputLayer::inputLayer():
+  observationStride_(0)
+{
+  type_ = layerTypes::input;
+
+  size_.isFlat = true;
+  size_.size = 0;
+  size_.rows = 0;
+  size_.cols = 0;
+  size_.channels = 0;
+
+  trainable_ = false;
+}
+
 inputLayer::inputLayer(const int inSize):
   observationStride_(1)
 {
@@ -80,7 +94,10 @@ void inputLayer::checkInputSize(const Matrix& obs) const
 
 void inputLayer::saveLayer(std::ofstream& ofs) const
 {
-  ofs.write((char*) (&type_),        sizeof(int));
+  const int iType =
+    static_cast<std::underlying_type_t<layerTypes> >(layerTypes::input);
+
+  ofs.write((char*) (&iType),        sizeof(int));
   ofs.write((char*) (&trainable_),   sizeof(bool));
   ofs.write((char*) (&size_.isFlat), sizeof(bool));
 
@@ -94,6 +111,26 @@ void inputLayer::saveLayer(std::ofstream& ofs) const
     ofs.write((char*) (&size_.cols),     sizeof(int));
     ofs.write((char*) (&size_.channels), sizeof(int));
   }
+}
+
+void inputLayer::loadLayer(std::ifstream& ifs) const
+{  
+  /*
+  ifs.write((char*) (&type_),        sizeof(int));
+  ifs.write((char*) (&trainable_),   sizeof(bool));
+  ifs.write((char*) (&size_.isFlat), sizeof(bool));
+
+  if (size_.isFlat)
+  {
+    ifs.write((char*) (&size_.size), sizeof(int));
+  }
+  else
+  {
+    ifs.write((char*) (&size_.rows),     sizeof(int));
+    ifs.write((char*) (&size_.cols),     sizeof(int));
+    ifs.write((char*) (&size_.channels), sizeof(int));
+  }
+  */
 }
 
 

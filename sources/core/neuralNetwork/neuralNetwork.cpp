@@ -19,12 +19,21 @@
 
 #include "optimizers/sgd.h"
 
+
+#include "layers/inputLayer.h"
 //#include "H5Cpp.h"
 // ---------------------------------------------------------------------------
 
 namespace NilDa
 {
 
+neuralNetwork::neuralNetwork():
+  layers_(0),
+  numberOfLayers_(0),
+  lastLayer_(0),
+  validState_(false),
+  finalizedNetwork_(false)
+{}
 
 neuralNetwork::neuralNetwork(const std::vector<layer*>& vLayers):
   layers_(vLayers),
@@ -36,7 +45,7 @@ neuralNetwork::neuralNetwork(const std::vector<layer*>& vLayers):
   // The first layer must be an input layer
   if (layers_[inputLayer_]->layerType() != layerTypes::input)
   {
-     std::cerr << "First layer is not an input layer." << std::endl;
+     std::cerr << "First layer is not an input layer.\n";
      assert(false);
   }
 
@@ -71,7 +80,7 @@ void neuralNetwork::summary() const
               << i << "    ";
 
     std::cout << std::setw(12) << std::left
-              << layers_[i]->layerName() << " ";
+              << layers_[i]->name() << " ";
 
     layerSizes sizes = layers_[i]->size();
 
@@ -507,10 +516,12 @@ void neuralNetwork::saveModel(std::string outputFile) const
                     std::ofstream::trunc
                    );
 
-  if (!ofs)
+  if (ofs.fail())
   {
     std::cerr << "Impossible to save the model to "
               << outputFile << "\n";
+
+    assert(false);
   }
 
   ofs.write((char*) (&numberOfLayers_ ), sizeof(int));
@@ -524,6 +535,40 @@ void neuralNetwork::saveModel(std::string outputFile) const
   ofs.write((char*) (&lossCode), sizeof(int));
 
   ofs.close();
+}
+
+void neuralNetwork::loadModel(std::string inputFile)
+{
+  std::ifstream ifs(
+                    inputFile,
+                    std::ofstream::in |
+                    std::ofstream::binary
+                   );
+
+  if (ifs.fail())
+  {
+    std::cerr << "Impossible to load model from "
+              << inputFile << "\n";
+
+    assert(false);
+  }
+
+  ifs.read((char*) (&numberOfLayers_), sizeof(int));
+
+  for (int i = 0; i < numberOfLayers_; ++i)
+  {
+    int layerType;
+    ifs.read((char*) (&layerType), sizeof(int));
+
+    layers_.push_back(createLayer(layerType));
+
+    layers_[i]->loadLayer(ifs);
+  }
+/*
+  const int lossCode = lossFunction_->type();
+  ofs.write((char*) (&lossCode), sizeof(int));
+*/
+  ifs.close();
 }
 
 errorCheck
@@ -705,7 +750,7 @@ int neuralNetwork::gradientsSanityCheck(
       if(printError || code == EXIT_FAIL)
       {
         std::cout << "Layer: "
-                  << layers_[i]->layerName() << "\n"
+                  << layers_[i]->name() << "\n"
                   << "Error weights = "
                   << outputW.error << " "
                   << ", Error biases = "

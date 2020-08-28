@@ -8,6 +8,18 @@
 namespace NilDa
 {
 
+
+maxPool2DLayer::maxPool2DLayer() :
+  kernelSize_{},
+  kernelStride_{},
+  undoFlattening_(false),
+  poolDims_{}
+{
+  type_ = layerTypes::maxPool2D;
+
+  trainable_ = false;
+}
+
 maxPool2DLayer::maxPool2DLayer(
                                const std::array<int, 2>& kernelSize,
   			                       const std::array<int, 2>& kernelStride
@@ -32,7 +44,7 @@ void maxPool2DLayer::init(const layer* previousLayer)
     std::cerr << "Previous layer of type "
              <<  getLayerName(previousLayer->layerType())
              << " not compatible with current layer of type "
-             << getLayerName(type_) << "." << std::endl;
+             << getLayerName(type_) << ".\n";
 
     assert(false);
   }
@@ -42,7 +54,7 @@ void maxPool2DLayer::init(const layer* previousLayer)
   if (prevLayer.isFlat)
   {
     std::cerr << "Previous layer to " << getLayerName(type_)
-              << " cannot be flat." << std::endl;
+              << " cannot be flat.\n";
   }
 
   assert(prevLayer.rows > 0);
@@ -92,8 +104,7 @@ void maxPool2DLayer::checkInputSize(const Matrix& input) const
     << "(" << input.rows() << ") "
     << " not consistent with maxPool2D layer size"
     << "(" << poolDims_.inputRows << ", "
-    << poolDims_.inputCols << ") "
-    << std::endl;
+    << poolDims_.inputCols << ").\n";
 
     assert(false);
   }
@@ -115,8 +126,7 @@ void maxPool2DLayer::checkInputAndCacheSize(
            << cacheBackProp.cols() << ") "
     << " not consistent with the ouput size "
     << "(" << linearOutput_.rows() << ", "
-           << linearOutput_.cols() << ") "
-    << std::endl;
+           << linearOutput_.cols() << ").\n";
 
     assert(false);
   }
@@ -187,13 +197,21 @@ void maxPool2DLayer::backwardPropagation(const Matrix& dActivationNext,
 
 void maxPool2DLayer::saveLayer(std::ofstream& ofs) const
 {
-  ofs.write((char*) (&type_),      sizeof(int));
+  const int iType =
+    static_cast<std::underlying_type_t<layerTypes> >(layerTypes::maxPool2D);
+
+  ofs.write((char*) (&iType),      sizeof(int));
   ofs.write((char*) (&trainable_), sizeof(bool));
 
   ofs.write((char*) (&(poolDims_.kernelRows)), sizeof(int));
   ofs.write((char*) (&(poolDims_.kernelCols)), sizeof(int));
   ofs.write((char*) (&(poolDims_.kernelStrideRow)), sizeof(int));
   ofs.write((char*) (&(poolDims_.kernelStrideCol)), sizeof(int));
+}
+
+void maxPool2DLayer::loadLayer(std::ifstream& ifs) const
+{
+
 }
 
 errorCheck

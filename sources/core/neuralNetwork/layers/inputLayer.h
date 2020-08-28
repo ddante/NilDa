@@ -28,6 +28,8 @@ private:
 public:
 
   // Constructors
+  
+  inputLayer();
 
   explicit inputLayer(const int inSize);
 
@@ -41,14 +43,14 @@ public:
 
   void init(const layer* previousLayer) override
   {
-    std::cerr << "Input layer cannot call the init." << std::endl;
+    std::cerr << "Input layer cannot call the init.\n";
 
     assert(false);
   }
 
   void setupBackward(const layer* nextLayer) override
   {
-    std::cerr << "Input layer cannot call setupBackward." << std::endl;
+    std::cerr << "Input layer cannot call setupBackward.\n";
 
     assert(false);
   }
@@ -57,7 +59,7 @@ public:
 
   void forwardPropagation(const Matrix& obs) override
   {
-    std::cerr << "Input layer cannot call forwardPropagation." << std::endl;
+    std::cerr << "Input layer cannot call forwardPropagation.\n";
 
     assert(false);
   }
@@ -67,49 +69,49 @@ public:
                            const Matrix& inputData
                           ) override
   {
-    std::cerr << "Input layer cannot call backwardPropagation." << std::endl;
+    std::cerr << "Input layer cannot call backwardPropagation.\n";
 
     assert(false);
   }
 
   const Matrix& getWeights() const override
   {
-    std::cerr << "Input layer cannot call getWeights." << std::endl;
+    std::cerr << "Input layer cannot call getWeights.\n";
 
     assert(false);
   }
 
   const Vector& getBiases() const override
   {
-    std::cerr << "Input layer cannot call getBiases." << std::endl;
+    std::cerr << "Input layer cannot call getBiases.\n";
 
     assert(false);
   }
 
   const Matrix& getWeightsDerivative() const override
   {
-    std::cerr << "Input layer cannot call getWeightsDerivative." << std::endl;
+    std::cerr << "Input layer cannot call getWeightsDerivative.\n";
 
     assert(false);
   }
 
   const Vector& getBiasesDerivative() const override
   {
-    std::cerr << "Input layer cannot call getBiasesDerivative." << std::endl;
+    std::cerr << "Input layer cannot call getBiasesDerivative.\n";
 
     assert(false);
   }
 
   const Matrix& output() const override
   {
-    std::cerr << "Input layer cannot call output." << std::endl;
+    std::cerr << "Input layer cannot call output.\n";
 
     assert(false);
   }
 
   const Matrix& backPropCache() const override
   {
-    std::cerr << "Input layer cannot call backPropCache." << std::endl;
+    std::cerr << "Input layer cannot call backPropCache.\n";
 
     assert(false);
   }
@@ -119,7 +121,7 @@ public:
                            const Vector& b
                           ) override
   {
-    std::cerr << "Input layer cannot call setWeightsAndBiases." << std::endl;
+    std::cerr << "Input layer cannot call setWeightsAndBiases.\n";
 
     assert(false);
   }
@@ -129,7 +131,7 @@ public:
                                  const Vector& deltaB
                                 ) override
   {
-    std::cerr << "Input layer cannot call incrementWeightsAndBiases." << std::endl;
+    std::cerr << "Input layer cannot call incrementWeightsAndBiases.\n";
 
     assert(false);
   }
@@ -146,13 +148,15 @@ public:
 
   void saveLayer(std::ofstream& ofs) const override;
 
+  void loadLayer(std::ifstream& ifs) const override;
+
   errorCheck localChecks(
                          const Matrix& input,
                          Scalar errTol
                         ) const override
   {
 
-    std::cerr << "No localChecks for input layer" << std::endl;
+    std::cerr << "No localChecks for input layer\n";
 
     assert(false);
 

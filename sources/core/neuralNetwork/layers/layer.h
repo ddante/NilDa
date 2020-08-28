@@ -29,6 +29,11 @@ struct layerSizes {
   int channels;
 };
 
+
+// Return the string name of the type layer from the enum name
+std::string getLayerName(const layerTypes inLayerType);
+
+
 class layer
 {
 
@@ -44,7 +49,7 @@ public:
 
   // Constructors
 
-  layer(){}
+  layer() = default;
 
   // Member functions
 
@@ -108,6 +113,9 @@ public:
   // Save the layer informations and weights to a file
   virtual void saveLayer(std::ofstream& ofs) const = 0;
 
+  // Load the layer informations and weights from a file
+  virtual void loadLayer(std::ifstream& ifs) const = 0;
+
   // Perform local checks in the layers for debugging
   virtual errorCheck localChecks(
                                  const Matrix& input,
@@ -135,37 +143,7 @@ public:
   }
 
   // Return the string name of the type layer from the enum name
-  std::string getLayerName(const layerTypes inLayerType) const
-  {
-    std::string name;
-
-    if (inLayerType == layerTypes::input)
-    {
-      name = "Input";
-    }
-    else if (inLayerType == layerTypes::dense)
-    {
-      name = "Dense";
-    }
-    else if (inLayerType == layerTypes::conv2D)
-    {
-      name = "Conv 2D";
-    }
-    else if (inLayerType == layerTypes::maxPool2D)
-    {
-      name = "MaxPool 2D";
-    }
-    else
-    {
-      std::cerr << "Unknown layer type code." << std::endl;
-      assert(false);
-    }
-
-    return name;
-  }
-
-  // Return the string name of the type layer from the enum name
-  std::string layerName() const
+  std::string name() const
   {
     return getLayerName(type_);
   }
@@ -176,6 +154,7 @@ public:
   virtual ~layer()  = default;
 };
 
+layer* createLayer(const int layerCode);
 
 } // namespace
 

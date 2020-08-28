@@ -32,7 +32,7 @@ public:
   int type() const override
   {
     return
-      static_cast<std::underlying_type_t<activationFucntions>>(
+      static_cast<std::underlying_type_t<activationFucntions> >(
         activationFucntions::sigmoid
       );
   }

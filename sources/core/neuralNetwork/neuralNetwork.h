@@ -73,7 +73,7 @@ private:
                        const Matrix& labels,
                        const Scalar eps,
                        const Scalar errorLimit
-                            ) const;
+                      ) const;
 
   // Initialize the optimizer internal cache for each layer
   void initOptimizer() const;
@@ -89,7 +89,7 @@ public:
 
   // Constructor
 
-  neuralNetwork() = delete;
+  neuralNetwork();
 
   neuralNetwork(const std::vector<layer*>& vectorLayer);
 
@@ -152,7 +152,11 @@ public:
                      const int batchSize
                     ) const;
 
+  // Save the trained model and the weights to a file
   void saveModel(std::string outputFile) const;
+
+  // Load the model and the weights from a file
+  void loadModel(std::string inputFile);
 
   // Check if the analytical gradients matches numerical ones
   int gradientsSanityCheck(
@@ -165,9 +169,12 @@ public:
 
   ~neuralNetwork()
   {
-    for (int i = 0; i < numberOfLayers_; ++i)
+    if (layers_.size() > 0)
     {
-      delete layers_[i];
+      for (int i = 0; i < numberOfLayers_; ++i)
+      {
+        delete layers_[i];
+      }
     }
   };
 

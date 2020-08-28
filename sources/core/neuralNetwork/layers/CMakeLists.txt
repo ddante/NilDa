@@ -1,4 +1,5 @@
 add_library(layers
+            layer.cpp
             inputLayer.cpp
             denseLayer.cpp
             conv2DLayer.cpp

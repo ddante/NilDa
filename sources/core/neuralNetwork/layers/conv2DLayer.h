@@ -81,6 +81,8 @@ private:
 public:
 
   // Constructor
+  
+  conv2DLayer();
 
   conv2DLayer(
               const int numberOfFilters,
@@ -169,7 +171,7 @@ public:
 
   int inputStride() const override
   {
-    std::cerr << "Conv 2d layer cannot call inputStride function" << std::endl;
+    std::cerr << "Conv 2d layer cannot call inputStride function.\n";
 
     assert(false);
   }
@@ -178,8 +180,10 @@ public:
   {
     return filterWeights_.size();
   }
-  
+
   void saveLayer(std::ofstream& ofs) const override;
+
+  void loadLayer(std::ifstream& ifs) const override;
 
   errorCheck localChecks(
                          const Matrix& input,

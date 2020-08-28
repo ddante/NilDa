@@ -50,6 +50,8 @@ private:
 public:
 
   // Constructor
+  
+  maxPool2DLayer();
 
   maxPool2DLayer(
                  const std::array<int, 2>& poolSize,
@@ -80,32 +82,28 @@ public:
 
   const Matrix& getWeights() const override
   {
-    std::cerr << "Max pool 2D layer cannot call "
-              << "getWeights function" << std::endl;
+    std::cerr << "Max pool 2D layer cannot call getWeights function\n";
 
     assert(false);
   }
 
   const Vector& getBiases() const override
   {
-    std::cerr << "Max pool 2D layer cannot call "
-              << "getBiases function" << std::endl;
+    std::cerr << "Max pool 2D layer cannot call getBiases function.\n";
 
     assert(false);
   }
 
   const Matrix& getWeightsDerivative() const override
   {
-    std::cerr << "Max pool 2D layer cannot call "
-              << "getWeightsDerivative function" << std::endl;
+    std::cerr << "Max pool 2D layer cannot call getWeightsDerivative function.\n";
 
     assert(false);
   }
 
   const Vector& getBiasesDerivative() const override
   {
-    std::cerr << "Max pool 2D layer cannot call "
-              << "getBiasesDerivative function" << std::endl;
+    std::cerr << "Max pool 2D layer cannot call getBiasesDerivative function.\n";
 
     assert(false);
   }
@@ -115,8 +113,7 @@ public:
                            const Vector& b
                          ) override
   {
-    std::cerr << "Max pool 2D layer cannot call "
-              << "setWeightsAndBiases function" << std::endl;
+    std::cerr << "Max pool 2D layer cannot call setWeightsAndBiases function.\n";
 
     assert(false);
   }
@@ -126,8 +123,7 @@ public:
                                  const Vector& deltaB
                                 ) override
   {
-    std::cerr << "Max pool 2D layer cannot call "
-              << "incrementWeightsAndBiases function" << std::endl;
+    std::cerr << "Max pool 2D layer cannot call incrementWeightsAndBiases function.\n";
 
     assert(false);
   }
@@ -144,8 +140,7 @@ public:
 
   int inputStride() const override
   {
-    std::cerr << "Max pool 2D layer cannot call "
-              << "inputStride function" << std::endl;
+    std::cerr << "Max pool 2D layer cannot call inputStride function.\n";
 
     assert(false);
   }
@@ -154,8 +149,10 @@ public:
   {
     return 0;
   }
-  
+
   void saveLayer(std::ofstream& ofs) const override;
+
+  void loadLayer(std::ifstream& ifs) const override;
 
   errorCheck localChecks(
                          const Matrix& input,

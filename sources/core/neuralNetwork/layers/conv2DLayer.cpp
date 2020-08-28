@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "conv2DLayer.h"
-
 #include "conv2DUtils.h"
 
 #include "activationFunctions/activationFunctionUtils.h"
@@ -15,6 +14,21 @@
 
 namespace NilDa
 {
+conv2DLayer::conv2DLayer() :
+  numberOfFilters_(0),
+  filterSize_{},
+  filterStride_{},
+  withPadding_(false),
+  activationName_{},
+  undoFlattening_(false),
+  nObservations_(0),
+  forwardConvDims_{},
+  backwardWeightsConvDims_{}
+{
+  type_ = layerTypes::conv2D;
+
+  trainable_ = true;
+}
 
 conv2DLayer::conv2DLayer(
                          const int numberOfFilters,
@@ -116,7 +130,7 @@ void conv2DLayer::init(const layer* previousLayer)
   default :
     std::cerr << "Not valid activation function  "
               << activationName_
-              << " in this context." << std::endl;
+              << " in this context.\n";
     assert(false);
   }
 
@@ -129,7 +143,7 @@ void conv2DLayer::init(const layer* previousLayer)
     std::cerr << "Previous layer of type "
              <<  getLayerName(previousLayer->layerType())
              << " not compatible with current layer of type "
-             << getLayerName(type_) << "." << std::endl;
+             << getLayerName(type_) << ".\n";
 
     assert(false);
   }
@@ -139,7 +153,7 @@ void conv2DLayer::init(const layer* previousLayer)
   if (prevLayer.isFlat)
   {
     std::cerr << "Previous layer to " << getLayerName(type_)
-              << " cannot be flat." << std::endl;
+              << " cannot be flat.\n";
   }
 
   assert(prevLayer.rows > 0);
@@ -266,9 +280,6 @@ void conv2DLayer::forwardPropagation(const Matrix& input)
                                    );
 
   nObservations_ = nObs;
-
-  //  std::cout << "activation conv2d\n"
-  //            << activation_.array() << "\n\n";
 }
 
 
@@ -330,9 +341,6 @@ void conv2DLayer::backwardPropagation(
              dFilterWeights_
             );
 
-//  std::cout << "Backward Weights Conv Dim" << std::endl;
-//  std::cout << backwardWeightsConvDims_ << std::endl;
-
   dFilterWeights_ /= nObs;
 
   // ----------------------------------------------------
@@ -390,9 +398,6 @@ void conv2DLayer::backwardPropagation(
 
   cacheBackProp_.resize(cacheRows, cacheCols);
 
-  //std::cout << "Backward Input Conv Dim" << std::endl;
-  //std::cout << backwardInputConvDims_ << std::endl;
-
   convolve2D(
              nObs,
              backwardInputConvDims_,
@@ -415,8 +420,7 @@ void conv2DLayer::setWeightsAndBiases(
               << W.cols() << ") "
               << " not consistent with the layer weights size "
               << "(" << filterWeights_.rows() << ", "
-              << filterWeights_.cols() << ") "
-              << std::endl;
+              << filterWeights_.cols() << ").\n";
 
     assert(false);
   }
@@ -426,8 +430,7 @@ void conv2DLayer::setWeightsAndBiases(
     std::cerr << "Size of the input biases vector "
               << "(" << b.rows() << ") "
               << " not consistent with the layer biases size "
-              << "(" << biases_.rows() << ") "
-              << std::endl;
+              << "(" << biases_.rows() << ").\n";
 
     assert(false);
   }
@@ -451,8 +454,7 @@ void conv2DLayer::incrementWeightsAndBiases(
               << deltaW.cols() << ") "
               << " not consistent with the layer weights size "
               << "(" << filterWeights_.rows() << ", "
-              << filterWeights_.cols() << ") "
-              << std::endl;
+              << filterWeights_.cols() << ").\n";
 
     assert(false);
   }
@@ -462,8 +464,7 @@ void conv2DLayer::incrementWeightsAndBiases(
     std::cerr << "Size of the input biases vector "
               << "(" << deltaB.rows() << ") "
               << " not consistent with the layer biases size "
-              << "(" << biases_.rows() << ") "
-              << std::endl;
+              << "(" << biases_.rows() << ").\n";
 
     assert(false);
   }
@@ -476,7 +477,10 @@ void conv2DLayer::incrementWeightsAndBiases(
 
 void conv2DLayer::saveLayer(std::ofstream& ofs) const
 {
-  ofs.write((char*) (&type_),      sizeof(int));
+  const int iType =
+    static_cast<std::underlying_type_t<layerTypes> >(layerTypes::conv2D);
+
+  ofs.write((char*) (&iType),      sizeof(int));
   ofs.write((char*) (&trainable_), sizeof(bool));
 
   ofs.write((char*) (&(forwardConvDims_.outputChannels)), sizeof(int));
@@ -504,6 +508,11 @@ void conv2DLayer::saveLayer(std::ofstream& ofs) const
 
   ofs.write((char*) (&bRows), sizeof(int));
   ofs.write((char*) biases_.data(), biasesBytes);
+}
+
+void conv2DLayer::loadLayer(std::ifstream& ifs) const
+{
+
 }
 
 errorCheck conv2DLayer::localChecks(

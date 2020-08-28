@@ -14,6 +14,23 @@
 namespace NilDa
 {
 
+denseLayer::denseLayer():
+    layerSize_(0),
+    needFlattening_(false),
+    inputSize_(0),
+    inputChannels_(0),
+    nObservations_(0)
+{
+  type_ = layerTypes::dense;
+
+  size_.isFlat = true;
+  size_.size = 0;
+  size_.rows = 0;
+  size_.cols = 0;
+  size_.channels = 0;
+
+  trainable_ = true;
+}
 
 denseLayer::denseLayer(
                        const int inSize,
@@ -354,8 +371,10 @@ void denseLayer::incrementWeightsAndBiases(
 
 void denseLayer::saveLayer(std::ofstream& ofs) const
 {
+  const int iType =
+    static_cast<std::underlying_type_t<layerTypes> >(layerTypes::dense);
 
-  ofs.write((char*) (&type_),      sizeof(int));
+  ofs.write((char*) (&iType),      sizeof(int));
   ofs.write((char*) (&trainable_), sizeof(bool));
   ofs.write((char*) (&size_.size), sizeof(int));
 
@@ -379,6 +398,11 @@ void denseLayer::saveLayer(std::ofstream& ofs) const
 
   ofs.write((char*) (&bRows), sizeof(int));
   ofs.write((char*) biases_.data(), biasesBytes);
+}
+
+void denseLayer::loadLayer(std::ifstream& ifs) const
+{
+
 }
 
 } // namespace
