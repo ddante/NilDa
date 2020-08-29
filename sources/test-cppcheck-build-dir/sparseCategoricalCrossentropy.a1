@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<analyzerinfo checksum="3562491589">
-        <error id="syntaxError" severity="error" msg="syntax error" verbose="syntax error">
-            <location file="/home/dante/dev/NilDa/sources/core/neuralNetwork/lossFunctions/sparseCategoricalCrossentropy.cpp" line="31" column="11"/>
-        </error>
-</analyzerinfo>
