@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<results version="2">
+    <cppcheck version="1.90"/>
+    <errors>
+        <error id="preprocessorErrorDirective" severity="error" msg="#error Please tell me what is the equivalent of alignas(n) and alignof(x) for your compiler" verbose="#error Please tell me what is the equivalent of alignas(n) and alignof(x) for your compiler" sinceDate="28.08.20">
+            <location file="../../../../../usr/local/include/eigen3/Eigen/src/Core/util/ConfigureVectorization.h" line="52"/>
+        </error>
+        <error id="syntaxError" severity="error" msg="syntax error" verbose="syntax error" sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/conv2DUtils.cpp" line="162"/>
+        </error>
+        <error id="shadowFunction" severity="style" msg="Local variable &amp;#039;output&amp;#039; shadows outer function" verbose="Local variable &amp;#039;output&amp;#039; shadows outer function" sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/denseLayer.h" line="159" info="Shadow variable"/>
+            <location file="core/neuralNetwork/layers/denseLayer.h" line="124" info="Shadowed declaration"/>
+        </error>
+        <error id="shadowFunction" severity="style" msg="Local variable &amp;#039;output&amp;#039; shadows outer function" verbose="Local variable &amp;#039;output&amp;#039; shadows outer function" sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/inputLayer.h" line="163" info="Shadow variable"/>
+            <location file="core/neuralNetwork/layers/inputLayer.h" line="105" info="Shadowed declaration"/>
+        </error>
+        <error id="syntaxError" severity="error" msg="syntax error" verbose="syntax error" sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/pool2DUtils.cpp" line="162"/>
+        </error>
+        <error id="syntaxError" severity="error" msg="syntax error" verbose="syntax error" sinceDate="28.08.20">
+            <location file="core/neuralNetwork/lossFunctions/sparseCategoricalCrossentropy.cpp" line="31"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;activationFunctionName&amp;#039; is never used." verbose="The function &amp;#039;activationFunctionName&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/activationFunctions/activationFunctionUtils.cpp" line="44"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;backwardPropagation&amp;#039; is never used." verbose="The function &amp;#039;backwardPropagation&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/maxPool2DLayer.cpp" line="144"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;checkInputAndCacheSize&amp;#039; is never used." verbose="The function &amp;#039;checkInputAndCacheSize&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/maxPool2DLayer.cpp" line="114"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;forwardPropagation&amp;#039; is never used." verbose="The function &amp;#039;forwardPropagation&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/maxPool2DLayer.cpp" line="135"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;loadLayer&amp;#039; is never used." verbose="The function &amp;#039;loadLayer&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/maxPool2DLayer.cpp" line="212"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;localChecks&amp;#039; is never used." verbose="The function &amp;#039;localChecks&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/maxPool2DLayer.cpp" line="218"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;saveLayer&amp;#039; is never used." verbose="The function &amp;#039;saveLayer&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/maxPool2DLayer.cpp" line="198"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;setupBackward&amp;#039; is never used." verbose="The function &amp;#039;setupBackward&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/maxPool2DLayer.cpp" line="89"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;createLayer&amp;#039; is never used." verbose="The function &amp;#039;createLayer&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/layer.cpp" line="45"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;importMNISTDatabase&amp;#039; is never used." verbose="The function &amp;#039;importMNISTDatabase&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="utils/importMNISTDatasets.cpp" line="30"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;incrementWeightsAndBiases&amp;#039; is never used." verbose="The function &amp;#039;incrementWeightsAndBiases&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/denseLayer.cpp" line="335"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;setWeightsAndBiases&amp;#039; is never used." verbose="The function &amp;#039;setWeightsAndBiases&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/layers/denseLayer.cpp" line="300"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;init&amp;#039; is never used." verbose="The function &amp;#039;init&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/optimizers/sgd.cpp" line="43"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;lossFunctionCode&amp;#039; is never used." verbose="The function &amp;#039;lossFunctionCode&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/lossFunctions/lossFunctionUtils.cpp" line="11"/>
+        </error>
+        <error id="unusedFunction" severity="style" msg="The function &amp;#039;lossFunctionName&amp;#039; is never used." verbose="The function &amp;#039;lossFunctionName&amp;#039; is never used." sinceDate="28.08.20">
+            <location file="core/neuralNetwork/lossFunctions/lossFunctionUtils.cpp" line="26"/>
+        </error>
+    </errors>
+</results>

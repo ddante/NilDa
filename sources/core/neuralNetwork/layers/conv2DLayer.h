@@ -38,9 +38,6 @@ private:
   // Is padding used?
   bool withPadding_;
 
-  // Name of the activation function
-  std::string activationName_;
-
   // Pointer to the activation function used in this layer
   std::unique_ptr<activationFunction> activationFunction_;
 
@@ -78,10 +75,14 @@ private:
   conv2DDimensions backwardWeightsConvDims_;
   conv2DDimensions backwardInputConvDims_;
 
+private:
+
+  void setActivationFunction(const activationFunctions code);
+
 public:
 
   // Constructor
-  
+
   conv2DLayer();
 
   conv2DLayer(
@@ -118,7 +119,12 @@ public:
 
   // Member functions
 
-  void init(const layer* previousLayer) override;
+  void checkInput() const override;
+
+  void init(
+            const layer* previousLayer,
+            const bool resetWeightBiases = true
+           ) override;
 
   void setupBackward(const layer* nextLayer) override;
 
@@ -183,7 +189,7 @@ public:
 
   void saveLayer(std::ofstream& ofs) const override;
 
-  void loadLayer(std::ifstream& ifs) const override;
+  void loadLayer(std::ifstream& ifs) override;
 
   errorCheck localChecks(
                          const Matrix& input,

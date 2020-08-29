@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="2888411765">
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="lossFunctionCode" lineNumber="11"/>
+    <functiondecl functionName="lossFunctionName" lineNumber="26"/>
+    <functioncall functionName="assert"/>
+    <functioncall functionName="false"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="sparseCategoricalCrossentropy"/>
+  </FileInfo>
+</analyzerinfo>

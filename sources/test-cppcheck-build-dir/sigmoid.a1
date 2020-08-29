@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="4057554410">
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="applyForward" lineNumber="9"/>
+    <functiondecl functionName="applyBackward" lineNumber="22"/>
+    <functioncall functionName="activation"/>
+    <functioncall functionName="applyForward"/>
+    <functioncall functionName="array"/>
+    <functioncall functionName="cols"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="exp"/>
+    <functioncall functionName="identity"/>
+    <functioncall functionName="linearInput"/>
+    <functioncall functionName="override"/>
+    <functioncall functionName="relu"/>
+    <functioncall functionName="resize"/>
+    <functioncall functionName="rows"/>
+    <functioncall functionName="sigmoid"/>
+    <functioncall functionName="softmax"/>
+    <functioncall functionName="static_cast"/>
+    <functioncall functionName="tanh"/>
+  </FileInfo>
+</analyzerinfo>

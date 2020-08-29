@@ -19,7 +19,6 @@ conv2DLayer::conv2DLayer() :
   filterSize_{},
   filterStride_{},
   withPadding_(false),
-  activationName_{},
   undoFlattening_(false),
   nObservations_(0),
   forwardConvDims_{},
@@ -41,7 +40,6 @@ conv2DLayer::conv2DLayer(
   filterSize_(filterSize),
   filterStride_(filterStride),
   withPadding_(withPadding),
-  activationName_(activationName),
   undoFlattening_(false),
   nObservations_(0),
   forwardConvDims_{},
@@ -50,6 +48,10 @@ conv2DLayer::conv2DLayer(
   type_ = layerTypes::conv2D;
 
   trainable_ = true;
+
+  setActivationFunction(
+    activationFunctionCode(activationName)
+  );
 }
 
 conv2DLayer::conv2DLayer(
@@ -62,7 +64,6 @@ conv2DLayer::conv2DLayer(
   filterSize_(filterSize),
   filterStride_(filterStride),
   withPadding_(false),
-  activationName_(activationName),
   undoFlattening_(false),
   nObservations_(0),
   forwardConvDims_{},
@@ -71,6 +72,10 @@ conv2DLayer::conv2DLayer(
   type_ = layerTypes::conv2D;
 
   trainable_ = true;
+
+  setActivationFunction(
+    activationFunctionCode(activationName)
+  );
 }
 
 conv2DLayer::conv2DLayer(
@@ -83,7 +88,6 @@ conv2DLayer::conv2DLayer(
   filterSize_(filterSize),
   filterStride_({1,1}),
   withPadding_(withPadding),
-  activationName_(activationName),
   undoFlattening_(false),
   nObservations_(0),
   forwardConvDims_{},
@@ -92,6 +96,10 @@ conv2DLayer::conv2DLayer(
   type_ = layerTypes::conv2D;
 
   trainable_ = true;
+
+  setActivationFunction(
+    activationFunctionCode(activationName)
+  );
 }
 
 conv2DLayer::conv2DLayer(
@@ -103,7 +111,6 @@ conv2DLayer::conv2DLayer(
   filterSize_(filterSize),
   filterStride_({1,1}),
   withPadding_(false),
-  activationName_(activationName),
   undoFlattening_(false),
   nObservations_(0),
   forwardConvDims_{},
@@ -112,28 +119,28 @@ conv2DLayer::conv2DLayer(
   type_ = layerTypes::conv2D;
 
   trainable_ = true;
+
+  setActivationFunction(
+    activationFunctionCode(activationName)
+  );
 }
 
-void conv2DLayer::init(const layer* previousLayer)
+void conv2DLayer::checkInput() const
 {
-  switch (activationFunctionCode(activationName_))
-  {
-  case activationFucntions::identity :
-    activationFunction_ = std::make_unique<identity>();
-  break;
-  case activationFucntions::sigmoid :
-    activationFunction_ = std::make_unique<sigmoid>();
-  break;
-  case activationFucntions::relu :
-    activationFunction_ = std::make_unique<relu>();
-  break;
-  default :
-    std::cerr << "Not valid activation function  "
-              << activationName_
-              << " in this context.\n";
-    assert(false);
-  }
+  assert(numberOfFilters_ > 0);
 
+  assert(filterSize_[0] > 0);
+  assert(filterSize_[1] > 0);
+
+  assert(filterStride_[0] > 0);
+  assert(filterStride_[1] > 0);
+}
+
+void conv2DLayer::init(
+                       const layer* previousLayer,
+                       const bool resetWeightBiases
+                      )
+{
   if (
       previousLayer->layerType() != layerTypes::input &&
       previousLayer->layerType() != layerTypes::conv2D &&
@@ -191,22 +198,25 @@ void conv2DLayer::init(const layer* previousLayer)
                             * forwardConvDims_.kernelCols
                             * forwardConvDims_.kernelChannels;
 
-  Scalar epsilonInit = sqrt(2.0)/sqrt(kernelDimension);
-
   const int kernelSize = forwardConvDims_.kernelRows
                        * forwardConvDims_.kernelCols;
 
   const int kernelChannels = forwardConvDims_.kernelChannels
                            * forwardConvDims_.kernelNumber;
 
-  filterWeights_.setRandom(kernelSize, kernelChannels);
+  if (resetWeightBiases)
+  {
+    Scalar epsilonInit = sqrt(2.0)/sqrt(kernelDimension);
 
-  filterWeights_ *= epsilonInit;
+    filterWeights_.setRandom(kernelSize, kernelChannels);
+
+    filterWeights_ *= epsilonInit;
+
+    biases_.setRandom(forwardConvDims_.kernelNumber);
+    biases_ *= epsilonInit;
+  }
 
   dFilterWeights_.setZero(kernelSize, kernelChannels);
-
-  biases_.setRandom(forwardConvDims_.kernelNumber);
-  biases_ *= epsilonInit;
 
   dBiases_.setZero(forwardConvDims_.kernelNumber);
 }
@@ -484,8 +494,13 @@ void conv2DLayer::saveLayer(std::ofstream& ofs) const
   ofs.write((char*) (&trainable_), sizeof(bool));
 
   ofs.write((char*) (&(forwardConvDims_.outputChannels)), sizeof(int));
+
   ofs.write((char*) (&(forwardConvDims_.kernelRows)), sizeof(int));
   ofs.write((char*) (&(forwardConvDims_.kernelCols)), sizeof(int));
+
+  ofs.write((char*) (&(forwardConvDims_.kernelStrideRow)), sizeof(int));
+  ofs.write((char*) (&(forwardConvDims_.kernelStrideCol)), sizeof(int));
+
   ofs.write((char*) (&(forwardConvDims_.padding)), sizeof(bool));
 
   const int activationCode = activationFunction_->type();
@@ -510,9 +525,63 @@ void conv2DLayer::saveLayer(std::ofstream& ofs) const
   ofs.write((char*) biases_.data(), biasesBytes);
 }
 
-void conv2DLayer::loadLayer(std::ifstream& ifs) const
+void conv2DLayer::loadLayer(std::ifstream& ifs)
 {
+  ifs.read((char*) (&trainable_), sizeof(bool));
 
+  ifs.read((char*) (&(numberOfFilters_)), sizeof(int));
+
+  ifs.read((char*) (&(filterSize_[0])), sizeof(int));
+  ifs.read((char*) (&(filterSize_[1])), sizeof(int));
+
+  ifs.read((char*) (&(filterStride_[0])), sizeof(int));
+  ifs.read((char*) (&(filterStride_[1])), sizeof(int));
+
+  ifs.read((char*) (&withPadding_), sizeof(bool));
+
+  int code;
+  ifs.read((char*) (&code), sizeof(int));
+
+  activationFunctions aType =
+    static_cast<activationFunctions>(code);
+
+  setActivationFunction(aType);
+
+  int wRows, wCols;
+  ifs.read((char*) (&wRows), sizeof(int));
+  ifs.read((char*) (&wCols), sizeof(int));
+
+  filterWeights_.setZero(wRows, wCols);
+
+  const std::size_t weightsBytes = sizeof(Scalar) * wRows * wCols;
+  ifs.read((char*) filterWeights_.data(), weightsBytes);
+
+  int bRows;
+  ifs.read((char*) (&bRows), sizeof(int));
+
+  biases_.setZero(bRows);
+
+  const std::size_t biasesBytes = sizeof(Scalar) * bRows;
+  ifs.read((char*) biases_.data(), biasesBytes);
+}
+
+void conv2DLayer::setActivationFunction(const activationFunctions code)
+{
+  switch (code)
+  {
+    case activationFunctions::identity :
+      activationFunction_ = std::make_unique<identity>();
+    break;
+    case activationFunctions::sigmoid :
+      activationFunction_ = std::make_unique<sigmoid>();
+    break;
+    case activationFunctions::relu :
+      activationFunction_ = std::make_unique<relu>();
+    break;
+    default :
+       std::cerr << "Not valid activation function.\n";
+       assert(false);
+  }
 }
 
 errorCheck conv2DLayer::localChecks(

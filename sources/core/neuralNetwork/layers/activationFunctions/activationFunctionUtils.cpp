@@ -9,28 +9,28 @@ namespace NilDa
 {
 
 
-activationFucntions
+activationFunctions
 activationFunctionCode(const std::string& inName)
 {
   if (inName == "identity")
   {
-    return activationFucntions::identity;
+    return activationFunctions::identity;
   }
   else if (inName == "sigmoid")
   {
-    return activationFucntions::sigmoid;
+    return activationFunctions::sigmoid;
   }
   else if (inName == "relu")
   {
-    return activationFucntions::relu;
+    return activationFunctions::relu;
   }
   else if (inName == "softmax")
   {
-    return activationFucntions::softmax;
+    return activationFunctions::softmax;
   }
   else if (inName == "tanh")
   {
-    return activationFucntions::tanh;
+    return activationFunctions::tanh;
   }
   else
   {
@@ -41,25 +41,25 @@ activationFunctionCode(const std::string& inName)
 }
 
 std::string
-activationFunctionName(const activationFucntions type)
+activationFunctionName(const activationFunctions type)
 {
-  if (type == activationFucntions::identity)
+  if (type == activationFunctions::identity)
   {
     return "identity";
   }
-  else if (type == activationFucntions::sigmoid)
+  else if (type == activationFunctions::sigmoid)
   {
     return "sigmoid";
   }
-  else if (type == activationFucntions::relu)
+  else if (type == activationFunctions::relu)
   {
     return "relu";
   }
-  else if (type == activationFucntions::softmax)
+  else if (type == activationFunctions::softmax)
   {
     return "softmax";
   }
-  else if (type == activationFucntions::tanh)
+  else if (type == activationFunctions::tanh)
   {
     return "tanh";
   }

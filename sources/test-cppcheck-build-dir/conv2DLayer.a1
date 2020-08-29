@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="1649351298">
+  <FileInfo check="ctu">
+<function-call call-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DUtils.h:75:6" call-funcname="setConv2DDims" call-argnr="1" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DLayer.cpp" line="169" col="16" call-argexpr="prevLayerSize" call-argvaluetype="7" call-argvalue="0"/><function-call call-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DUtils.h:75:6" call-funcname="setConv2DDims" call-argnr="3" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DLayer.cpp" line="169" col="16" call-argexpr="filterSize_" call-argvaluetype="7" call-argvalue="0"/><function-call call-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DUtils.h:75:6" call-funcname="setConv2DDims" call-argnr="4" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DLayer.cpp" line="169" col="16" call-argexpr="filterStride_" call-argvaluetype="7" call-argvalue="0"/>  </FileInfo>
+  <FileInfo check="Uninitialized variables">
+    <unsafe-usage my-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DLayer.h:121:8" my-argnr="1" my-argname="previousLayer" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DLayer.cpp" line="138" col="7" value="0"/>
+    <unsafe-usage my-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DLayer.h:123:8" my-argnr="1" my-argname="nextLayer" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DLayer.cpp" line="216" col="29" value="0"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="init" lineNumber="117"/>
+    <functiondecl functionName="setupBackward" lineNumber="214"/>
+    <functiondecl functionName="checkInputSize" lineNumber="221"/>
+    <functiondecl functionName="forwardPropagation" lineNumber="237"/>
+    <functiondecl functionName="backwardPropagation" lineNumber="286"/>
+    <functiondecl functionName="setWeightsAndBiases" lineNumber="410"/>
+    <functiondecl functionName="incrementWeightsAndBiases" lineNumber="443"/>
+    <functiondecl functionName="saveLayer" lineNumber="478"/>
+    <functiondecl functionName="loadLayer" lineNumber="513"/>
+    <functiondecl functionName="localChecks" lineNumber="518"/>
+    <functioncall functionName="EXIT_FAIL"/>
+    <functioncall functionName="EXIT_OK"/>
+    <functioncall functionName="Scalar"/>
+    <functioncall functionName="W"/>
+    <functioncall functionName="activationCode"/>
+    <functioncall functionName="activationFunctionCode"/>
+    <functioncall functionName="activationName"/>
+    <functioncall functionName="activationName_"/>
+    <functioncall functionName="activation_"/>
+    <functioncall functionName="applyBackward"/>
+    <functioncall functionName="applyForward"/>
+    <functioncall functionName="applyRotation"/>
+    <functioncall functionName="assert"/>
+    <functioncall functionName="b"/>
+    <functioncall functionName="bRows"/>
+    <functioncall functionName="backwardInputConvDims_"/>
+    <functioncall functionName="backwardWeightsConvDims_"/>
+    <functioncall functionName="biasesBytes"/>
+    <functioncall functionName="block"/>
+    <functioncall functionName="bool"/>
+    <functioncall functionName="break"/>
+    <functioncall functionName="cacheBackProp_"/>
+    <functioncall functionName="cacheCols"/>
+    <functioncall functionName="cacheRows"/>
+    <functioncall functionName="channels"/>
+    <functioncall functionName="checkConvolution"/>
+    <functioncall functionName="checkInputSize"/>
+    <functioncall functionName="colObs"/>
+    <functioncall functionName="cols"/>
+    <functioncall functionName="colwise"/>
+    <functioncall functionName="conv2D"/>
+    <functioncall functionName="conv2DDimensions"/>
+    <functioncall functionName="conv2DLayer"/>
+    <functioncall functionName="convolve2D"/>
+    <functioncall functionName="dActivationNext"/>
+    <functioncall functionName="dActivationNextM"/>
+    <functioncall functionName="dFilterWeights_"/>
+    <functioncall functionName="dLinearOutput"/>
+    <functioncall functionName="data"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="delete"/>
+    <functioncall functionName="dense"/>
+    <functioncall functionName="error"/>
+    <functioncall functionName="false"/>
+    <functioncall functionName="filterSize"/>
+    <functioncall functionName="filterSize_"/>
+    <functioncall functionName="filterStride"/>
+    <functioncall functionName="filterStride_"/>
+    <functioncall functionName="filterWeights_"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="forwardConvDims_"/>
+    <functioncall functionName="getLayerName"/>
+    <functioncall functionName="iType"/>
+    <functioncall functionName="identity"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="input"/>
+    <functioncall functionName="inputChannels"/>
+    <functioncall functionName="inputCols"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="isFlat"/>
+    <functioncall functionName="kernelChannels"/>
+    <functioncall functionName="kernelCols"/>
+    <functioncall functionName="kernelDimension"/>
+    <functioncall functionName="kernelNumber"/>
+    <functioncall functionName="kernelRows"/>
+    <functioncall functionName="kernelSize"/>
+    <functioncall functionName="layerType"/>
+    <functioncall functionName="linearOutput_"/>
+    <functioncall functionName="make_unique"/>
+    <functioncall functionName="mappedOutput"/>
+    <functioncall functionName="mappedSumOutputs"/>
+    <functioncall functionName="maxPool2D"/>
+    <functioncall functionName="mean"/>
+    <functioncall functionName="nObs"/>
+    <functioncall functionName="nObservations_"/>
+    <functioncall functionName="noalias"/>
+    <functioncall functionName="numberOfFilters"/>
+    <functioncall functionName="numberOfFilters_"/>
+    <functioncall functionName="outputChannels"/>
+    <functioncall functionName="outputCols"/>
+    <functioncall functionName="outputRows"/>
+    <functioncall functionName="override"/>
+    <functioncall functionName="padding"/>
+    <functioncall functionName="prevLayerSize"/>
+    <functioncall functionName="relu"/>
+    <functioncall functionName="resize"/>
+    <functioncall functionName="rotatedKernels"/>
+    <functioncall functionName="rows"/>
+    <functioncall functionName="rowwise"/>
+    <functioncall functionName="setConv2DDims"/>
+    <functioncall functionName="setInputChannels"/>
+    <functioncall functionName="setRandom"/>
+    <functioncall functionName="setZero"/>
+    <functioncall functionName="sigmoid"/>
+    <functioncall functionName="size"/>
+    <functioncall functionName="sizeof"/>
+    <functioncall functionName="softmax"/>
+    <functioncall functionName="sqrt"/>
+    <functioncall functionName="static_cast"/>
+    <functioncall functionName="sum"/>
+    <functioncall functionName="switch"/>
+    <functioncall functionName="tanh"/>
+    <functioncall functionName="trainable_"/>
+    <functioncall functionName="transpose"/>
+    <functioncall functionName="true"/>
+    <functioncall functionName="type"/>
+    <functioncall functionName="type_"/>
+    <functioncall functionName="undoFlattening_"/>
+    <functioncall functionName="wCols"/>
+    <functioncall functionName="wRows"/>
+    <functioncall functionName="weightsBytes"/>
+    <functioncall functionName="withPadding"/>
+    <functioncall functionName="withPadding_"/>
+    <functioncall functionName="write"/>
+  </FileInfo>
+</analyzerinfo>

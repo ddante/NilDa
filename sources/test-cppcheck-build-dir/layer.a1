@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="683722595">
+        <error id="shadowFunction" severity="style" msg="Local variable &apos;output&apos; shadows outer function" verbose="Local variable &apos;output&apos; shadows outer function" cwe="398">
+            <location file0="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/layer.cpp" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.h" line="163" column="16" info="Shadow variable"/>
+            <location file0="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/layer.cpp" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.h" line="105" column="17" info="Shadowed declaration"/>
+            <symbol>output</symbol>
+        </error>
+        <error id="shadowFunction" severity="style" msg="Local variable &apos;output&apos; shadows outer function" verbose="Local variable &apos;output&apos; shadows outer function" cwe="398">
+            <location file0="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/layer.cpp" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.h" line="159" column="16" info="Shadow variable"/>
+            <location file0="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/layer.cpp" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.h" line="124" column="17" info="Shadowed declaration"/>
+            <symbol>output</symbol>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="getLayerName" lineNumber="16"/>
+    <functiondecl functionName="createLayer" lineNumber="45"/>
+    <functioncall functionName="assert"/>
+    <functioncall functionName="const"/>
+    <functioncall functionName="conv2D"/>
+    <functioncall functionName="conv2DDimensions"/>
+    <functioncall functionName="conv2DLayer"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="delete"/>
+    <functioncall functionName="dense"/>
+    <functioncall functionName="denseLayer"/>
+    <functioncall functionName="false"/>
+    <functioncall functionName="getLayerName"/>
+    <functioncall functionName="identity"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="input"/>
+    <functioncall functionName="inputLayer"/>
+    <functioncall functionName="layerCode"/>
+    <functioncall functionName="maxPool2D"/>
+    <functioncall functionName="maxPool2DLayer"/>
+    <functioncall functionName="override"/>
+    <functioncall functionName="pool2DDimensions"/>
+    <functioncall functionName="relu"/>
+    <functioncall functionName="sigmoid"/>
+    <functioncall functionName="size"/>
+    <functioncall functionName="softmax"/>
+    <functioncall functionName="static_cast"/>
+    <functioncall functionName="tanh"/>
+    <functioncall functionName="type_"/>
+  </FileInfo>
+</analyzerinfo>

@@ -57,12 +57,15 @@ private:
   // forward propagation
   int nObservations_;
 
+private:
+  void setActivationFunction(const activationFunctions code);
+
 public:
 
   // Constructor
 
   denseLayer();
-  
+
   denseLayer(
              const int inSize,
              const std::string& activationName
@@ -74,7 +77,12 @@ public:
 
   // Member functions
 
-  void init(const layer* previousLayer) override;
+  void checkInput() const override;
+
+  void init(
+            const layer* previousLayer,
+            const bool resetWeightBiases = true
+           ) override;
 
   void setupBackward(const layer* nextLayer) override
   {
@@ -145,7 +153,7 @@ public:
 
   void saveLayer(std::ofstream& ofs) const override;
 
-  void loadLayer(std::ifstream& ifs) const override;
+  void loadLayer(std::ifstream& ifs) override;
 
   errorCheck localChecks(
                          const Matrix& input,

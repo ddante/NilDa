@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="2929714647">
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="init" lineNumber="43"/>
+    <functiondecl functionName="update" lineNumber="65"/>
+    <functioncall functionName="Matrix"/>
+    <functioncall functionName="Vector"/>
+    <functioncall functionName="alpha"/>
+    <functioncall functionName="assert"/>
+    <functioncall functionName="cols"/>
+    <functioncall functionName="data"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="delete"/>
+    <functioncall functionName="false"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="learningRate_"/>
+    <functioncall functionName="m"/>
+    <functioncall functionName="momentum_"/>
+    <functioncall functionName="noalias"/>
+    <functioncall functionName="resize"/>
+    <functioncall functionName="rows"/>
+    <functioncall functionName="setZero"/>
+    <functioncall functionName="sgd"/>
+  </FileInfo>
+</analyzerinfo>

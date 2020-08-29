@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="4196344843">
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="reverseInt" lineNumber="17"/>
+    <functiondecl functionName="importMNISTDatabase" lineNumber="30"/>
+    <functioncall functionName="Dynamic"/>
+    <functioncall functionName="Images"/>
+    <functioncall functionName="Labels"/>
+    <functioncall functionName="c4"/>
+    <functioncall functionName="close"/>
+    <functioncall functionName="cols"/>
+    <functioncall functionName="data"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="fullPathFileImage"/>
+    <functioncall functionName="fullPathFileLabel"/>
+    <functioncall functionName="i"/>
+    <functioncall functionName="idx"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="imgSize"/>
+    <functioncall functionName="indices"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="is_open"/>
+    <functioncall functionName="label"/>
+    <functioncall functionName="magicNumber"/>
+    <functioncall functionName="numberOfClasses"/>
+    <functioncall functionName="numberOfCols"/>
+    <functioncall functionName="numberOfImages"/>
+    <functioncall functionName="numberOfLabels"/>
+    <functioncall functionName="numberOfRows"/>
+    <functioncall functionName="open"/>
+    <functioncall functionName="perm"/>
+    <functioncall functionName="pixel"/>
+    <functioncall functionName="random_shuffle"/>
+    <functioncall functionName="read"/>
+    <functioncall functionName="resize"/>
+    <functioncall functionName="return"/>
+    <functioncall functionName="reverseInt"/>
+    <functioncall functionName="setIdentity"/>
+    <functioncall functionName="setZero"/>
+    <functioncall functionName="shuffle"/>
+    <functioncall functionName="size"/>
+    <functioncall functionName="sizeof"/>
+    <functioncall functionName="static_cast"/>
+    <functioncall functionName="update"/>
+  </FileInfo>
+</analyzerinfo>

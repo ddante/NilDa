@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="2799803384">
+        <error id="syntaxError" severity="error" msg="syntax error" verbose="syntax error">
+            <location file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/pool2DUtils.cpp" line="162" column="17"/>
+        </error>
+</analyzerinfo>

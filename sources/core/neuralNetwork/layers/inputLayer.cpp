@@ -29,8 +29,6 @@ inputLayer::inputLayer(const int inSize):
   size_.cols = 0;
   size_.channels = 0;
 
-  assert(size_.size > 0);
-
   trainable_ = false;
 }
 
@@ -45,11 +43,19 @@ inputLayer::inputLayer(const std::array<int,3>& inSize):
   size_.cols = inSize[1];
   size_.channels = inSize[2];
 
-  assert(size_.rows > 0);
-  assert(size_.cols > 0);
-  assert(size_.channels >0);
-
   trainable_ = false;
+}
+
+void inputLayer::checkInput() const
+{
+  assert(size_.size > 0);
+
+  if (!size_.isFlat)
+  {
+    assert(size_.rows > 0);
+    assert(size_.cols > 0);
+    assert(size_.channels > 0);
+  }
 }
 
 void inputLayer::checkInputSize(const Matrix& obs) const
@@ -97,8 +103,10 @@ void inputLayer::saveLayer(std::ofstream& ofs) const
   const int iType =
     static_cast<std::underlying_type_t<layerTypes> >(layerTypes::input);
 
-  ofs.write((char*) (&iType),        sizeof(int));
-  ofs.write((char*) (&trainable_),   sizeof(bool));
+  ofs.write((char*) (&iType), sizeof(int));
+
+  ofs.write((char*) (&trainable_), sizeof(bool));
+
   ofs.write((char*) (&size_.isFlat), sizeof(bool));
 
   if (size_.isFlat)
@@ -113,24 +121,24 @@ void inputLayer::saveLayer(std::ofstream& ofs) const
   }
 }
 
-void inputLayer::loadLayer(std::ifstream& ifs) const
-{  
-  /*
-  ifs.write((char*) (&type_),        sizeof(int));
-  ifs.write((char*) (&trainable_),   sizeof(bool));
-  ifs.write((char*) (&size_.isFlat), sizeof(bool));
+void inputLayer::loadLayer(std::ifstream& ifs)
+{
+  ifs.read((char*) (&trainable_), sizeof(bool));
+
+  ifs.read((char*) (&size_.isFlat), sizeof(bool));
 
   if (size_.isFlat)
   {
-    ifs.write((char*) (&size_.size), sizeof(int));
+    ifs.read((char*) (&size_.size), sizeof(int));
+    size_.rows = 0;
+    size_.cols = 0;
   }
   else
   {
-    ifs.write((char*) (&size_.rows),     sizeof(int));
-    ifs.write((char*) (&size_.cols),     sizeof(int));
-    ifs.write((char*) (&size_.channels), sizeof(int));
+    ifs.read((char*) (&size_.rows),     sizeof(int));
+    ifs.read((char*) (&size_.cols),     sizeof(int));
+    ifs.read((char*) (&size_.channels), sizeof(int));
   }
-  */
 }
 
 

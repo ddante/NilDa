@@ -49,10 +49,14 @@ neuralNetwork::neuralNetwork(const std::vector<layer*>& vLayers):
      assert(false);
   }
 
+  layers_[inputLayer_]->checkInput();
+
   // Initialize the hidden and the output layers
   // in the forward direction
   for (int i = firstLayer_; i < numberOfLayers_; ++i)
   {
+    layers_[i]->checkInput();
+
     layers_[i]->init(layers_[i - 1]);
   }
 
@@ -563,6 +567,8 @@ void neuralNetwork::loadModel(std::string inputFile)
     layers_.push_back(createLayer(layerType));
 
     layers_[i]->loadLayer(ifs);
+
+    layers_[i]->checkInput();
   }
 /*
   const int lossCode = lossFunction_->type();

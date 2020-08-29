@@ -28,7 +28,7 @@ private:
 public:
 
   // Constructors
-  
+
   inputLayer();
 
   explicit inputLayer(const int inSize);
@@ -41,12 +41,17 @@ public:
 
   // Member functions
 
-  void init(const layer* previousLayer) override
+  void init(
+            const layer* previousLayerconst,
+            const bool resetWeightBiases = true
+          ) override
   {
     std::cerr << "Input layer cannot call the init.\n";
 
     assert(false);
   }
+
+  void checkInput() const override;
 
   void setupBackward(const layer* nextLayer) override
   {
@@ -148,7 +153,7 @@ public:
 
   void saveLayer(std::ofstream& ofs) const override;
 
-  void loadLayer(std::ifstream& ifs) const override;
+  void loadLayer(std::ifstream& ifs) override;
 
   errorCheck localChecks(
                          const Matrix& input,

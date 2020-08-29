@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="3063207979">
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="activationFunctionCode" lineNumber="13"/>
+    <functiondecl functionName="activationFunctionName" lineNumber="44"/>
+    <functioncall functionName="assert"/>
+    <functioncall functionName="false"/>
+    <functioncall functionName="identity"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="relu"/>
+    <functioncall functionName="sigmoid"/>
+    <functioncall functionName="softmax"/>
+    <functioncall functionName="tanh"/>
+  </FileInfo>
+</analyzerinfo>

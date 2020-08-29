@@ -52,39 +52,33 @@ denseLayer::denseLayer(
 
   trainable_ = true;
 
-  switch (activationFunctionCode(activationName))
-  {
-    case activationFucntions::identity :
-      activationFunction_ = std::make_unique<identity>();
-    break;
-    case activationFucntions::sigmoid :
-      activationFunction_ = std::make_unique<sigmoid>();
-    break;
-    case activationFucntions::relu :
-      activationFunction_ = std::make_unique<relu>();
-    break;
-    case activationFucntions::softmax :
-      activationFunction_ = std::make_unique<softmax>();
-    break;
-    default :
-     std::cerr << "Not valid activation function  "
-               << activationName
-               << " in this context." << std::endl;
-     assert(false);
-  }
-
-  assert(layerSize_ > 0);
+  setActivationFunction(
+    activationFunctionCode(activationName)
+  );
 
   if (layerSize_ == 1 &&
       activationFunctionCode(activationName) ==
-      activationFucntions::softmax)
+      activationFunctions::softmax)
   {
-    std::cout << "Softmax activation requires layer size > 1" << std::endl;
+    std::cout << "Softmax activation requires layer size > 1.\n";
     assert(false);
   }
 }
 
-void denseLayer::init(const layer* previousLayer)
+void denseLayer::checkInput() const
+{
+  assert(layerSize_ > 0);
+
+  assert(size_.size > 0);
+  assert(size_.rows == 0);
+  assert(size_.cols == 0);
+  assert(size_.channels == 0);
+}
+
+void denseLayer::init(
+                      const layer* previousLayer,
+                      const bool resetWeightBiases
+                      )
 {
   // Check that the previous layer is compatible
   // with the current layer
@@ -98,7 +92,7 @@ void denseLayer::init(const layer* previousLayer)
     std::cerr << "Previous layer of type "
               <<  getLayerName(previousLayer->layerType())
               << " not compatible with current layer of type "
-              << getLayerName(type_) << "." << std::endl;
+              << getLayerName(type_) << ".\n";
 
     assert(false);
   }
@@ -122,16 +116,19 @@ void denseLayer::init(const layer* previousLayer)
      assert(inputChannels_ > 0);
   }
 
-  const Scalar epsilonInit = sqrt(6.0)
-                           / sqrt(layerSize_ + inputSize_);
+  if (resetWeightBiases)
+  {
+    const Scalar epsilonInit = sqrt(6.0)
+                             / sqrt(layerSize_ + inputSize_);
 
-  weights_.setRandom(layerSize_, inputSize_);
-  weights_ *= epsilonInit;
+    weights_.setRandom(layerSize_, inputSize_);
+    weights_ *= epsilonInit;
+
+    biases_.setRandom(layerSize_);
+    biases_ *= epsilonInit;
+  }
 
   dWeights_.setZero(layerSize_, inputSize_);
-
-  biases_.setRandom(layerSize_);
-  biases_ *= epsilonInit;
 
   dBiases_.setZero(layerSize_);
 }
@@ -144,8 +141,7 @@ void denseLayer::checkInputSize(const Matrix& inputData) const
     << "(" << inputData.rows() << ") "
     << " not consistent with dense layer weights size"
     << "(" << weights_.rows() << ", "
-    << weights_.cols() << ") "
-    << std::endl;
+    << weights_.cols() << ").\n";
 
     assert(false);
   }
@@ -166,8 +162,7 @@ void denseLayer::checkInputAndCacheSize(
            << cacheBackProp.cols() << ") "
     << " not consistent with the activation size "
     << "(" << activation_.rows() << ", "
-           << activation_.cols() << ") "
-    << std::endl;
+           << activation_.cols() << ").\n";
 
     assert(false);
   }
@@ -310,8 +305,7 @@ void denseLayer::setWeightsAndBiases(
               << W.cols() << ") "
               << " not consistent with the layer weights size "
               << "(" << weights_.rows() << ", "
-              << weights_.cols() << ") "
-              << std::endl;
+              << weights_.cols() << ").\n";
 
     assert(false);
   }
@@ -321,8 +315,7 @@ void denseLayer::setWeightsAndBiases(
     std::cerr << "Size of the input biases vector "
               << "(" << b.rows() << ") "
               << " not consistent with the layer biases size "
-              << "(" << biases_.rows() << ") "
-              << std::endl;
+              << "(" << biases_.rows() << ").\n";
 
     assert(false);
   }
@@ -346,8 +339,7 @@ void denseLayer::incrementWeightsAndBiases(
             << deltaW.cols() << ") "
             << " not consistent with the layer weights size "
             << "(" << weights_.rows() << ", "
-            << weights_.cols() << ") "
-            << std::endl;
+            << weights_.cols() << ").\n";
 
     assert(false);
   }
@@ -357,8 +349,7 @@ void denseLayer::incrementWeightsAndBiases(
     std::cerr << "Size of the input biases vector "
               << "(" << deltaB.rows() << ") "
               << " not consistent with the layer biases size "
-              << "(" << biases_.rows() << ") "
-              << std::endl;
+              << "(" << biases_.rows() << ").\n";
 
     assert(false);
   }
@@ -374,8 +365,10 @@ void denseLayer::saveLayer(std::ofstream& ofs) const
   const int iType =
     static_cast<std::underlying_type_t<layerTypes> >(layerTypes::dense);
 
-  ofs.write((char*) (&iType),      sizeof(int));
+  ofs.write((char*) (&iType), sizeof(int));
+
   ofs.write((char*) (&trainable_), sizeof(bool));
+
   ofs.write((char*) (&size_.size), sizeof(int));
 
   const int activationCode = activationFunction_->type();
@@ -400,9 +393,66 @@ void denseLayer::saveLayer(std::ofstream& ofs) const
   ofs.write((char*) biases_.data(), biasesBytes);
 }
 
-void denseLayer::loadLayer(std::ifstream& ifs) const
+void denseLayer::loadLayer(std::ifstream& ifs)
 {
+  ifs.read((char*) (&trainable_), sizeof(bool));
 
+  ifs.read((char*) (&size_.size), sizeof(int));
+
+  layerSize_ = size_.size;
+
+  size_.rows = 0;
+  size_.cols = 0;
+  size_.channels = 0;
+
+  int code;
+  ifs.read((char*) (&code), sizeof(int));
+
+  activationFunctions aType =
+    static_cast<activationFunctions>(code);
+
+  setActivationFunction(aType);
+
+  int wRows, wCols;
+  ifs.read((char*) (&wRows), sizeof(int));
+  ifs.read((char*) (&wCols), sizeof(int));
+
+  weights_.setZero(wRows, wCols);
+
+  const std::size_t weightsBytes = sizeof(Scalar) * wRows * wCols;
+
+  ifs.read((char*) weights_.data(), weightsBytes);
+
+  int bRows;
+  ifs.read((char*) (&bRows), sizeof(int));
+
+  biases_.setZero(bRows);
+
+  const std::size_t biasesBytes = sizeof(Scalar) * bRows;
+
+  ifs.read((char*) biases_.data(), biasesBytes);
+}
+
+void denseLayer::setActivationFunction(const activationFunctions code)
+{
+  switch (code)
+  {
+    case activationFunctions::identity :
+      activationFunction_ = std::make_unique<identity>();
+    break;
+    case activationFunctions::sigmoid :
+      activationFunction_ = std::make_unique<sigmoid>();
+    break;
+    case activationFunctions::relu :
+      activationFunction_ = std::make_unique<relu>();
+    break;
+    case activationFunctions::softmax :
+      activationFunction_ = std::make_unique<softmax>();
+    break;
+    default :
+       std::cerr << "Not valid activation function.\n";
+       assert(false);
+  }
 }
 
 } // namespace

@@ -9,7 +9,7 @@ namespace NilDa
 {
 
 
-enum class activationFucntions
+enum class activationFunctions
 {
   identity,
   sigmoid,
@@ -19,12 +19,12 @@ enum class activationFucntions
 };
 
 // Return the enum name of the activation function from the string name
-activationFucntions
+activationFunctions
 activationFunctionCode(const std::string& inName);
 
 // Return the string name of the activation function from enum name
-std::string 
-activationFunctionName(const activationFucntions type);
+std::string
+activationFunctionName(const activationFunctions type);
 
 } // namespace
 

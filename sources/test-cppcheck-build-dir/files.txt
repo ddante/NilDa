@@ -1,0 +1,17 @@
+neuralNetwork.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/neuralNetwork.cpp
+conv2DLayer.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DLayer.cpp
+conv2DUtils.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/conv2DUtils.cpp
+denseLayer.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/denseLayer.cpp
+inputLayer.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/inputLayer.cpp
+layer.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/layer.cpp
+maxPool2DLayer.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.cpp
+pool2DUtils.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/pool2DUtils.cpp
+activationFunctionUtils.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/activationFunctionUtils.cpp
+identity.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/identity.cpp
+relu.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/relu.cpp
+sigmoid.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/sigmoid.cpp
+softmax.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/activationFunctions/softmax.cpp
+lossFunctionUtils.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/lossFunctions/lossFunctionUtils.cpp
+sparseCategoricalCrossentropy.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/lossFunctions/sparseCategoricalCrossentropy.cpp
+sgd.a1::/home/dante/dev/NilDa/sources/core/neuralNetwork/optimizers/sgd.cpp
+importMNISTDatasets.a1::utils/importMNISTDatasets.cpp

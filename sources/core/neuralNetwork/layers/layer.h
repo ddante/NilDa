@@ -53,8 +53,14 @@ public:
 
   // Member functions
 
+  // Perform basic checks on the validity of the inputs
+  virtual void checkInput() const = 0;
+
   // Initialize the layer
-  virtual void init(const layer* previousLayer) = 0;
+  virtual void init(
+                    const layer* previousLayer,
+                    const bool resetWeightBiases = true
+                   ) = 0;
 
   // Setup additional paramters in backward direction
   // for the hidden layers
@@ -114,7 +120,7 @@ public:
   virtual void saveLayer(std::ofstream& ofs) const = 0;
 
   // Load the layer informations and weights from a file
-  virtual void loadLayer(std::ifstream& ifs) const = 0;
+  virtual void loadLayer(std::ifstream& ifs) = 0;
 
   // Perform local checks in the layers for debugging
   virtual errorCheck localChecks(

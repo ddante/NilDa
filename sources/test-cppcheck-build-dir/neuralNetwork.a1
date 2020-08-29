@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="4166431611">
+        <error id="preprocessorErrorDirective" severity="error" msg="#error Please tell me what is the equivalent of alignas(n) and alignof(x) for your compiler" verbose="#error Please tell me what is the equivalent of alignas(n) and alignof(x) for your compiler">
+            <location file="/usr/local/include/eigen3/Eigen/src/Core/util/ConfigureVectorization.h" line="52" column="0"/>
+        </error>
+</analyzerinfo>

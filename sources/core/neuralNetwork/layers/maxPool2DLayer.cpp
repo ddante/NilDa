@@ -34,7 +34,19 @@ maxPool2DLayer::maxPool2DLayer(
   trainable_ = false;
 }
 
-void maxPool2DLayer::init(const layer* previousLayer)
+void maxPool2DLayer::checkInput() const
+{
+  assert(kernelSize_[0] > 0);
+  assert(kernelSize_[1] > 0);
+
+  assert(kernelStride_[0] > 0);
+  assert(kernelStride_[1] > 0);
+}
+
+void maxPool2DLayer::init(
+                          const layer* previousLayer,
+                          const bool resetWeightBiases
+                         )
 {
   if (
       previousLayer->layerType() != layerTypes::input &&
@@ -209,9 +221,14 @@ void maxPool2DLayer::saveLayer(std::ofstream& ofs) const
   ofs.write((char*) (&(poolDims_.kernelStrideCol)), sizeof(int));
 }
 
-void maxPool2DLayer::loadLayer(std::ifstream& ifs) const
+void maxPool2DLayer::loadLayer(std::ifstream& ifs)
 {
+  ifs.read((char*) (&trainable_), sizeof(bool));
 
+  ifs.read((char*) (&(kernelSize_[0])), sizeof(int));
+  ifs.read((char*) (&(kernelSize_[1])), sizeof(int));
+  ifs.read((char*) (&(kernelStride_[0])), sizeof(int));
+  ifs.read((char*) (&(kernelStride_[1])), sizeof(int));
 }
 
 errorCheck
