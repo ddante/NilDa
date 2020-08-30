@@ -417,7 +417,7 @@ void denseLayer::loadLayer(std::ifstream& ifs)
   ifs.read((char*) (&wRows), sizeof(int));
   ifs.read((char*) (&wCols), sizeof(int));
 
-  weights_.setZero(wRows, wCols);
+  weights_.resize(wRows, wCols);
 
   const std::size_t weightsBytes = sizeof(Scalar) * wRows * wCols;
 
@@ -426,7 +426,7 @@ void denseLayer::loadLayer(std::ifstream& ifs)
   int bRows;
   ifs.read((char*) (&bRows), sizeof(int));
 
-  biases_.setZero(bRows);
+  biases_.resize(bRows);
 
   const std::size_t biasesBytes = sizeof(Scalar) * bRows;
 

@@ -42,6 +42,11 @@ neuralNetwork::neuralNetwork(const std::vector<layer*>& vLayers):
   validState_(false),
   finalizedNetwork_(false)
 {
+  initLayers();
+}
+
+void neuralNetwork::initLayers() const
+{
   // The first layer must be an input layer
   if (layers_[inputLayer_]->layerType() != layerTypes::input)
   {
@@ -159,6 +164,7 @@ void neuralNetwork::forwardPropagation(const Matrix& obs) const
   // The layer 0 is an input layer, just check that
   // the size of the input data is consistent with the
   // input layer size
+
   layers_[inputLayer_]->checkInputSize(obs);
 #endif
 
@@ -240,22 +246,27 @@ void neuralNetwork::configure(
 
   initOptimizer();
 
-  setLossFunction(lossName);
+  setLossFunction(lossFunctionCode(lossName));
 
   finalizedNetwork_ = true;
 }
 
 void neuralNetwork::setLossFunction(const std::string& lossName)
 {
-  switch(lossFunctionCode(lossName))
+  setLossFunction(lossFunctionCode(lossName));
+}
+
+void neuralNetwork::setLossFunction(const lossFunctions lossCode)
+{
+  switch(lossCode)
   {
     case lossFunctions::sparseCategoricalCrossentropy :
         lossFunction_ = std::make_unique<sparseCategoricalCrossentropy>();
         break;
     default :
         std::cerr << "Not valid loss function  "
-                    << lossName
-                    << " in this context." << std::endl;
+                    << lossFunctionName(lossCode)
+                    << " in this context.\n";
     assert(false);
   }
 }
@@ -559,6 +570,8 @@ void neuralNetwork::loadModel(std::string inputFile)
 
   ifs.read((char*) (&numberOfLayers_), sizeof(int));
 
+  lastLayer_ = (numberOfLayers_ - 1);
+
   for (int i = 0; i < numberOfLayers_; ++i)
   {
     int layerType;
@@ -570,10 +583,16 @@ void neuralNetwork::loadModel(std::string inputFile)
 
     layers_[i]->checkInput();
   }
-/*
-  const int lossCode = lossFunction_->type();
-  ofs.write((char*) (&lossCode), sizeof(int));
-*/
+
+  initLayers();
+
+  int lCode;
+  ifs.read((char*) (&lCode), sizeof(int));
+
+  lossFunctions lType = static_cast<lossFunctions>(lCode);
+
+  setLossFunction(lType);
+
   ifs.close();
 }
 

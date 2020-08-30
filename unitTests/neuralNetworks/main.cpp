@@ -113,7 +113,7 @@ int test1()
         std::cout << difference_dw1 << ", ";
         std::cout << difference_db1 << ", ";
         std::cout << difference_dw2 << ", ";
-        std::cout << difference_db2 << std::endl;
+        std::cout << difference_db2 << "\n";
         return NilDa::EXIT_FAIL;
     }
 

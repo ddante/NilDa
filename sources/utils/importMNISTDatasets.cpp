@@ -46,6 +46,7 @@ int importMNISTDatabase(
   if (!fileImages.is_open())
   {
     std::cerr << "Impossible to open file " <<  fullPathFileImage << std::endl;
+    assert(false);
     return EXIT_FAIL;
   }
 
@@ -57,6 +58,7 @@ int importMNISTDatabase(
   if (!fileLabels.is_open())
   {
     std::cerr << "Impossible to open file " <<  fullPathFileLabel << std::endl;
+    assert(false);
     return EXIT_FAIL;
   }
 

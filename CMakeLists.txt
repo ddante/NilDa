@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(NilDa VERSION 0.1)
 
 ######################################
-option(NILDA_DEBUG_BUILD  "Enable debug build" OFF)
+option(NILDA_DEBUG_BUILD  "Enable debug build" ON)
 
 set(NILDA_PRECISION_OPTION "DP")
 
@@ -58,3 +58,4 @@ add_subdirectory(unitTests/neuralNetworkDense)
 add_subdirectory(unitTests/conv2d)
 add_subdirectory(unitTests/conv2dDenseLayers)
 add_subdirectory(unitTests/maxPool2d)
+add_subdirectory(unitTests/saveLoadModel)

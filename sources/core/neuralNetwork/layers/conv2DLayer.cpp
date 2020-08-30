@@ -551,7 +551,7 @@ void conv2DLayer::loadLayer(std::ifstream& ifs)
   ifs.read((char*) (&wRows), sizeof(int));
   ifs.read((char*) (&wCols), sizeof(int));
 
-  filterWeights_.setZero(wRows, wCols);
+  filterWeights_.resize(wRows, wCols);
 
   const std::size_t weightsBytes = sizeof(Scalar) * wRows * wCols;
   ifs.read((char*) filterWeights_.data(), weightsBytes);
@@ -559,7 +559,7 @@ void conv2DLayer::loadLayer(std::ifstream& ifs)
   int bRows;
   ifs.read((char*) (&bRows), sizeof(int));
 
-  biases_.setZero(bRows);
+  biases_.resize(bRows);
 
   const std::size_t biasesBytes = sizeof(Scalar) * bRows;
   ifs.read((char*) biases_.data(), biasesBytes);

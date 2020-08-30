@@ -53,6 +53,4 @@ int main(int argc, char const *argv[])
   nn.train(trainingImages, trainingLabels, epochs, batchSize);
 
   nn.saveModel("myModel.out");
-
-  return 0;
 }

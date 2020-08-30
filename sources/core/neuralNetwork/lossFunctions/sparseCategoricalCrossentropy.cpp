@@ -26,7 +26,7 @@ sparseCategoricalCrossentropy::compute(
   s.resize(obs.rows());
 
   s = ((obs.array()).log() * labels.array()).colwise().sum()
-    + ((1.0-obs.array()).log() * (1.0 - labels.array())).colwise().sum();
+    + ((1.0 - obs.array()).log() * (1.0 - labels.array())).colwise().sum();
 
   return (-1.0/nObs)*s.sum();
 }

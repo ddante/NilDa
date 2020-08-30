@@ -75,6 +75,9 @@ private:
                        const Scalar errorLimit
                       ) const;
 
+  // Initialize the layers of the network
+  void initLayers() const;
+
   // Initialize the optimizer internal cache for each layer
   void initOptimizer() const;
 
@@ -120,6 +123,7 @@ public:
             ) const;
 
   // Set the loss function
+  void setLossFunction(const lossFunctions lossCode);
   void setLossFunction(const std::string& lossName);
 
   // Return the value of the loss function at the current state

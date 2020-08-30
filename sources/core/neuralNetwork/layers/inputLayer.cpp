@@ -38,7 +38,7 @@ inputLayer::inputLayer(const std::array<int,3>& inSize):
   type_ = layerTypes::input;
 
   size_.isFlat = false;
-  size_.size = inSize[0]*inSize[1]*inSize[2];
+  size_.size = inSize[0] * inSize[1] * inSize[2];
   size_.rows = inSize[0];
   size_.cols = inSize[1];
   size_.channels = inSize[2];
@@ -138,6 +138,8 @@ void inputLayer::loadLayer(std::ifstream& ifs)
     ifs.read((char*) (&size_.rows),     sizeof(int));
     ifs.read((char*) (&size_.cols),     sizeof(int));
     ifs.read((char*) (&size_.channels), sizeof(int));
+
+    size_.size = size_.rows * size_.cols * size_.channels;
   }
 }
 
