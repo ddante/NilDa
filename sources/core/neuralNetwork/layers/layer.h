@@ -59,7 +59,7 @@ public:
   // Initialize the layer
   virtual void init(
                     const layer* previousLayer,
-                    const bool resetWeightBiases = true
+                    const bool resetWeightBiases
                    ) = 0;
 
   // Setup additional paramters in backward direction

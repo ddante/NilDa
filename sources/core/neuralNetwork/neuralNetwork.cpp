@@ -42,10 +42,10 @@ neuralNetwork::neuralNetwork(const std::vector<layer*>& vLayers):
   validState_(false),
   finalizedNetwork_(false)
 {
-  initLayers();
+  initLayers(/*resetWeights= */ true);
 }
 
-void neuralNetwork::initLayers() const
+void neuralNetwork::initLayers(const bool resetWeightBiases) const
 {
   // The first layer must be an input layer
   if (layers_[inputLayer_]->layerType() != layerTypes::input)
@@ -62,7 +62,7 @@ void neuralNetwork::initLayers() const
   {
     layers_[i]->checkInput();
 
-    layers_[i]->init(layers_[i - 1]);
+    layers_[i]->init(layers_[i - 1], resetWeightBiases);
   }
 
   // Setup additional paramters in backward direction
@@ -584,7 +584,7 @@ void neuralNetwork::loadModel(std::string inputFile)
     layers_[i]->checkInput();
   }
 
-  initLayers();
+  initLayers(/*resetWeights= */ false);
 
   int lCode;
   ifs.read((char*) (&lCode), sizeof(int));

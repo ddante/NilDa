@@ -76,7 +76,7 @@ private:
                       ) const;
 
   // Initialize the layers of the network
-  void initLayers() const;
+  void initLayers(const bool resetWeightBiases) const;
 
   // Initialize the optimizer internal cache for each layer
   void initOptimizer() const;

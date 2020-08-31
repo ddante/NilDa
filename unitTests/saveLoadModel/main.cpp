@@ -35,7 +35,7 @@ int main(int argc, char const *argv[])
                              mnistImagesTrainFile,
 		                 			   mnistLabelsTrainFile,
 		       			             imgScaling,
-		       			             /*shuffle=*/ true,
+		       			             true,
 			                       trainingImages,
 			                       trainingLabels
                             );
@@ -76,7 +76,7 @@ int main(int argc, char const *argv[])
     nn.train(trainingImages, trainingLabels, epochs, batchSize);
 
     J = nn.getAccuracy(trainingImages, trainingLabels);
-    
+
     nn.saveModel("myConvNetModel.out");
   }
 

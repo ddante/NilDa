@@ -68,7 +68,7 @@ public:
 
   void init(
             const layer* previousLayer,
-            const bool resetWeightBiases = true
+            const bool resetWeightBiases
            ) override;
 
   void setupBackward(const layer* nextLayer) override;

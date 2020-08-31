@@ -43,8 +43,8 @@ public:
 
   void init(
             const layer* previousLayerconst,
-            const bool resetWeightBiases = true
-          ) override
+            const bool resetWeightBiases
+           ) override
   {
     std::cerr << "Input layer cannot call the init.\n";
 
