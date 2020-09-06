@@ -51,11 +51,6 @@ add_subdirectory(sources)
 
 add_subdirectory(tests)
 
-add_subdirectory(unitTests/activationFunctions)
-add_subdirectory(unitTests/derivativeOfActivationFunctions)
-add_subdirectory(unitTests/neuralNetworks)
-add_subdirectory(unitTests/neuralNetworkDense)
-add_subdirectory(unitTests/conv2d)
-add_subdirectory(unitTests/conv2dDenseLayers)
-add_subdirectory(unitTests/maxPool2d)
-add_subdirectory(unitTests/saveLoadModel)
+add_subdirectory(unitTests)
+
+add_subdirectory(examples)

@@ -1,0 +1,11 @@
+subdirs(
+ activationFunctions
+ conv2d
+ conv2dDenseLayers
+ #convNet
+ derivativeOfActivationFunctions
+ maxPool2d
+ neuralNetworkDense
+ neuralNetworks
+ saveLoadModel
+)

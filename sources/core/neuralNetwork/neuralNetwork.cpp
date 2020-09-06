@@ -479,7 +479,7 @@ Scalar neuralNetwork::getAccuracy(
                                  ) const
 {
   // Sum of all the errors
-  Scalar err = getSumError(obs, trueData);
+  Scalar err = getSumError(obs, trueData, /*runForward=*/ true);
 
   // Mean error
   return 1.0 - (err/trueData.size());
@@ -513,7 +513,8 @@ Scalar neuralNetwork::getAccuracy(
                           trueData(
                                    Eigen::all,
                                    Eigen::seqN(j*batchStride, batchStride)
-                                  )
+                                  ),
+                          /*runForward=*/ true
                          );
 
     totN += batchStride;
