@@ -402,7 +402,7 @@ Scalar neuralNetwork::propagate(const Matrix& obs, const Matrix& labels) const
 
 void neuralNetwork::initOptimizer() const
 {
-  for (int i = firstLayer_; i < lastLayer_; ++i)
+  for (int i = firstLayer_; i < numberOfLayers_; ++i)
   {
     if (layers_[i]->numberOfParameters() > 0 &&
         layers_[i]->isTrainable())
@@ -421,7 +421,7 @@ void neuralNetwork::update() const
 
   Vector deltaBiases;
 
-  for (int i = firstLayer_; i < lastLayer_; ++i)
+  for (int i = firstLayer_; i < numberOfLayers_; ++i)
   {
     if (layers_[i]->numberOfParameters() > 0 &&
         layers_[i]->isTrainable())
@@ -745,7 +745,7 @@ int neuralNetwork::gradientsSanityCheck(
                                        ) const
 {
 #ifdef ND_SP
-  #error "Single precision used. For testing specify either double or long precision."
+  #warning "Single precision used. For testing specify either double or long precision."
 #endif
 
   int code = EXIT_OK;
