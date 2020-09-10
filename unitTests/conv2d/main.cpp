@@ -63,9 +63,7 @@ int runTest(
 int main(int argc, char const *argv[])
 {
 #ifdef ND_SP
-
-    #error "Single precision used. For testing specify either double or long precision"
-
+    #warning "Single precision used. For testing specify either double or long precision"
 #endif
 
   // Test 1

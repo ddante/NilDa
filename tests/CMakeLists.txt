@@ -14,4 +14,5 @@ target_link_libraries(${PROJECT_NAME}
     nilda::loss
     nilda::opt
     Eigen3::Eigen
+    ${OpenCV_LIBS}
 )

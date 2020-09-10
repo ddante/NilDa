@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "primitives/Array.h"
 #include "softmax.h"
 

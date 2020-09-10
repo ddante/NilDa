@@ -156,6 +156,8 @@ public:
                      const int batchSize
                     ) const;
 
+  void getProbability(const Matrix& obs, Matrix& probability);
+
   // Save the trained model and the weights to a file
   void saveModel(std::string outputFile) const;
 

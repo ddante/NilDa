@@ -42,10 +42,13 @@ find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 message("${EIGEN3_INCLUDE_DIR}")
 
-if(NOT TARGET spdlog)
-    # Stand-alone build
-    find_package(spdlog REQUIRED)
-endif()
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+message("${OpenCV_INCLUDE_DIRS}")
+
+#if(NOT TARGET spdlog)
+#    find_package(spdlog REQUIRED)
+#endif()
 
 add_subdirectory(sources)
 

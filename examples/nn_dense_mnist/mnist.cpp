@@ -2,6 +2,8 @@
 #include <vector>
 
 #include "utils/importDatasets.h"
+#include "utils/images.h"
+
 #include "core/neuralNetwork/layers/inputLayer.h"
 #include "core/neuralNetwork/layers/denseLayer.h"
 #include "core/neuralNetwork/neuralNetwork.h"
@@ -26,16 +28,18 @@ int main(int argc, char const *argv[])
                                mnistImagesTrainFile,
   		                 			   mnistLabelsTrainFile,
   		       			             imgScaling,
-  		       			             /*shuffle=*/ true,
+  		       			             true,
   			                       trainingImages,
   			                       trainingLabels
                               );
 
     NilDa::layer* l0 = new NilDa::inputLayer(784);
-    NilDa::layer* l1 = new NilDa::denseLayer(28, "relu");
+    NilDa::layer* l1 = new NilDa::denseLayer(28, "sigmoid");
     NilDa::layer* l2 = new NilDa::denseLayer(10, "softmax");
 
     NilDa::neuralNetwork nn({l0, l1, l2});
+
+    nn.summary();
 
     //
 
@@ -52,7 +56,7 @@ int main(int argc, char const *argv[])
   	const int epochs = 10;
   	const int batchSize = 32;
 
-    nn.train(trainingImages, trainingLabels, epochs, batchSize);
+    nn.train(trainingImages, trainingLabels, epochs, batchSize, 2);
 
     // Save the trained model
     nn.saveModel("myModel.out");
@@ -75,7 +79,7 @@ int main(int argc, char const *argv[])
                                mnistImagesPredictFile,
   		                 			   mnistLabelsPredictFile,
   		       			             imgScaling,
-  		       			             /*shuffle=*/ true,
+  		       			             true,
   			                       predictImages,
   			                       predictLabels
                               );
@@ -89,6 +93,23 @@ int main(int argc, char const *argv[])
     std::cout << "Prediction Accuracy: "
               << nnT.getAccuracy(predictImages, predictLabels) << "\n";
 
+    int totErr = 0;
+
+    for(int id = 0; id <  predictImages.cols(); ++id)
+    {
+      NilDa::Matrix::Index trueLabel;
+      NilDa::Scalar max = predictLabels.col(id).maxCoeff(&trueLabel);
+
+      NilDa::Matrix prob;
+      nnT.getProbability(predictImages.col(id), prob);
+
+      NilDa::Matrix::Index prediction;
+      NilDa::Scalar max2 = prob.col(0).maxCoeff(&prediction);
+
+      //NilDa::displayImage(predictImages, {28,28,1}, id, std::to_string(prediction));
+
+      //std::cout << trueLabel << ", " << prediction;
+    }
   }
 
 }

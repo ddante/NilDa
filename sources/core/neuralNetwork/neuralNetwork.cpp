@@ -470,7 +470,7 @@ Scalar neuralNetwork::getSumError(
 
   Matrix err = predictions - trueData;
 
-  return err.array().abs().sum();
+  return (err.array().abs().colwise().sum() > 0).count();
 }
 
 Scalar neuralNetwork::getAccuracy(
@@ -482,7 +482,7 @@ Scalar neuralNetwork::getAccuracy(
   Scalar err = getSumError(obs, trueData, /*runForward=*/ true);
 
   // Mean error
-  return 1.0 - (err/trueData.size());
+  return 1.0 - (err / trueData.cols());
 }
 
 Scalar neuralNetwork::getAccuracy(
@@ -520,7 +520,17 @@ Scalar neuralNetwork::getAccuracy(
     totN += batchStride;
   }
 
-  return 1.0 - (totErr/totN);
+  return 1.0 - (totErr / totN);
+}
+
+void neuralNetwork::getProbability(
+                                   const Matrix& obs,
+                                   Matrix& probability
+                                  )
+{
+  forwardPropagation(obs);
+
+  probability = layers_[lastLayer_]->output();
 }
 
 void neuralNetwork::saveModel(std::string outputFile) const

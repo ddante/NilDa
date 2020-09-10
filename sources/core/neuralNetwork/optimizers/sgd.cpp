@@ -86,7 +86,7 @@ void sgd::update(const Matrix& weightsGradient,
   // Return the increment of the weights and biases
   deltaWeights.noalias() = -learningRate_ * weightsFirstMomentum;
 
-  deltaBiases.noalias() = -learningRate_ * biasesFirstMomentum;
+  deltaBiases.noalias() = -learningRate_ * biasesFirstMomentum;  
 }
 
 

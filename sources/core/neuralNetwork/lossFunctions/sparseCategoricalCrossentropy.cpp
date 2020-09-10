@@ -55,9 +55,7 @@ sparseCategoricalCrossentropy::predict(
                                        Matrix& predictions
                                       )
 {
-  predictions.resize(output.rows(), output.cols());
-
-  predictions.setZero(predictions.rows(), predictions.cols());
+  predictions.setZero(output.rows(), output.cols());
 
   const int nObs = predictions.cols();
 

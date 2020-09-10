@@ -8,6 +8,7 @@
 #include "utils/progressBar.h"
 
 #include "importDatasets.h"
+#include "images.h"
 
 // ---------------------------------------------------------------------------
 namespace NilDa
@@ -108,14 +109,13 @@ int importMNISTDatabase(
             << numberOfCols
             << std::endl;
 
-  const int imgSize = numberOfRows*numberOfCols;
+  const int imgSize = numberOfRows * numberOfCols;
 
   Images.resize(imgSize, numberOfImages);
 
   // Classes [0, ..., 9]
   const int numberOfClasses = 10;
 
-  Labels.resize(numberOfClasses, numberOfImages);
   Labels.setZero(numberOfClasses, numberOfImages);
 
   progressBar progBar;
@@ -126,18 +126,14 @@ int importMNISTDatabase(
     char label;
     fileLabels.read((char*)&label, sizeof(label));
 
-    int idx = 0;
-
     for (int r = 0; r < numberOfRows; ++r)
     {
-      for (int c = 0; c < numberOfRows; ++c)
+      for (int c = 0; c < numberOfCols; ++c)
       {
         unsigned char pixel;
         fileImages.read((char*)&pixel, sizeof(pixel));
 
-        Images(idx, i) = static_cast<Scalar>(pixel);
-
-        idx++;
+        Images(r + numberOfCols*c, i) = static_cast<Scalar>(pixel);
       }
     }
 
@@ -145,6 +141,8 @@ int importMNISTDatabase(
     Labels(static_cast<int>(label), i) = 1;
 
     progBar.update(i+1, numberOfImages);
+
+    //displayImage(Images, {28,28,1}, i);
   }
 
   progBar.close();

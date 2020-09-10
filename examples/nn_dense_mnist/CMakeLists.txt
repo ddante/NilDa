@@ -10,5 +10,5 @@ target_link_libraries(${PROJECT_NAME}
     nilda::layers
     nilda::loss
     nilda::opt
-    Eigen3::Eigen
+    Eigen3::Eigen    
 )

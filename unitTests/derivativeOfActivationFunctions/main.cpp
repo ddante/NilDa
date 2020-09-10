@@ -9,7 +9,7 @@
 const NilDa::Scalar errTol = 1e-10;
 
 int checkIdentity(const NilDa::Matrix& input, const NilDa::Matrix& G)
-{ 
+{
     NilDa::activationFunction* activation= new  NilDa::identity;
 
     NilDa::Matrix output;
@@ -40,7 +40,7 @@ int checkIdentity(const NilDa::Matrix& input, const NilDa::Matrix& G)
 int checkRelu(const NilDa::Matrix& input, const NilDa::Matrix& G)
 {
     NilDa::activationFunction* activation = new  NilDa::relu;
-   
+
     NilDa::Matrix output;
     output.resize(input.rows(), input.cols());
     activation->applyBackward(input, G, output);
@@ -52,11 +52,11 @@ int checkRelu(const NilDa::Matrix& input, const NilDa::Matrix& G)
                       0, 0.04,  0.0, 0.0;
 
     NilDa::Scalar difference = (output - checkData).norm();
-    
+
     std::cout << " ReLU     activation function: ";
     if (difference < errTol)
     {
-         std::cout << "test OK\n"; 
+         std::cout << "test OK\n";
          return NilDa::EXIT_OK;
     }
     else
@@ -69,7 +69,7 @@ int checkRelu(const NilDa::Matrix& input, const NilDa::Matrix& G)
 int checkSigmoid(const NilDa::Matrix& input, const NilDa::Matrix& G)
 {
     NilDa::activationFunction* activation = new  NilDa::sigmoid;
-   
+
     NilDa::Matrix output;
     output.resize(input.rows(), input.cols());
     activation->applyBackward(input, G, output);
@@ -81,7 +81,7 @@ int checkSigmoid(const NilDa::Matrix& input, const NilDa::Matrix& G)
                        0.237808423053721,   0.00999900006666289, 0,   -0.0874803154527485;
 
     NilDa::Scalar difference = (output - checkData).norm();
-    
+
     std::cout << " Sigmoid  activation function: ";
     if (difference < errTol)
     {
@@ -98,7 +98,7 @@ int checkSigmoid(const NilDa::Matrix& input, const NilDa::Matrix& G)
 int checkSoftMax(const NilDa::Matrix& input, const NilDa::Matrix& G)
 {
     NilDa::activationFunction* activation = new  NilDa::softmax;
-   
+
     NilDa::Matrix output;
     output.resize(input.rows(), input.cols());
     activation->applyBackward(input, G, output);
@@ -106,11 +106,11 @@ int checkSoftMax(const NilDa::Matrix& input, const NilDa::Matrix& G)
     NilDa::Matrix checkData;
     checkData.resize(3,4);
     checkData << -0.187112007445907, 0.224533146798003, 0.0544004011009916, 0.166370870996672,
-                       -0.1343565153556, -0.240914779413685, -0.0152684415430404, -0.0142268374992013, 
+                       -0.1343565153556, -0.240914779413685, -0.0152684415430404, -0.0142268374992013,
                         0.321468522801508, 0.0163816326156819, -0.0391319595579512, -0.152144033497471;
 
     NilDa::Scalar difference = (output - checkData).norm();
-    
+
     std::cout << " SoftMax  activation function: ";
     if (difference < errTol)
     {
@@ -128,9 +128,7 @@ int checkSoftMax(const NilDa::Matrix& input, const NilDa::Matrix& G)
 int main(int argc, char const *argv[])
 {
 #ifdef ND_SP
-
-    #error "Single precision used. For testing specify either double or long precision"
-
+    #warning"Single precision used. For testing specify either double or long precision"
 #else
 
     NilDa::Matrix inputData;
@@ -156,6 +154,6 @@ int main(int argc, char const *argv[])
     {
         return NilDa::EXIT_FAIL;
     }
-   
+
 #endif
 }

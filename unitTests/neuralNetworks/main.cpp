@@ -122,9 +122,7 @@ int test1()
 int main(int argc, char const *argv[])
 {
 #ifdef ND_SP
-
-    #error "Single precision used. For testing specify either double or long precision"
-
+    #warning "Single precision used. For testing specify either double or long precision"
 #else
 
     if (test1() == NilDa::EXIT_OK)
