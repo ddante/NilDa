@@ -1,5 +1,5 @@
-#ifndef SGD_H
-#define SGD_H
+#ifndef ADA_GRAD_H
+#define ADA_GRAD_H
 
 #include <iostream>
 #include <memory>
@@ -15,15 +15,17 @@
 namespace NilDa
 {
 
-class sgd : public optimizer
+class adaGrad : public optimizer
 {
-
 private:
 
   Scalar learningRate_;
 
-  // Hperparameter that accelerates gradient descent
-  Scalar momentum_;
+  // Starting value for the accumulators
+  Scalar initAccumlation_;
+
+  // A small value to avoid zero denominator
+  Scalar epsilon_;
 
   // To recover the correct history of the weights and
   // biases associated with their respective gradient,
@@ -37,24 +39,28 @@ public:
 
   // Constructors
 
-  sgd() = delete;
+  adaGrad() = delete;
 
-  explicit sgd(Scalar alpha);
+  explicit adaGrad(Scalar alpha);
 
-  sgd(Scalar alpha, Scalar m);
+  adaGrad(Scalar alpha, Scalar initAccumlation);
+
+  adaGrad(Scalar alpha, Scalar initAccumlation, Scalar epsilon);
 
   // Member functions
 
   void get() const override
   {
     std::cout << "Learning rate: " << learningRate_ << ", "
-              << "Momentum: " << momentum_ << "\n";
+              << "Initial accumulation: " << initAccumlation_ << ", "
+              << "Epsilon: " << epsilon_ << "\n";
   }
 
   void init(
             const Matrix& weightsGradient,
             const Vector& biasesGradient
            ) const override;
+
 
   void update(const Matrix& weightsGradient,
               const Vector& biasesGradient,
@@ -64,11 +70,10 @@ public:
 
   // Destructor
 
-  ~sgd() = default;
-
+  ~adaGrad() = default;
 };
 
 
-} // namespace
+}// namespace
 
 #endif

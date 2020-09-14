@@ -16,7 +16,8 @@ sgd::sgd(Scalar alpha):
   if (learningRate_ <= 0)
   {
     std::cerr << "Learning rate must be > 0.\n";
-    assert(false);
+
+    std::abort();
   }
 }
 
@@ -29,14 +30,15 @@ sgd::sgd(Scalar alpha, Scalar m):
     std::cerr << "In SGD optimizer, "
               << "learning rate must be > 0.\n";
 
-    assert(false);
+    std::abort();
   }
 
   if (momentum_ < 0 || momentum_ >=1)
   {
     std::cerr << "In SGD optimizer, "
                  "momentum must be >= 0 and < 1 " << std::endl;
-    assert(false);
+
+    std::abort();
   }
 }
 
@@ -48,18 +50,15 @@ void sgd::init(
   Matrix& weightsFirstMomentum
       = weightsHistory_[weightsGradient.data()];
 
-  weightsFirstMomentum.resize(
-                              weightsGradient.rows(),
-                              weightsGradient.cols()
-                             );
-
-  weightsFirstMomentum.setZero();
+  weightsFirstMomentum.setZero(
+                               weightsGradient.rows(),
+                               weightsGradient.cols()
+                              );
 
   Vector& biasesFirstMomentum
       = biasesHistory_[biasesGradient.data()];
 
-  biasesFirstMomentum.resize(biasesGradient.rows());
-  biasesFirstMomentum.setZero();
+  biasesFirstMomentum.setZero(biasesGradient.rows());
 }
 
 void sgd::update(const Matrix& weightsGradient,
@@ -86,7 +85,7 @@ void sgd::update(const Matrix& weightsGradient,
   // Return the increment of the weights and biases
   deltaWeights.noalias() = -learningRate_ * weightsFirstMomentum;
 
-  deltaBiases.noalias() = -learningRate_ * biasesFirstMomentum;  
+  deltaBiases.noalias() = -learningRate_ * biasesFirstMomentum;
 }
 
 

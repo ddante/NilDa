@@ -6,6 +6,7 @@
 #include "core/neuralNetwork/layers/denseLayer.h"
 #include "core/neuralNetwork/neuralNetwork.h"
 #include "core/neuralNetwork/optimizers/sgd.h"
+#include "core/neuralNetwork/optimizers/adaGrad.h"
 
 int main(int argc, char const *argv[])
 {
@@ -42,13 +43,14 @@ int main(int argc, char const *argv[])
 
 	const NilDa::Scalar momentum = 0.90;
 
-  NilDa::sgd opt(learningRate, momentum);
+  //NilDa::sgd opt(learningRate, momentum);
+  NilDa::adaGrad opt(learningRate);
 
   nn.configure(opt, "sparse_categorical_crossentropy");
 
   //
 
-	const int epochs = 10;
+	const int epochs = 20;
 	const int batchSize = 32;
 
   nn.train(trainingImages, trainingLabels, epochs, batchSize);
