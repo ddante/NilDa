@@ -76,11 +76,13 @@ void sgd::update(const Matrix& weightsGradient,
       = biasesHistory_[biasesGradient.data()];
 
   // Update the weights and biases using momentum
-  weightsFirstMomentum = momentum_ * weightsFirstMomentum
-                       + (1.0 - momentum_) * weightsGradient;
+  weightsFirstMomentum =
+             momentum_  * weightsFirstMomentum
+    + (1.0 - momentum_) * weightsGradient;
 
-  biasesFirstMomentum = momentum_ * biasesFirstMomentum
-                      + (1.0 - momentum_) * biasesGradient;
+  biasesFirstMomentum =
+            momentum_  * biasesFirstMomentum
+   + (1.0 - momentum_) * biasesGradient;
 
   // Return the increment of the weights and biases
   deltaWeights.noalias() = -learningRate_ * weightsFirstMomentum;

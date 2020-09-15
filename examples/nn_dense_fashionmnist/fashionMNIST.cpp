@@ -7,6 +7,7 @@
 #include "core/neuralNetwork/neuralNetwork.h"
 #include "core/neuralNetwork/optimizers/sgd.h"
 #include "core/neuralNetwork/optimizers/adaGrad.h"
+#include "core/neuralNetwork/optimizers/rsmProp.h"
 
 int main(int argc, char const *argv[])
 {
@@ -32,7 +33,7 @@ int main(int argc, char const *argv[])
                             );
 
   NilDa::layer* l0 = new NilDa::inputLayer(784);
-  NilDa::layer* l1 = new NilDa::denseLayer(28, "relu");
+  NilDa::layer* l1 = new NilDa::denseLayer(28, "sigmoid");
   NilDa::layer* l2 = new NilDa::denseLayer(10, "softmax");
 
   NilDa::neuralNetwork nn({l0, l1, l2});
@@ -43,8 +44,11 @@ int main(int argc, char const *argv[])
 
 	const NilDa::Scalar momentum = 0.90;
 
-  //NilDa::sgd opt(learningRate, momentum);
-  NilDa::adaGrad opt(learningRate);
+  const NilDa::Scalar decay = 0.9;
+
+  NilDa::sgd opt(learningRate, momentum);
+  //NilDa::adaGrad opt(learningRate);
+  //NilDa::rsmProp opt(learningRate, decay);
 
   nn.configure(opt, "sparse_categorical_crossentropy");
 
