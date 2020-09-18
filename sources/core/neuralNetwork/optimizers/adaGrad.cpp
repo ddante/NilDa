@@ -78,25 +78,23 @@ void adaGrad::init(
   Matrix& weightsAccumulator
       = weightsHistory_[weightsGradient.data()];
 
-  weightsAccumulator.setZero(
-                             weightsGradient.rows(),
-                             weightsGradient.cols()
-                            );
+  weightsAccumulator.setConstant(
+                                 weightsGradient.rows(),
+                                 weightsGradient.cols(),
+                                 initAccumlation_
+                                );
 
   Vector& biasesAccumulator
       = biasesHistory_[biasesGradient.data()];
 
-  biasesAccumulator.setZero(biasesGradient.rows());
-
-  if (initAccumlation_ > 0)
-  {
-    weightsAccumulator.array() += initAccumlation_;
-
-    biasesAccumulator.array() += initAccumlation_;
-  }
+  biasesAccumulator.setConstant(
+                                biasesGradient.rows(),
+                                initAccumlation_
+                               );
 }
 
-void adaGrad::update(const Matrix& weightsGradient,
+void adaGrad::update(
+                     const Matrix& weightsGradient,
                      const Vector& biasesGradient,
                      Matrix& deltaWeights,
                      Vector& deltaBiases
@@ -115,18 +113,21 @@ void adaGrad::update(const Matrix& weightsGradient,
 
   biasesAccumulator.array() += biasesGradient.array().square();
 
-  // Correction of the learning rates
-  Matrix corrW = weightsGradient.array()
-               * (weightsAccumulator.array() + epsilon_).rsqrt();
-
-  Matrix corrB = biasesGradient.array()
-               * (biasesAccumulator.array() + epsilon_).rsqrt();
-
   // Return the increment of the weights and biases
 
-  deltaWeights.noalias() = -learningRate_ * corrW;
+  deltaWeights.array() = -learningRate_
+                       *  weightsGradient.array()
+                       * (
+                          weightsAccumulator.array()
+                          + epsilon_
+                         ).rsqrt();
 
-  deltaBiases.noalias() = -learningRate_ * corrB;
+  deltaBiases.array() = -learningRate_
+                      *  biasesGradient.array()
+                      * (
+                         biasesAccumulator.array()
+                         + epsilon_
+                        ).rsqrt();
 }
 
 

@@ -48,7 +48,7 @@ rsmProp::rsmProp(
     std::abort();
   }
 
-  if (decay_ <= 0 || decay >= 1)
+  if (decay_ <= 0 || decay_ >= 1)
   {
     std::cerr << "Decay parameterrate must be > 0 and < 1.\n";
 
@@ -81,7 +81,7 @@ rsmProp::rsmProp(
     std::abort();
   }
 
-  if (decay_ <= 0 || decay >= 1)
+  if (decay_ <= 0 || decay_ >= 1)
   {
     std::cerr << "Decay parameterrate must be > 0 and < 1.\n";
 
@@ -111,25 +111,23 @@ void rsmProp::init(
   Matrix& weightsAccumulator
       = weightsHistory_[weightsGradient.data()];
 
-  weightsAccumulator.setZero(
-                             weightsGradient.rows(),
-                             weightsGradient.cols()
-                            );
+  weightsAccumulator.setConstant(
+                                 weightsGradient.rows(),
+                                 weightsGradient.cols(),
+                                 initAccumlation_
+                               );
 
   Vector& biasesAccumulator
       = biasesHistory_[biasesGradient.data()];
 
-  biasesAccumulator.setZero(biasesGradient.rows());
-
-  if (initAccumlation_ > 0)
-  {
-    weightsAccumulator.array() += initAccumlation_;
-
-    biasesAccumulator.array() += initAccumlation_;
-  }
+  biasesAccumulator.setConstant(
+                                biasesGradient.rows(),
+                                initAccumlation_
+                               );
 }
 
-void rsmProp::update(const Matrix& weightsGradient,
+void rsmProp::update(
+                     const Matrix& weightsGradient,
                      const Vector& biasesGradient,
                      Matrix& deltaWeights,
                      Vector& deltaBiases
@@ -152,17 +150,21 @@ void rsmProp::update(const Matrix& weightsGradient,
              decay_  * biasesAccumulator.array()
     + (1.0 - decay_) * biasesGradient.array().square();
 
-  // Correction of the learning rates
-  Matrix corrW = weightsGradient.array()
-               * (weightsAccumulator.array() + epsilon_).rsqrt();
-
-  Matrix corrB = biasesGradient.array()
-               * (biasesAccumulator.array() + epsilon_).rsqrt();
-
   // Return the increment of the weights and biases
-  deltaWeights.noalias() = -learningRate_ * corrW;
+  deltaWeights.array() = -learningRate_
+                       * weightsGradient.array()
+                       * (
+                          weightsAccumulator.array()
+                           + epsilon_
+                         ).rsqrt();
 
-  deltaBiases.noalias() = -learningRate_ * corrB;
+
+  deltaBiases.array() = -learningRate_
+                      * biasesGradient.array()
+                      * (
+                         biasesAccumulator.array()
+                          + epsilon_
+                        ).rsqrt();
 }
 
 

@@ -61,7 +61,8 @@ void sgd::init(
   biasesFirstMomentum.setZero(biasesGradient.rows());
 }
 
-void sgd::update(const Matrix& weightsGradient,
+void sgd::update(
+                 const Matrix& weightsGradient,
                  const Vector& biasesGradient,
                  Matrix& deltaWeights,
                  Vector& deltaBiases

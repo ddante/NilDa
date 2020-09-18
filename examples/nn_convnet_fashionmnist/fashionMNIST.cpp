@@ -12,6 +12,9 @@
 
 #include "core/neuralNetwork/neuralNetwork.h"
 #include "core/neuralNetwork/optimizers/sgd.h"
+#include "core/neuralNetwork/optimizers/adaGrad.h"
+#include "core/neuralNetwork/optimizers/rsmProp.h"
+#include "core/neuralNetwork/optimizers/adam.h"
 
 int main(int argc, char const *argv[])
 {
@@ -40,11 +43,11 @@ int main(int argc, char const *argv[])
 
   NilDa::layer* l0 = new NilDa::inputLayer({28, 28, 1});
 
-  NilDa::layer* l1 = new NilDa::conv2DLayer(32, {3,3}, true, "sigmoid");
+  NilDa::layer* l1 = new NilDa::conv2DLayer(32, {3,3}, true, "relu");
 
   NilDa::layer* l2 = new NilDa::maxPool2DLayer({2, 2}, {2, 2});
 
-  NilDa::layer* l3 = new NilDa::conv2DLayer(64, {3,3}, true, "sigmoid");
+  NilDa::layer* l3 = new NilDa::conv2DLayer(64, {3,3}, true, "relu");
 
   NilDa::layer* l4 = new NilDa::maxPool2DLayer({2, 2}, {2, 2});
 
@@ -63,7 +66,12 @@ int main(int argc, char const *argv[])
 
 	const NilDa::Scalar momentum = 0.90;
 
+  const NilDa::Scalar decay = 0.9;
+
   NilDa::sgd opt(learningRate, momentum);
+  //NilDa::adaGrad opt(learningRate);
+  //NilDa::rsmProp opt(learningRate, decay);
+  //NilDa::adam opt(learningRate, decay, decay);
 
   nn.configure(opt, "sparse_categorical_crossentropy");
 
