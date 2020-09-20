@@ -11,16 +11,16 @@
 #include "primitives/errors.h"
 
 #include "utils/progressBar.h"
+#include "utils/images.h"
 
 #include "neuralNetwork.h"
 
-#include "lossFunctions/sparseCategoricalCrossentropy.h"
 #include "lossFunctions/lossFunctionUtils.h"
+#include "lossFunctions/categoricalCrossentropy.h"
+#include "lossFunctions/sparseCategoricalCrossentropy.h"
 
 #include "optimizers/sgd.h"
 
-
-#include "layers/inputLayer.h"
 //#include "H5Cpp.h"
 // ---------------------------------------------------------------------------
 
@@ -194,7 +194,7 @@ void neuralNetwork::backwardPropagation(
   // Derivative of the cost function w.r.t the activation
   // output of the last layer
   Matrix dLoss;
-  dLoss.resize(labels.rows(), labels.cols());
+  //dLoss.resize(labels.rows(), labels.cols();
 
   lossFunction_->computeDerivative(
                                    layers_[lastLayer_]->output(),
@@ -260,6 +260,10 @@ void neuralNetwork::setLossFunction(const lossFunctions lossCode)
 {
   switch(lossCode)
   {
+    case lossFunctions::categoricalCrossentropy :
+        // add check size output layer > 2
+        lossFunction_ = std::make_unique<categoricalCrossentropy>();
+        break;
     case lossFunctions::sparseCategoricalCrossentropy :
         lossFunction_ = std::make_unique<sparseCategoricalCrossentropy>();
         break;

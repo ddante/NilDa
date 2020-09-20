@@ -2,7 +2,7 @@
 
 #include "primitives/Array.h"
 
-#include "rsmProp.h"
+#include "rmsProp.h"
 
 // ---------------------------------------------------------------------------
 
@@ -10,11 +10,11 @@ namespace NilDa
 {
 
 
-rsmProp::rsmProp(Scalar alpha, Scalar decay):
+rmsProp::rmsProp(Scalar alpha, Scalar decay):
   learningRate_(alpha),
   decay_(decay),
-  initAccumlation_(0),
-  epsilon_(1e-12)
+  initAccumlation_(0.1),
+  epsilon_(1e-8)
 {
   if (learningRate_ <= 0)
   {
@@ -31,7 +31,7 @@ rsmProp::rsmProp(Scalar alpha, Scalar decay):
   }
 }
 
-rsmProp::rsmProp(
+rmsProp::rmsProp(
                  Scalar alpha,
                  Scalar decay,
                  Scalar initAccumlation
@@ -39,7 +39,7 @@ rsmProp::rsmProp(
   learningRate_(alpha),
   decay_(decay),
   initAccumlation_(initAccumlation),
-  epsilon_(1e-12)
+  epsilon_(1e-8)
 {
   if (learningRate_ <= 0)
   {
@@ -63,7 +63,7 @@ rsmProp::rsmProp(
   }
 }
 
-rsmProp::rsmProp(
+rmsProp::rmsProp(
                  Scalar alpha,
                  Scalar decay,
                  Scalar initAccumlation,
@@ -103,7 +103,7 @@ rsmProp::rsmProp(
   }
 }
 
-void rsmProp::init(
+void rmsProp::init(
                    const Matrix& weightsGradient,
                    const Vector& biasesGradient
                   ) const
@@ -126,7 +126,7 @@ void rsmProp::init(
                                );
 }
 
-void rsmProp::update(
+void rmsProp::update(
                      const Matrix& weightsGradient,
                      const Vector& biasesGradient,
                      Matrix& deltaWeights,
@@ -141,6 +141,9 @@ void rsmProp::update(
   Vector& biasesAccumulator
       = biasesHistory_[biasesGradient.data()];
 
+Matrix tmp = decay_  * weightsAccumulator.array()
+    + (1.0 - decay_) * weightsGradient.array().square();
+
   // Update the weights and biases using momentum
   weightsAccumulator.array() =
              decay_  * weightsAccumulator.array()
@@ -152,19 +155,19 @@ void rsmProp::update(
 
   // Return the increment of the weights and biases
   deltaWeights.array() = -learningRate_
-                       * weightsGradient.array()
+                       *  weightsGradient.array()
                        * (
                           weightsAccumulator.array()
-                           + epsilon_
+                          + epsilon_
                          ).rsqrt();
 
-
   deltaBiases.array() = -learningRate_
-                      * biasesGradient.array()
+                      *  biasesGradient.array()
                       * (
                          biasesAccumulator.array()
-                          + epsilon_
+                         + epsilon_
                         ).rsqrt();
+
 }
 
 

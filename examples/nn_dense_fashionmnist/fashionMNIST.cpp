@@ -2,12 +2,16 @@
 #include <vector>
 
 #include "utils/importDatasets.h"
+#include "utils/images.h"
+
 #include "core/neuralNetwork/layers/inputLayer.h"
 #include "core/neuralNetwork/layers/denseLayer.h"
+
 #include "core/neuralNetwork/neuralNetwork.h"
+
 #include "core/neuralNetwork/optimizers/sgd.h"
 #include "core/neuralNetwork/optimizers/adaGrad.h"
-#include "core/neuralNetwork/optimizers/rsmProp.h"
+#include "core/neuralNetwork/optimizers/rmsProp.h"
 #include "core/neuralNetwork/optimizers/adam.h"
 
 int main(int argc, char const *argv[])
@@ -24,39 +28,51 @@ int main(int argc, char const *argv[])
 
 	const NilDa::Scalar imgScaling = 1.0/255.0;
 
+  const bool shuffle = true;
+
+  const bool sparseCategorical = false;
+
 	NilDa::importMNISTDatabase(
                              mnistImagesTrainFile,
 		                 			   mnistLabelsTrainFile,
 		       			             imgScaling,
-		       			             /*shuffle=*/ true,
+		       			             shuffle,
+                             sparseCategorical,
 			                       trainingImages,
 			                       trainingLabels
                             );
 
   NilDa::layer* l0 = new NilDa::inputLayer(784);
-  NilDa::layer* l1 = new NilDa::denseLayer(28, "relu");
+  NilDa::layer* l1 = new NilDa::denseLayer(128,  "relu");
   NilDa::layer* l2 = new NilDa::denseLayer(10, "softmax");
 
   NilDa::neuralNetwork nn({l0, l1, l2});
 
   //
 
-	const NilDa::Scalar learningRate = 0.1;
+	const NilDa::Scalar learningRate = 0.001;
 
 	const NilDa::Scalar momentum = 0.90;
 
-  const NilDa::Scalar decay = 0.9;
+  const NilDa::Scalar decay = 0.999;
 
-  //NilDa::sgd opt(learningRate, momentum);
-  NilDa::adaGrad opt(learningRate);
-  //NilDa::rsmProp opt(learningRate, decay);
+  NilDa::sgd opt(learningRate, momentum);
+  //NilDa::adaGrad opt(learningRate);
+  //NilDa::rmsProp opt(learningRate, decay);
   //NilDa::adam opt(learningRate, decay, decay);
 
-  nn.configure(opt, "sparse_categorical_crossentropy");
+  nn.configure(opt, "categorical_crossentropy");
+  /*
+  nn.gradientsSanityCheck(
+                          trainingImages.col(1),
+                          trainingLabels.col(1),
+                          true
+                         );
 
+  */
   //
 
-	const int epochs = 10;
+	const int epochs = 20;
 	const int batchSize = 32;
 
   nn.train(trainingImages, trainingLabels, epochs, batchSize, 2);
@@ -74,7 +90,8 @@ int main(int argc, char const *argv[])
                              mnistImagesPredictFile,
 		                 			   mnistLabelsPredictFile,
 		       			             imgScaling,
-		       			             /*shuffle=*/ true,
+		       			             shuffle,
+                             sparseCategorical,
 			                       predictImages,
 			                       predictLabels
                             );

@@ -2,7 +2,7 @@ add_library(
   opt
   sgd.cpp
   adaGrad.cpp
-  rsmProp.cpp
+  rmsProp.cpp
   adam.cpp
 )
 add_library(nilda::opt ALIAS opt)

@@ -7,6 +7,7 @@ namespace NilDa
 
 enum class lossFunctions
 {
+  categoricalCrossentropy,
   sparseCategoricalCrossentropy
 };
 

@@ -1,4 +1,4 @@
-#ifndef RSM_PROP_H
+#ifndef rms_PROP_H
 #define RMS_PROP_H
 
 #include <iostream>
@@ -15,7 +15,7 @@
 namespace NilDa
 {
 
-class rsmProp : public optimizer
+class rmsProp : public optimizer
 {
 private:
 
@@ -42,13 +42,13 @@ public:
 
   // Constructors
 
-  rsmProp() = delete;
+  rmsProp() = delete;
 
-  rsmProp(Scalar alpha, Scalar decay);
+  rmsProp(Scalar alpha, Scalar decay);
 
-  rsmProp(Scalar alpha, Scalar decay, Scalar initAccumlation);
+  rmsProp(Scalar alpha, Scalar decay, Scalar initAccumlation);
 
-  rsmProp(Scalar alpha, Scalar decay, Scalar initAccumlation, Scalar epsilon);
+  rmsProp(Scalar alpha, Scalar decay, Scalar initAccumlation, Scalar epsilon);
 
   // Member functions
 
@@ -74,7 +74,7 @@ public:
 
   // Destructor
 
-  ~rsmProp() = default;
+  ~rmsProp() = default;
 };
 
 

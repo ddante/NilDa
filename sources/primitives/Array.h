@@ -26,6 +26,20 @@ typedef Eigen::Array<
                     >
                     ColArray;
 
+typedef Eigen::Array<
+                     int,
+                     1,
+                     Eigen::Dynamic
+                    >
+                    RowArrayI;
+
+typedef Eigen::Array<
+                     int,
+                     Eigen::Dynamic,
+                     1
+                    >
+                    ColArrayI;
+
 
 } // namespace
 

@@ -19,6 +19,7 @@ int importMNISTDatabase(
 	                      const std::string& fullPathFileLabel,
 	                      const double imageScaling,
 	                      const bool shuffle,
+                        const bool sparseCategorical,
                         Matrix& Images,
                         Matrix& Labels
                       );

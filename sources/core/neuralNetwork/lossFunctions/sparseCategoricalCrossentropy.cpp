@@ -1,4 +1,6 @@
 #include <iostream>
+#include <math.h>
+
 #include "primitives/Array.h"
 
 #include "sparseCategoricalCrossentropy.h"
@@ -16,19 +18,24 @@ sparseCategoricalCrossentropy::compute(
                                       )
 {
 #ifdef ND_DEBUG_CHECKS
-  assert(labels.rows() == obs.rows());
+  assert(labels.rows() == 1);
   assert(labels.cols() == obs.cols());
 #endif
 
   int nObs = obs.cols();
 
-  RowArray s;
-  s.resize(obs.rows());
+  //RowArrayI sparseIndices = labels.row(0).cast<int>();
 
-  s = ((obs.array()).log() * labels.array()).colwise().sum()
-    + ((1.0 - obs.array()).log() * (1.0 - labels.array())).colwise().sum();
+  Scalar s = 0;
 
-  return (-1.0/nObs)*s.sum();
+  for (int i = 0; i < nObs; ++i)
+  {
+    const int idx = labels(0, i);
+
+    s += log(obs(idx, i));
+  }
+
+  return (-1.0/nObs)*s;
 }
 
 void
@@ -40,13 +47,32 @@ sparseCategoricalCrossentropy::computeDerivative(
 {
 #ifdef ND_DEBUG_CHECKS
   assert(labels.cols() == obs.cols());
+  assert(labels.rows() == 1);
 
-  assert(output.rows() == obs.rows());
-  assert(output.cols() == obs.cols());
+  //assert(output.rows() == obs.rows());
+  //assert(output.cols() == obs.cols());
 #endif
 
-  output = -labels.array() * obs.array().cwiseInverse()
-         + (1.0 - labels.array()) * (1.0 - obs.array()).cwiseInverse();
+  output.setZero(obs.rows(), obs.cols());
+
+  int nObs = obs.cols();
+
+  for (int i = 0; i < nObs; ++i)
+  {
+    const int idx = labels(0, i);
+
+    Scalar eps = 0;
+    if(obs(idx, i) == 0)
+    {
+        std::cout << "\n" << i << ", " << idx << "\n";
+        std::cout << obs.col(i) << "\n";
+        assert(false);
+    }
+
+    output(idx, i) = -1.0/obs(idx, i);
+  }
+
+  //output = -labels.array() * obs.array().cwiseInverse();
 }
 
 void
@@ -55,19 +81,19 @@ sparseCategoricalCrossentropy::predict(
                                        Matrix& predictions
                                       )
 {
-  predictions.setZero(output.rows(), output.cols());
+  predictions.setZero(1, output.cols());
 
   const int nObs = predictions.cols();
 
-  Matrix::Index maxIndex;
-
   for (int i=0; i < nObs; ++i)
   {
+    Matrix::Index maxIndex;
+
     Scalar maxVal = output.col(i).maxCoeff(&maxIndex);
 
     (void) maxVal;
 
-    predictions(maxIndex, i) = 1;
+    predictions(0, i) = maxIndex;
   }
 }
 

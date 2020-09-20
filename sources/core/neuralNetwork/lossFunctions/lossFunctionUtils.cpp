@@ -10,7 +10,11 @@ namespace NilDa
 
 lossFunctions lossFunctionCode(const std::string& inName)
 {
-  if(inName == "sparse_categorical_crossentropy")
+  if (inName == "categorical_crossentropy")
+  {
+    return lossFunctions::categoricalCrossentropy;
+  }
+  else if (inName == "sparse_categorical_crossentropy")
   {
     return lossFunctions::sparseCategoricalCrossentropy;
   }
@@ -19,13 +23,17 @@ lossFunctions lossFunctionCode(const std::string& inName)
     std::cerr << "Unknown loss function name "
               << inName << ".\n";
 
-    assert(false);
+    std::abort();
   }
 }
 
 std::string lossFunctionName(const lossFunctions type)
 {
-  if(type == lossFunctions::sparseCategoricalCrossentropy)
+  if (type == lossFunctions::categoricalCrossentropy)
+  {
+    return "categorical_crossentropy";
+  }
+  else if (type == lossFunctions::sparseCategoricalCrossentropy)
   {
     return "sparse_categorical_crossentropy";
   }
@@ -33,7 +41,7 @@ std::string lossFunctionName(const lossFunctions type)
   {
     std::cerr << "Unknown loss function code.\n";
 
-    assert(false);
+    std::abort();
   }
 }
 

@@ -27,6 +27,7 @@ int main(int argc, char const *argv[])
   		                 			   mnistLabelsTrainFile,
   		       			             imgScaling,
   		       			             /*shuffle=*/ true,
+                               /*sparseCategorical=*/ false,
   			                       trainingImages,
   			                       trainingLabels
                               );
@@ -76,6 +77,7 @@ int main(int argc, char const *argv[])
   		                 			   mnistLabelsPredictFile,
   		       			             imgScaling,
   		       			             /*shuffle=*/ true,
+                               /*sparseCategorical=*/ false,
   			                       predictImages,
   			                       predictLabels
                               );

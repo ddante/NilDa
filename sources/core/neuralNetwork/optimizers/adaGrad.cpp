@@ -12,7 +12,7 @@ namespace NilDa
 
 adaGrad::adaGrad(Scalar alpha):
   learningRate_(alpha),
-  initAccumlation_(0),
+  initAccumlation_(0.1),
   epsilon_(1e-12)
 {
   if (learningRate_ <= 0)
@@ -121,6 +121,7 @@ void adaGrad::update(
                           weightsAccumulator.array()
                           + epsilon_
                          ).rsqrt();
+
 
   deltaBiases.array() = -learningRate_
                       *  biasesGradient.array()

@@ -13,7 +13,7 @@
 #include "core/neuralNetwork/neuralNetwork.h"
 #include "core/neuralNetwork/optimizers/sgd.h"
 #include "core/neuralNetwork/optimizers/adaGrad.h"
-#include "core/neuralNetwork/optimizers/rsmProp.h"
+#include "core/neuralNetwork/optimizers/rmsProp.h"
 #include "core/neuralNetwork/optimizers/adam.h"
 
 int main(int argc, char const *argv[])
@@ -37,6 +37,7 @@ int main(int argc, char const *argv[])
 		                 			   mnistLabelsTrainFile,
 		       			             imgScaling,
 		       			             true,
+                             /*sparseCategorical=*/ false,
 			                       trainingImages,
 			                       trainingLabels
                             );

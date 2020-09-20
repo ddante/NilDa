@@ -48,7 +48,7 @@ void displayImage(
 
   cv::imshow(title, cvImg);
 
-  cv::waitKey(1000);
+  cv::waitKey(2000);
 }
 
 } // namepsace

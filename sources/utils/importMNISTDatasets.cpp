@@ -33,6 +33,7 @@ int importMNISTDatabase(
                         const std::string& fullPathFileLabel,
                         const double imageScaling,
                         const bool shuffle,
+                        const bool sparseCategorical,
                         Matrix& Images,
                         Matrix& Labels
 )
@@ -116,7 +117,14 @@ int importMNISTDatabase(
   // Classes [0, ..., 9]
   const int numberOfClasses = 10;
 
-  Labels.setZero(numberOfClasses, numberOfImages);
+  if (sparseCategorical)
+  {
+    Labels.setZero(1, numberOfImages);
+  }
+  else
+  {
+    Labels.setZero(numberOfClasses, numberOfImages);
+  }
 
   progressBar progBar;
 
@@ -137,8 +145,15 @@ int importMNISTDatabase(
       }
     }
 
-    // One hot encoding of the number classes
-    Labels(static_cast<int>(label), i) = 1;
+    if (sparseCategorical)
+    {
+      Labels(0, i) = static_cast<int>(label);
+    }
+    else
+    {
+      // One hot encoding of the number classes
+      Labels(static_cast<int>(label), i) = 1;           
+    }
 
     progBar.update(i+1, numberOfImages);
 
