@@ -30,7 +30,7 @@ int main(int argc, char const *argv[])
 
   const bool shuffle = true;
 
-  const bool sparseCategorical = false;
+  const bool sparseCategorical = true;
 
 	NilDa::importMNISTDatabase(
                              mnistImagesTrainFile,
@@ -61,7 +61,7 @@ int main(int argc, char const *argv[])
   //NilDa::rmsProp opt(learningRate, decay);
   //NilDa::adam opt(learningRate, decay, decay);
 
-  nn.configure(opt, "categorical_crossentropy");
+  nn.configure(opt, "sparse_categorical_crossentropy");
   /*
   nn.gradientsSanityCheck(
                           trainingImages.col(1),

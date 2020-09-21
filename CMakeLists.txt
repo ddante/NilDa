@@ -5,7 +5,7 @@ project(NilDa VERSION 0.1)
 ######################################
 option(NILDA_DEBUG_BUILD  "Enable debug build" OFF)
 
-set(NILDA_PRECISION_OPTION "DP")
+set(NILDA_PRECISION_OPTION "SP")
 
 ######################################
 
@@ -50,6 +50,11 @@ message("${OpenCV_INCLUDE_DIRS}")
 #if(NOT TARGET spdlog)
 #    find_package(spdlog REQUIRED)
 #endif()
+
+find_package(OpenMP REQUIRED)
+if(OpenMP_CXX_FOUND)
+    message("${OpenMP_CXX}")
+endif()
 
 add_subdirectory(sources)
 

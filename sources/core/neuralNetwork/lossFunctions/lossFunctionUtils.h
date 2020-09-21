@@ -8,7 +8,8 @@ namespace NilDa
 enum class lossFunctions
 {
   categoricalCrossentropy,
-  sparseCategoricalCrossentropy
+  sparseCategoricalCrossentropy,
+  binaryCrossentropy
 };
 
 lossFunctions lossFunctionCode(const std::string& inName);

@@ -18,6 +18,10 @@ lossFunctions lossFunctionCode(const std::string& inName)
   {
     return lossFunctions::sparseCategoricalCrossentropy;
   }
+  else if (inName == "binary_crossentropy")
+  {
+    return lossFunctions::binaryCrossentropy;
+  }
   else
   {
     std::cerr << "Unknown loss function name "
@@ -36,6 +40,10 @@ std::string lossFunctionName(const lossFunctions type)
   else if (type == lossFunctions::sparseCategoricalCrossentropy)
   {
     return "sparse_categorical_crossentropy";
+  }
+  else if (type == lossFunctions::binaryCrossentropy)
+  {
+    return "binary_crossentropy";
   }
   else
   {

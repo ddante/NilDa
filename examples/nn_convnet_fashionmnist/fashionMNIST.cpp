@@ -30,14 +30,16 @@ int main(int argc, char const *argv[])
 	NilDa::Matrix trainingImages;
 	NilDa::Matrix trainingLabels;
 
+ const bool shuffle = true;
 
+  const bool sparseCategorical = true;
 
 	NilDa::importMNISTDatabase(
                              mnistImagesTrainFile,
 		                 			   mnistLabelsTrainFile,
 		       			             imgScaling,
-		       			             true,
-                             /*sparseCategorical=*/ false,
+		       			             shuffle,
+                             sparseCategorical,
 			                       trainingImages,
 			                       trainingLabels
                             );
@@ -63,29 +65,29 @@ int main(int argc, char const *argv[])
 
   //
 
-	const NilDa::Scalar learningRate = 0.08;
+	const NilDa::Scalar learningRate = 0.001;
 
 	const NilDa::Scalar momentum = 0.90;
 
-  const NilDa::Scalar decay = 0.9;
+  const NilDa::Scalar decay = 0.99;
 
-  NilDa::sgd opt(learningRate, momentum);
+  //NilDa::sgd opt(learningRate, momentum);
   //NilDa::adaGrad opt(learningRate);
   //NilDa::rsmProp opt(learningRate, decay);
-  //NilDa::adam opt(learningRate, decay, decay);
+  NilDa::adam opt(learningRate, decay, decay);
 
   nn.configure(opt, "sparse_categorical_crossentropy");
 
   //
 
-	const int epochs = 10;
+	const int epochs = 20;
 	const int batchSize = 32;
 
   nn.train(trainingImages, trainingLabels, epochs, batchSize);
 
   nn.saveModel("convNetFashionMnist.out");
 
-  /*
+  
   const std::string mnistImagesPredictFile
     = "/home/dante/dev/NilDa/datasets/fashion_mnist/t10k-images-idx3-ubyte";
 
@@ -99,11 +101,16 @@ int main(int argc, char const *argv[])
                              mnistImagesPredictFile,
 		                 			   mnistLabelsPredictFile,
 		       			             imgScaling,
-		       			             true,
+		       			             shuffle,
+                             sparseCategorical,
 			                       predictImages,
 			                       predictLabels
                             );
 
+    std::cout << "Prediction Accuracy: "
+              << nn.getAccuracy(predictImages, predictLabels) << "\n";
+
+	/*
   NilDa::neuralNetwork nnT;
 
   nnT.loadModel("convNetFashionMnist.out");
@@ -142,5 +149,5 @@ int main(int argc, char const *argv[])
 
     NilDa::displayImage(predictImages, {28,28,1}, id, classes[ic]);
   }
-  */
+	*/  
 }
