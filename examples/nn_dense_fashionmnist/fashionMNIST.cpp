@@ -48,6 +48,8 @@ int main(int argc, char const *argv[])
 
   NilDa::neuralNetwork nn({l0, l1, l2});
 
+  nn.summary();
+
   //
 
 	const NilDa::Scalar learningRate = 0.001;

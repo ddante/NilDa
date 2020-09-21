@@ -39,6 +39,11 @@ public:
                Matrix& predictions
               ) override;
 
+  void sanityCheck(
+                   const int outputSize,
+                   const Matrix& labels
+                  ) const override;
+
   // Destructor
 
   ~sparseCategoricalCrossentropy() = default;

@@ -206,8 +206,8 @@ void denseLayer::forwardPropagation(const Matrix& inputData)
     nObservations_ = inputData.cols();
 
     linearOutput_.resize(
-                          weights_.rows(),
-                          inputData.cols()
+                         weights_.rows(),
+                         inputData.cols()
                         );
 
      // Apply the weights of the layer to the input

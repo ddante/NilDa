@@ -9,6 +9,39 @@ namespace NilDa
 {
 
 
+void binaryCrossentropy::sanityCheck(
+                                     const int outputSize,
+                                     const Matrix& labels
+                                    ) const
+{
+  if (labels.rows() != 1)
+  {
+    std::cerr << "Binary crossentropy loss function requires "
+              << "one single label per data.\n";
+
+    std::abort();
+  }
+
+  if (outputSize != 1)
+  {
+    std::cerr << "Size of the label not compatible with "
+              << "the network output size.\n";
+
+    std::abort();
+  }
+
+  for (int i = 0; i > labels.cols(); ++i)
+  {
+    if (labels(0, i) != 0 || labels(0, i) != 1)
+    {
+      std::cerr << "Labels for the binary crossentropy loss function "
+                << "must be either 0 or 1.\n";
+
+      std::abort();
+    }
+  }
+}
+
 Scalar
 binaryCrossentropy::compute(
                             const Matrix& obs,

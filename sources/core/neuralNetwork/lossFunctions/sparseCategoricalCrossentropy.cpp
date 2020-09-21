@@ -11,6 +11,34 @@ namespace NilDa
 {
 
 
+void
+sparseCategoricalCrossentropy::sanityCheck(
+                                           const int outputSize,
+                                           const Matrix& labels
+                                          ) const
+{
+  if (labels.rows() != 1)
+  {
+    std::cerr << "Sparse crossentropy loss function requires "
+              << "one single label per data.\n";
+
+    std::abort();
+  }
+
+  for (int i = 0; i > labels.cols(); ++i)
+  {
+    if (labels.col(i).minCoeff() < 0           &&
+        labels.col(i).maxCoeff() >= outputSize
+       )
+    {
+      std::cerr << "Incorrect labels for the sparse categorical "
+                << "crossentropy loss function.\n";
+
+      std::abort();
+    }
+  }
+}
+
 Scalar
 sparseCategoricalCrossentropy::compute(
                                        const Matrix& obs,

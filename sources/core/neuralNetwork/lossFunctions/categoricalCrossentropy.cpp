@@ -9,6 +9,36 @@ namespace NilDa
 {
 
 
+void categoricalCrossentropy::sanityCheck(
+                                          const int outputSize,
+                                          const Matrix& labels
+                                         ) const
+{
+  if (labels.rows() != outputSize)
+  {
+    std::cerr << "Size of the label (" << labels.rows() << ") "
+              << "not compatible with the network output size ("
+              <<  outputSize << ").\n";
+
+    std::abort();
+  }
+
+  for (int i = 0; i > labels.cols(); ++i)
+  {
+    if (labels.col(i).minCoeff() != 0 &&
+        labels.col(i).maxCoeff() != 1 &&
+        labels.col(i).sum() != 1
+       )
+    {
+      std::cerr << "Labels for the categorical crossentropy loss function "
+                << "must be either one-hot vectors.\n";
+
+      std::abort();
+    }
+  }
+}
+
+
 Scalar
 categoricalCrossentropy::compute(
                                  const Matrix& obs,

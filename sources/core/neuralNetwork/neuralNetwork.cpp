@@ -18,6 +18,7 @@
 #include "lossFunctions/lossFunctionUtils.h"
 #include "lossFunctions/categoricalCrossentropy.h"
 #include "lossFunctions/sparseCategoricalCrossentropy.h"
+#include "lossFunctions/binaryCrossentropy.h"
 
 #include "optimizers/sgd.h"
 
@@ -91,7 +92,7 @@ void neuralNetwork::summary() const
     std::cout << std::setw(12) << std::left
               << layers_[i]->name() << " ";
 
-    layerSizes sizes = layers_[i]->size();
+    const layerSizes sizes = layers_[i]->size();
 
     if (sizes.isFlat)
     {
@@ -154,6 +155,68 @@ void neuralNetwork::summary() const
   std::cout << "Non-trainable parameters: "
             << totalParameters - totalTrainableParameters << "\n\n";
 
+}
+
+void neuralNetwork::configure(
+                              const optimizer& opt,
+                              const std::string& lossName
+                             )
+{
+  if (numberOfLayers_ <= 0)
+  {
+    std::cerr << "The neural network has no layer." << std::endl;
+    assert(false);
+  }
+
+  optimizer_ = &opt;
+
+  initOptimizer();
+
+  setLossFunction(lossFunctionCode(lossName));
+
+  finalizedNetwork_ = true;
+}
+
+void neuralNetwork::initOptimizer() const
+{
+  for (int i = firstLayer_; i < numberOfLayers_; ++i)
+  {
+    if (layers_[i]->numberOfParameters() > 0 &&
+        layers_[i]->isTrainable())
+    {
+        optimizer_->init(
+                         layers_[i]->getWeightsDerivative(),
+                         layers_[i]->getBiasesDerivative()
+                        );
+    }
+  }
+}
+
+void neuralNetwork::setLossFunction(const std::string& lossName)
+{
+  setLossFunction(lossFunctionCode(lossName));
+}
+
+void neuralNetwork::setLossFunction(const lossFunctions lossCode)
+{
+  switch(lossCode)
+  {
+    case lossFunctions::categoricalCrossentropy :
+        // add check size output layer > 2
+        lossFunction_ = std::make_unique<categoricalCrossentropy>();
+        break;
+    case lossFunctions::sparseCategoricalCrossentropy :
+        lossFunction_ = std::make_unique<sparseCategoricalCrossentropy>();
+        break;
+    case lossFunctions::binaryCrossentropy :
+        lossFunction_ = std::make_unique<binaryCrossentropy>();
+        break;
+    default :
+        std::cerr << "Not valid loss function  "
+                    << lossFunctionName(lossCode)
+                    << " in this context.\n";
+    assert(false);
+  }
 }
 
 void neuralNetwork::forwardPropagation(const Matrix& obs) const
@@ -231,50 +294,6 @@ void neuralNetwork::backwardPropagation(
                                            );
 }
 
-void neuralNetwork::configure(
-                              const optimizer& opt,
-                              const std::string& lossName
-                             )
-{
-  if (numberOfLayers_ <= 0)
-  {
-    std::cerr << "The neural network has no layer." << std::endl;
-    assert(false);
-  }
-
-  optimizer_ = &opt;
-
-  initOptimizer();
-
-  setLossFunction(lossFunctionCode(lossName));
-
-  finalizedNetwork_ = true;
-}
-
-void neuralNetwork::setLossFunction(const std::string& lossName)
-{
-  setLossFunction(lossFunctionCode(lossName));
-}
-
-void neuralNetwork::setLossFunction(const lossFunctions lossCode)
-{
-  switch(lossCode)
-  {
-    case lossFunctions::categoricalCrossentropy :
-        // add check size output layer > 2
-        lossFunction_ = std::make_unique<categoricalCrossentropy>();
-        break;
-    case lossFunctions::sparseCategoricalCrossentropy :
-        lossFunction_ = std::make_unique<sparseCategoricalCrossentropy>();
-        break;
-    default :
-        std::cerr << "Not valid loss function  "
-                    << lossFunctionName(lossCode)
-                    << " in this context.\n";
-    assert(false);
-  }
-}
-
 Scalar neuralNetwork::getLoss(const Matrix& labels) const
 {
 #ifdef ND_DEBUG_CHECKS
@@ -285,6 +304,15 @@ Scalar neuralNetwork::getLoss(const Matrix& labels) const
                                 layers_[lastLayer_]->output(),
                                 labels
                                );
+}
+
+Scalar neuralNetwork::propagate(const Matrix& obs, const Matrix& labels) const
+{
+  forwardPropagation(obs);
+
+  backwardPropagation(obs, labels);
+
+  return getLoss(labels);
 }
 
 void neuralNetwork::train(
@@ -310,6 +338,10 @@ void neuralNetwork::train(
                  / layers_[inputLayer_]->inputStride();
 
   assert(batchSize <= nObs);
+
+  const layerSizes sizes = layers_[lastLayer_]->size();
+
+  lossFunction_->sanityCheck(sizes.size, labels);
 
   const int epochSteps = floor((float)nObs/(float)batchSize);
 
@@ -392,30 +424,6 @@ void neuralNetwork::train(
               << " -- "
    	          << 0.001*elapsedTime.count() << " s: "
    	          << (float)elapsedTime.count()/epochSteps << " ms/steps\n";
-  }
-}
-
-Scalar neuralNetwork::propagate(const Matrix& obs, const Matrix& labels) const
-{
-  forwardPropagation(obs);
-
-  backwardPropagation(obs, labels);
-
-  return getLoss(labels);
-}
-
-void neuralNetwork::initOptimizer() const
-{
-  for (int i = firstLayer_; i < numberOfLayers_; ++i)
-  {
-    if (layers_[i]->numberOfParameters() > 0 &&
-        layers_[i]->isTrainable())
-    {
-        optimizer_->init(
-                         layers_[i]->getWeightsDerivative(),
-                         layers_[i]->getBiasesDerivative()
-                        );
-    }
   }
 }
 

@@ -39,6 +39,11 @@ public:
                        Matrix& predictions
                       ) = 0;
 
+  virtual void sanityCheck(
+                           const int outputSize,
+                           const Matrix& labels
+                          ) const = 0;
+
   // Destructors
 
   virtual ~lossFunction() = default;
