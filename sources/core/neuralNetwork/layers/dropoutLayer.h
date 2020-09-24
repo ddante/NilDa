@@ -1,5 +1,5 @@
-#ifndef DENSE_LAYER_H
-#define DENSE_LAYER_H
+#ifndef DROPOUT_LAYER_H
+#define DROPOUT_LAYER_H
 
 #include <iostream>
 #include <memory>
@@ -8,8 +8,6 @@
 #include "primitives/Matrix.h"
 #include "primitives/errors.h"
 
-#include "activationFunctions/activationFunction.h"
-
 #include "layer.h"
 
 // ---------------------------------------------------------------------------
@@ -17,64 +15,36 @@
 namespace NilDa
 {
 
-class denseLayer : public layer
+
+class dropoutLayer : public layer
 {
 
 private:
 
-  // Number of neurons of the current layer
-  int layerSize_;
+  // Probability of keeping active neurons
+  Scalar keepProbability_;
 
-  // Pointer to the activation function used in this layer
-  std::unique_ptr<activationFunction> activationFunction_;
+  // Mask used to apply the dropout
+  Matrix mask_;
 
   // Linear output and activation matrices
-  Matrix linearOutput_;
   Matrix activation_;
-
-  // Weight and derivative w.r.t. weights matrices
-  Matrix weights_;
-  Matrix dWeights_;
-
-  // Bias and derivative w.r.t. bias vectors
-  Vector biases_;
-  Vector dBiases_;
 
   // Cache matrix to store the data to pass to the layer
   // of the previous level during the back propagation
   Matrix cacheBackProp_;
 
-  // Store if the flattening is needed when
-  // the input comes from a not flat layer
-  bool needFlattening_;
-
-  // Store the size and the number of channels of
-  // the previous not flat layers. Neded to flatten the input.
-  int inputSize_;
-  int inputChannels_;
-
-  // Store the number of observations seen in the
-  // forward propagation
-  int nObservations_;
-
-private:
-
-  void setActivationFunction(const activationFunctions code);
-
 public:
 
   // Constructor
 
-  denseLayer();
+  dropoutLayer();
 
-  denseLayer(
-             const int inSize,
-             const std::string& activationName
-            );
+  dropoutLayer(const Scalar keepProbability);
 
   // Destructor
 
-  ~denseLayer()  = default;
+  ~dropoutLayer()  = default;
 
   // Member functions
 
@@ -92,9 +62,6 @@ public:
 
   void checkInputSize(const Matrix& inputData) const override;
 
-  void checkInputAndCacheSize(const Matrix& inputData,
-                              const Matrix& cacheBackProp) const;
-
   void forwardPropagation(const Matrix& inputData) override;
 
   void backwardPropagation(const Matrix& dActivationNex,
@@ -102,33 +69,51 @@ public:
 
   const Matrix& getWeights() const override
   {
-    return weights_;
+    std::cerr << "Dropout layer cannot call getWeights function.\n";
+
+    std::abort();
   }
 
   const Vector& getBiases() const override
   {
-    return biases_;
+    std::cerr << "Dropout layer cannot call getBiases function.\n";
+
+    std::abort();
   }
 
   const Matrix& getWeightsDerivative() const override
   {
-    return dWeights_;
+    std::cerr << "Dropout layer cannot call getWeightsDerivative function.\n";
+
+    std::abort();
   }
 
   const Vector& getBiasesDerivative() const override
   {
-    return dBiases_;
+    std::cerr << "Dropout layer cannot call getBiasesDerivative function.\n";
+
+    std::abort();
   }
 
   void setWeightsAndBiases(
                            const Matrix& W,
                            const Vector& b
-                          ) override;
+                          ) override
+  {
+    std::cerr << "Dropout layer cannot call getBiasesDerivative function.\n";
+
+    std::abort();
+  }
 
   void incrementWeightsAndBiases(
                                  const Matrix& deltaW,
                                  const Vector& deltaB
-                                ) override;
+                                ) override
+  {
+    std::cerr << "Dropout layer cannot call getBiasesDerivative function.\n";
+
+    std::abort();
+  }
 
   const Matrix& output() const override
   {
@@ -142,14 +127,14 @@ public:
 
   int inputStride() const override
   {
-    std::cerr << "Dense layer cannot call inputStride function.\n";
+    std::cerr << "Dropout layer cannot call inputStride function.\n";
 
-    assert(false);
+    std::abort();
   }
 
   int numberOfParameters() const override
   {
-    return weights_.size();
+    return 0;
   }
 
   void saveLayer(std::ofstream& ofs) const override;
@@ -161,9 +146,9 @@ public:
                          Scalar errTol
                         ) const override
   {
-    std::cerr << "No localChecks for dense layer.\n";
+    std::cerr << "No localChecks for dropout layer.\n";
 
-    assert(false);
+    std::abort();
 
     errorCheck output;
     return output;

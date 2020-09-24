@@ -10,6 +10,7 @@
 #include "activationFunctions/relu.h"
 #include "activationFunctions/softmax.h"
 
+#include "utils/Random.h"
 // ---------------------------------------------------------------------------
 
 namespace NilDa
@@ -62,7 +63,8 @@ denseLayer::denseLayer(
       activationFunctions::softmax)
   {
     std::cout << "Softmax activation requires layer size > 1.\n";
-    assert(false);
+    
+    std::abort();
   }
 }
 
@@ -95,7 +97,7 @@ void denseLayer::init(
               << " not compatible with current layer of type "
               << getLayerName(type_) << ".\n";
 
-    assert(false);
+    std::abort();
   }
 
   const layerSizes prevLayer = previousLayer->size();
@@ -124,9 +126,11 @@ void denseLayer::init(
 
     weights_.setRandom(layerSize_, inputSize_);
     weights_ *= epsilonInit;
+    //Random(-epsilonInit, epsilonInit, weights_);
 
     biases_.setRandom(layerSize_);
     biases_ *= epsilonInit;
+    //Random(-epsilonInit, epsilonInit, biases_);
   }
 
   dWeights_.setZero(layerSize_, inputSize_);
@@ -144,7 +148,7 @@ void denseLayer::checkInputSize(const Matrix& inputData) const
     << "(" << weights_.rows() << ", "
     << weights_.cols() << ").\n";
 
-    assert(false);
+    std::abort();
   }
 }
 
@@ -165,7 +169,7 @@ void denseLayer::checkInputAndCacheSize(
     << "(" << activation_.rows() << ", "
            << activation_.cols() << ").\n";
 
-    assert(false);
+    std::abort();
   }
 }
 
@@ -308,7 +312,7 @@ void denseLayer::setWeightsAndBiases(
               << "(" << weights_.rows() << ", "
               << weights_.cols() << ").\n";
 
-    assert(false);
+    std::abort();
   }
 
   if (b.rows() != biases_.rows())
@@ -318,7 +322,7 @@ void denseLayer::setWeightsAndBiases(
               << " not consistent with the layer biases size "
               << "(" << biases_.rows() << ").\n";
 
-    assert(false);
+    std::abort();
   }
 
   weights_.noalias() = W;
@@ -342,7 +346,7 @@ void denseLayer::incrementWeightsAndBiases(
             << "(" << weights_.rows() << ", "
             << weights_.cols() << ").\n";
 
-    assert(false);
+    std::abort();
   }
 
   if (deltaB.rows() != biases_.rows())
@@ -352,7 +356,7 @@ void denseLayer::incrementWeightsAndBiases(
               << " not consistent with the layer biases size "
               << "(" << biases_.rows() << ").\n";
 
-    assert(false);
+    std::abort();
   }
 #endif
 
@@ -452,7 +456,7 @@ void denseLayer::setActivationFunction(const activationFunctions code)
     break;
     default :
        std::cerr << "Not valid activation function.\n";
-       assert(false);
+       std::abort();
   }
 }
 

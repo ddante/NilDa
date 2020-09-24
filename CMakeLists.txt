@@ -7,6 +7,7 @@ option(NILDA_DEBUG_BUILD  "Enable debug build" OFF)
 
 set(NILDA_PRECISION_OPTION "SP")
 
+option(NILDA_RANDOM_SEED "Random seed for random number generator" ON)
 ######################################
 
 if(${NILDA_DEBUG_BUILD})
@@ -26,8 +27,13 @@ else()
     message(FATAL_ERROR "${NILDA_PRECISION_OPTION} not supported")
 endif()
 
-message("-- Compiling mode: ${CMAKE_BUILD_TYPE}")
-message("-- Precision option:  ${NILDA_PRECISION_OPTION}")
+if(${NILDA_RANDOM_SEED})
+  add_definitions(-DND_RAND)
+endif()
+
+message("-- Compiling mode:   ${CMAKE_BUILD_TYPE}")
+message("-- Precision option: ${NILDA_PRECISION_OPTION}")
+message("-- Random seed:      ${NILDA_RANDOM_SEED}")
 
 set(CMAKE_CXX_FLAGS "-Wall -Wall")
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")

@@ -2,6 +2,7 @@ add_library(layers
             layer.cpp
             inputLayer.cpp
             denseLayer.cpp
+            dropoutLayer.cpp
             conv2DLayer.cpp
             conv2DUtils.cpp
             maxPool2DLayer.cpp

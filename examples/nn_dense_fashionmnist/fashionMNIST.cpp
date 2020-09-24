@@ -14,6 +14,7 @@
 #include "core/neuralNetwork/optimizers/rmsProp.h"
 #include "core/neuralNetwork/optimizers/adam.h"
 
+
 int main(int argc, char const *argv[])
 {
    // Training

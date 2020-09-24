@@ -89,28 +89,28 @@ public:
   {
     std::cerr << "Max pool 2D layer cannot call getWeights function\n";
 
-    assert(false);
+    std::abort();
   }
 
   const Vector& getBiases() const override
   {
     std::cerr << "Max pool 2D layer cannot call getBiases function.\n";
 
-    assert(false);
+    std::abort();
   }
 
   const Matrix& getWeightsDerivative() const override
   {
     std::cerr << "Max pool 2D layer cannot call getWeightsDerivative function.\n";
 
-    assert(false);
+    std::abort();
   }
 
   const Vector& getBiasesDerivative() const override
   {
     std::cerr << "Max pool 2D layer cannot call getBiasesDerivative function.\n";
 
-    assert(false);
+    std::abort();
   }
 
   void setWeightsAndBiases(
@@ -120,7 +120,7 @@ public:
   {
     std::cerr << "Max pool 2D layer cannot call setWeightsAndBiases function.\n";
 
-    assert(false);
+    std::abort();
   }
 
   void incrementWeightsAndBiases(
@@ -130,7 +130,7 @@ public:
   {
     std::cerr << "Max pool 2D layer cannot call incrementWeightsAndBiases function.\n";
 
-    assert(false);
+    std::abort();
   }
 
   const Matrix& output() const override
@@ -147,7 +147,7 @@ public:
   {
     std::cerr << "Max pool 2D layer cannot call inputStride function.\n";
 
-    assert(false);
+    std::abort();
   }
 
   int numberOfParameters() const override

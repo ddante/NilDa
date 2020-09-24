@@ -4,6 +4,8 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 
+#include <random>
+
 #include "Scalar.h"
 
 // ---------------------------------------------------------------------------
@@ -37,7 +39,6 @@ typedef Eigen::Matrix<
 typedef Eigen::Map<const Matrix> ConstMapMatrix;
 
 typedef Eigen::Map<Matrix> MapMatrix;
-
 
 } // namespace
 
