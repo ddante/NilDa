@@ -62,7 +62,10 @@ public:
 
   void checkInputSize(const Matrix& obs) const override;
 
-  void forwardPropagation(const Matrix& obs) override
+  void forwardPropagation(
+                          const Matrix& inputData,
+                          const bool trainingPhase
+                         ) override
   {
     std::cerr << "Input layer cannot call forwardPropagation.\n";
 

@@ -219,7 +219,10 @@ void neuralNetwork::setLossFunction(const lossFunctions lossCode)
   }
 }
 
-void neuralNetwork::forwardPropagation(const Matrix& obs) const
+void neuralNetwork::forwardPropagation(
+                                       const Matrix& obs,
+                                       const bool trainingPhase
+                                      ) const
 {
   validState_ = false;
 
@@ -232,12 +235,15 @@ void neuralNetwork::forwardPropagation(const Matrix& obs) const
 #endif
 
   // The first actual layer takes in directly the input data
-  layers_[firstLayer_]->forwardPropagation(obs);
+  layers_[firstLayer_]->forwardPropagation(obs, trainingPhase);
 
   for (int i = firstLayer_ + 1; i < numberOfLayers_; ++i)
   {
     // The other layers take in the output of the previous layer
-    layers_[i]->forwardPropagation(layers_[i - 1]->output());
+    layers_[i]->forwardPropagation(
+                                   layers_[i - 1]->output(),
+                                   trainingPhase
+                                  );
   }
 
   validState_ = true;
@@ -306,9 +312,13 @@ Scalar neuralNetwork::getLoss(const Matrix& labels) const
                                );
 }
 
-Scalar neuralNetwork::propagate(const Matrix& obs, const Matrix& labels) const
+Scalar neuralNetwork::propagate(
+                                const Matrix& obs,
+                                const Matrix& labels,
+                                const bool trainingPhase
+                               ) const
 {
-  forwardPropagation(obs);
+  forwardPropagation(obs, trainingPhase);
 
   backwardPropagation(obs, labels);
 
@@ -385,7 +395,11 @@ void neuralNetwork::train(
                                   batchStride
                                  );
 
-      Scalar loss = propagate(obsBatched, labelsBatched);
+      Scalar loss = propagate(
+                              obsBatched,
+                              labelsBatched,
+                              /*trainingPhase=*/true
+                             );
 
       update();
 
@@ -461,7 +475,7 @@ void neuralNetwork::predict(
 {
   if(runForward)
   {
-    forwardPropagation(obs);
+    forwardPropagation(obs, /*trainingPhase=*/false);
   }
 
   lossFunction_->predict(
@@ -540,7 +554,7 @@ void neuralNetwork::getProbability(
                                    Matrix& probability
                                   )
 {
-  forwardPropagation(obs);
+  forwardPropagation(obs, /*trainingPhase=*/false);
 
   probability = layers_[lastLayer_]->output();
 }

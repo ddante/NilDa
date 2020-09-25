@@ -80,37 +80,48 @@ void dropoutLayer::init(
   size_.channels = prevLayer.channels;
 }
 
-void dropoutLayer::forwardPropagation(const Matrix& inputData)
+void dropoutLayer::forwardPropagation(
+                                      const Matrix& inputData,
+                                      const bool trainingPhase
+                                     )
 {
-  mask_.resize(inputData.rows(), inputData.cols());
-
-  // This has to be replace by random Matrix operator
-  std::random_device rand;
-  //std::mt19937 genRand(rand());
-  std::mt19937 genRand(12);
-
-  std::uniform_real_distribution<Scalar> distr(0, 1);
-
-  mask_ = mask_.unaryExpr(
-                          [&](Scalar dummy)
-                          {
-                            return distr(genRand);
-                          }
-                         );
-
-  // ..................................................
-
   activation_.resize(
                      inputData.rows(),
                      inputData.cols()
                     );
 
-  // Shut down some neurons
-  activation_.array() =
-    (mask_.array() < dropProbability_).select(0, inputData);
+  // At the training phase apply droput
+  if (trainingPhase)
+  {
+    mask_.resize(inputData.rows(), inputData.cols());
 
-  // Scale the value of the active neurons
-  activation_ *= 1.0/(1.0 - dropProbability_);
+    // This has to be replace by random Matrix operator
+    std::random_device rand;
+    //std::mt19937 genRand(rand());
+    std::mt19937 genRand(12);
+
+    std::uniform_real_distribution<Scalar> distr(0, 1);
+
+    mask_ = mask_.unaryExpr(
+                            [&](Scalar dummy)
+                            {
+                              return distr(genRand);
+                            }
+                           );
+    // ..................................................
+
+    // Shut down some neurons
+    activation_.array() =
+      (mask_.array() < dropProbability_).select(0, inputData);
+
+    // Scale the value of the active neurons
+    activation_ *= 1.0/(1.0 - dropProbability_);
+  }
+  else
+  {
+    // Don't use droput at test phase
+    activation_ = inputData;
+  }
 }
 
 void dropoutLayer::backwardPropagation(

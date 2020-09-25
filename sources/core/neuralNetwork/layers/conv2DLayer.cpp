@@ -245,7 +245,10 @@ void conv2DLayer::checkInputSize(const Matrix& inputData) const
 
 }
 
-void conv2DLayer::forwardPropagation(const Matrix& input)
+void conv2DLayer::forwardPropagation(
+                                     const Matrix& input,
+                                     const bool trainingPhase
+                                    )
 {
 #ifdef ND_DEBUG_CHECKS
   checkInputSize(input);

@@ -6,6 +6,7 @@
 
 #include "core/neuralNetwork/layers/inputLayer.h"
 #include "core/neuralNetwork/layers/denseLayer.h"
+#include "core/neuralNetwork/layers/dropoutLayer.h"
 
 #include "core/neuralNetwork/neuralNetwork.h"
 
@@ -45,9 +46,10 @@ int main(int argc, char const *argv[])
 
   NilDa::layer* l0 = new NilDa::inputLayer(784);
   NilDa::layer* l1 = new NilDa::denseLayer(128,  "relu");
-  NilDa::layer* l2 = new NilDa::denseLayer(10, "softmax");
+  NilDa::layer* l2 = new NilDa::dropoutLayer(0.5);
+  NilDa::layer* l3 = new NilDa::denseLayer(10, "softmax");
 
-  NilDa::neuralNetwork nn({l0, l1, l2});
+  NilDa::neuralNetwork nn({l0, l1, l2, l3});
 
   nn.summary();
 
@@ -57,12 +59,14 @@ int main(int argc, char const *argv[])
 
 	const NilDa::Scalar momentum = 0.90;
 
-  const NilDa::Scalar decay = 0.999;
+  const NilDa::Scalar decay1 = 0.9;
 
-  NilDa::sgd opt(learningRate, momentum);
+  const NilDa::Scalar decay2 = 0.99;
+
+  //NilDa::sgd opt(learningRate, momentum);
   //NilDa::adaGrad opt(learningRate);
   //NilDa::rmsProp opt(learningRate, decay);
-  //NilDa::adam opt(learningRate, decay, decay);
+  NilDa::adam opt(learningRate, decay1, decay2);
 
   nn.configure(opt, "sparse_categorical_crossentropy");
   /*

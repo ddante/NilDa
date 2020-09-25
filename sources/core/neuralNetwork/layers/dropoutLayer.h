@@ -65,7 +65,10 @@ public:
     // Nothing to be done here
   }
 
-  void forwardPropagation(const Matrix& inputData) override;
+  void forwardPropagation(
+                          const Matrix& inputData,
+                          const bool trainingPhase
+                         ) override;
 
   void backwardPropagation(const Matrix& dActivationNex,
                            const Matrix& inputData) override;

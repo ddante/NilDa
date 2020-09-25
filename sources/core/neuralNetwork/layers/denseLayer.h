@@ -95,7 +95,10 @@ public:
   void checkInputAndCacheSize(const Matrix& inputData,
                               const Matrix& cacheBackProp) const;
 
-  void forwardPropagation(const Matrix& inputData) override;
+  void forwardPropagation(
+                          const Matrix& inputData,
+                          const bool trainingPhase
+                         ) override;
 
   void backwardPropagation(const Matrix& dActivationNex,
                            const Matrix& inputData) override;

@@ -174,7 +174,10 @@ void denseLayer::checkInputAndCacheSize(
   }
 }
 
-void denseLayer::forwardPropagation(const Matrix& inputData)
+void denseLayer::forwardPropagation(
+                                    const Matrix& inputData,
+                                    const bool trainingPhase
+                                   )
 {
   if (needFlattening_)
   {

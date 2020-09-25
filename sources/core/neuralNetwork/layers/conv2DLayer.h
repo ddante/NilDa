@@ -130,7 +130,10 @@ public:
 
   void checkInputSize(const Matrix& inputData) const override;
 
-  void forwardPropagation(const Matrix& input) override;
+  void forwardPropagation(
+                          const Matrix& inputData,
+                          const bool trainingPhase
+                         ) override;
 
   void backwardPropagation(const Matrix& dActivationNext,
                            const Matrix& input) override;

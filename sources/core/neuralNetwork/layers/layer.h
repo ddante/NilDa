@@ -73,7 +73,10 @@ public:
   // Forward step for the layer.
   // It takes as input the output of the previous layer
   // and computes the activation of the current layer
-  virtual void forwardPropagation(const Matrix& inputData) = 0;
+  virtual void forwardPropagation(
+                                  const Matrix& inputData,
+                                  const bool trainingPhase
+                                 ) = 0;
 
   // Backward step for the layer.
   // It takes as inputs the back propagation cache of

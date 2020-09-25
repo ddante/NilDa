@@ -82,7 +82,11 @@ private:
   void initOptimizer() const;
 
   // Perform one forward and backaward step
-  Scalar propagate(const Matrix& obs, const Matrix& labels) const;
+  Scalar propagate(
+                   const Matrix& obs,
+                   const Matrix& labels,
+                   const bool trainingPhase
+                  ) const;
 
   // Update the weights and biases of each layer
   // with the increments computed by the optimizer
@@ -102,7 +106,10 @@ public:
 
   void summary() const;
 
-  void forwardPropagation(const Matrix& obs) const;
+  void forwardPropagation(
+                          const Matrix& obs,
+                          const bool trainingPhase = true
+                         ) const;
 
   void backwardPropagation(
                            const Matrix& obs,
@@ -146,7 +153,10 @@ public:
 
   // Return the accuracy of the trained model
   // using the whole dataset at once
-  Scalar getAccuracy(const Matrix& obs, const Matrix& trueData) const;
+  Scalar getAccuracy(
+                     const Matrix& obs,
+                     const Matrix& trueData
+                    ) const;
 
   // Return the accuracy of the trained model
   // splitting the dataset in batches

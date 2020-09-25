@@ -49,7 +49,7 @@ void maxPool2DLayer::init(
                          )
 {
   if (
-      previousLayer->layerType() != layerTypes::input   &&      
+      previousLayer->layerType() != layerTypes::input   &&
       previousLayer->layerType() != layerTypes::dropout &&
       previousLayer->layerType() != layerTypes::conv2D
      )
@@ -145,7 +145,10 @@ void maxPool2DLayer::checkInputAndCacheSize(
   }
 }
 
-void maxPool2DLayer::forwardPropagation(const Matrix& input)
+void maxPool2DLayer::forwardPropagation(
+                                        const Matrix& input,
+                                        const bool trainingPhase
+                                       )
 {
 #ifdef ND_DEBUG_CHECKS
   checkInputSize(input);
