@@ -1,5 +1,5 @@
 #include <iostream>
-#include <math.h>
+#include <random>
 
 #include "dropoutLayer.h"
 
@@ -16,7 +16,7 @@ namespace NilDa
 {
 
 dropoutLayer::dropoutLayer():
-  keepProbability_(0)
+  dropProbability_(0)
 {
   type_ = layerTypes::dropout;
 
@@ -29,8 +29,8 @@ dropoutLayer::dropoutLayer():
   trainable_ = false;
 }
 
-dropoutLayer::dropoutLayer(const Scalar keepProbability):
-  keepProbability_(keepProbability)
+dropoutLayer::dropoutLayer(const Scalar dropProbability):
+  dropProbability_(dropProbability)
 {
   type_ = layerTypes::dropout;
 
@@ -45,7 +45,7 @@ dropoutLayer::dropoutLayer(const Scalar keepProbability):
 
 void dropoutLayer::checkInput() const
 {
-  assert(keepProbability_ > 0 && keepProbability_ <= 1);
+  assert(dropProbability_ > 0 && dropProbability_ < 1);
 }
 
 void dropoutLayer::init(
@@ -73,12 +73,12 @@ void dropoutLayer::init(
 
   // Set the size of the dropout layer as the one
   // of the previous layer
+  size_.isFlat = prevLayer.isFlat;
   size_.size = prevLayer.size;
   size_.rows = prevLayer.rows;
   size_.cols = prevLayer.cols;
   size_.channels = prevLayer.channels;
 }
-
 
 void dropoutLayer::forwardPropagation(const Matrix& inputData)
 {
@@ -86,15 +86,18 @@ void dropoutLayer::forwardPropagation(const Matrix& inputData)
 
   // This has to be replace by random Matrix operator
   std::random_device rand;
-  std::mt19937 genRand(rand());
+  //std::mt19937 genRand(rand());
+  std::mt19937 genRand(12);
+
   std::uniform_real_distribution<Scalar> distr(0, 1);
 
-  mask_.unaryExpr(
-                  [&](Scalar dummy)
-                  {
-                    return distr(genRand);
-                  }
-                 );
+  mask_ = mask_.unaryExpr(
+                          [&](Scalar dummy)
+                          {
+                            return distr(genRand);
+                          }
+                         );
+
   // ..................................................
 
   activation_.resize(
@@ -104,10 +107,10 @@ void dropoutLayer::forwardPropagation(const Matrix& inputData)
 
   // Shut down some neurons
   activation_.array() =
-    (mask_.array() < keepProbability_).select(0, inputData);
+    (mask_.array() < dropProbability_).select(0, inputData);
 
   // Scale the value of the active neurons
-  activation_ *= (1.0/keepProbability_);
+  activation_ *= 1.0/(1.0 - dropProbability_);
 }
 
 void dropoutLayer::backwardPropagation(
@@ -115,13 +118,10 @@ void dropoutLayer::backwardPropagation(
                                        const Matrix& inputData
                                       )
 {
-  cacheBackProp_.array() = dActivationNext.array()
-                         * inputData.array();
-
   cacheBackProp_.array() =
-    (mask_.array() < keepProbability_).select(0, cacheBackProp_);
+    (mask_.array() < dropProbability_).select(0, dActivationNext);
 
-  cacheBackProp_ *= (1.0/keepProbability_);
+  cacheBackProp_ *= 1.0/(1.0 - dropProbability_);
 }
 
 void dropoutLayer::saveLayer(std::ofstream& ofs) const

@@ -63,7 +63,7 @@ denseLayer::denseLayer(
       activationFunctions::softmax)
   {
     std::cout << "Softmax activation requires layer size > 1.\n";
-    
+
     std::abort();
   }
 }
@@ -86,9 +86,10 @@ void denseLayer::init(
   // Check that the previous layer is compatible
   // with the current layer
   if (
-      previousLayer->layerType() != layerTypes::input  &&
-      previousLayer->layerType() != layerTypes::dense  &&
-      previousLayer->layerType() != layerTypes::conv2D &&
+      previousLayer->layerType() != layerTypes::input   &&
+      previousLayer->layerType() != layerTypes::dense   &&
+      previousLayer->layerType() != layerTypes::dropout &&
+      previousLayer->layerType() != layerTypes::conv2D  &&
       previousLayer->layerType() != layerTypes::maxPool2D
      )
   {
@@ -248,6 +249,7 @@ void denseLayer::backwardPropagation(
                                      dActivationNext,
                                      dLinearOutput
                                     );
+
   int nObs;
 
   if (needFlattening_)

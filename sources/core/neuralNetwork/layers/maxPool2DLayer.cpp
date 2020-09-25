@@ -49,7 +49,8 @@ void maxPool2DLayer::init(
                          )
 {
   if (
-      previousLayer->layerType() != layerTypes::input &&
+      previousLayer->layerType() != layerTypes::input   &&      
+      previousLayer->layerType() != layerTypes::dropout &&
       previousLayer->layerType() != layerTypes::conv2D
      )
   {

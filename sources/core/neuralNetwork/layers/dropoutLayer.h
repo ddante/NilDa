@@ -21,8 +21,8 @@ class dropoutLayer : public layer
 
 private:
 
-  // Probability of keeping active neurons
-  Scalar keepProbability_;
+  // Probability of dropping neurons
+  Scalar dropProbability_;
 
   // Mask used to apply the dropout
   Matrix mask_;
@@ -60,7 +60,10 @@ public:
     // Nothing to be done here
   }
 
-  void checkInputSize(const Matrix& inputData) const override;
+  void checkInputSize(const Matrix& inputData) const override
+  {
+    // Nothing to be done here
+  }
 
   void forwardPropagation(const Matrix& inputData) override;
 

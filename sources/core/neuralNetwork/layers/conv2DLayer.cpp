@@ -142,9 +142,10 @@ void conv2DLayer::init(
                       )
 {
   if (
-      previousLayer->layerType() != layerTypes::input &&
-      previousLayer->layerType() != layerTypes::conv2D &&
-      previousLayer->layerType() != layerTypes::maxPool2D
+      previousLayer->layerType() != layerTypes::input     &&
+      previousLayer->layerType() != layerTypes::conv2D    &&
+      previousLayer->layerType() != layerTypes::maxPool2D &&
+      previousLayer->layerType() != layerTypes::dropout
      )
   {
     std::cerr << "Previous layer of type "

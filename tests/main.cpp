@@ -7,63 +7,33 @@
 #include "core/neuralNetwork/layers/denseLayer.h"
 #include "core/neuralNetwork/layers/conv2DLayer.h"
 #include "core/neuralNetwork/layers/maxPool2DLayer.h"
+#include "core/neuralNetwork/layers/dropoutLayer.h"
 #include "core/neuralNetwork/neuralNetwork.h"
 #include "core/neuralNetwork/optimizers/sgd.h"
 
 int main(int argc, char const *argv[])
 {
-  {
-    NilDa::layer* l0 = new NilDa::inputLayer(3);
-    NilDa::layer* l1 = new NilDa::denseLayer(2, "relu");
-    NilDa::layer* l2 = new NilDa::denseLayer(3, "softmax");
+  NilDa::layer* l0 = new NilDa::inputLayer(6);
+  NilDa::layer* l1 = new NilDa::denseLayer(5, "sigmoid");
+  NilDa::layer* l2 = new NilDa::dropoutLayer(0.9);
+  NilDa::layer* l3 = new NilDa::denseLayer(3, "softmax");
 
-    NilDa::neuralNetwork nn({l0, l1, l2});
+  NilDa::neuralNetwork nn({l0, l1, l2, l3});
 
-    NilDa::Matrix trainingData(3, 4);
-    trainingData <<  1.1, 1.21, 0.2, 0.42,
-                     0.3, 0.63, 4.4, 4.84,
-                     5.1, -0.3, 0.9, -1.4;
+  NilDa::Matrix trainingData;
+  trainingData.setRandom(6,4);
 
-    NilDa::Matrix trainingLabels(3, 4);
-    trainingLabels << 1,0,0,0,
-                      0,1,0,1,
-                      0,0,1,0;
+  NilDa::Matrix trainingLabels(3, 4);
+  trainingLabels << 1,0,0,0,
+                    0,1,0,1,
+                    0,0,1,0;
 
-    NilDa::Matrix W1(2,3);
-    W1 <<  -1, 2, -3, 0.4, -0.5, -0.6;
+  nn.setLossFunction("categorical_crossentropy");
 
-    NilDa::Vector b1(2);
-    b1 << 0.3, 0.5;
+  nn.forwardPropagation(trainingData);
+  nn.backwardPropagation(trainingData, trainingLabels);
 
-    l1->setWeightsAndBiases(W1, b1);
-
-    NilDa::Matrix W2(3,2);
-    W2 << -1, 2, 0.3, 0.4, 0.6, 0.7;
-
-    NilDa::Vector b2(3);
-    b2 << 0.3, 0.5, 0.7;
-    l2->setWeightsAndBiases(W2, b2);
-
-    const NilDa::Scalar learningRate = 0.1;
-
-  	const NilDa::Scalar momentum = 0.90;
-
-    NilDa::sgd opt(learningRate, momentum);
-
-    nn.configure(opt, "sparse_categorical_crossentropy");
-
-    nn.summary();
-
-    nn.saveModel("myModel.out");
-  }
-
-  {
-    NilDa::neuralNetwork nn2;
-
-    nn2.loadModel("myModel.out");
-
-    nn2.summary();
-  }
+  nn.gradientsSanityCheck(trainingData, trainingLabels, true);
 
   return 0;
 }

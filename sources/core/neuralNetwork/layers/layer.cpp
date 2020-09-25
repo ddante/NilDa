@@ -7,6 +7,7 @@
 #include "denseLayer.h"
 #include "conv2DLayer.h"
 #include "maxPool2DLayer.h"
+#include "dropoutLayer.h"
 
 // ---------------------------------------------------------------------------
 
@@ -33,6 +34,10 @@ std::string getLayerName(const layerTypes inLayerType)
   {
     name = "MaxPool 2D";
   }
+  else if (inLayerType == layerTypes::dropout)
+  {
+    name = "Dropout";
+  }
   else
   {
     std::cerr << "Unknown layer type code.\n";
@@ -49,7 +54,7 @@ layer* createLayer(const int layerCode)
   layer* newLayer;
 
   if (type == layerTypes::input)
-  {    
+  {
     newLayer = new inputLayer();
   }
   else if (type == layerTypes::dense)
@@ -63,6 +68,10 @@ layer* createLayer(const int layerCode)
   else if (type == layerTypes::maxPool2D)
   {
     newLayer = new maxPool2DLayer();
+  }
+  else if (type == layerTypes::dropout)
+  {
+    newLayer = new dropoutLayer();
   }
   else
   {

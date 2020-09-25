@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.10)
 project(NilDa VERSION 0.1)
 
 ######################################
-option(NILDA_DEBUG_BUILD  "Enable debug build" OFF)
+option(NILDA_DEBUG_BUILD  "Enable debug build" ON)
 
-set(NILDA_PRECISION_OPTION "SP")
+set(NILDA_PRECISION_OPTION "DP")
 
 option(NILDA_RANDOM_SEED "Random seed for random number generator" ON)
 ######################################
