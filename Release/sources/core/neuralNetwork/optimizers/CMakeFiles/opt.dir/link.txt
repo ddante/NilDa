@@ -1,2 +1,0 @@
-/usr/bin/ar qc libopt.a CMakeFiles/opt.dir/sgd.cpp.o CMakeFiles/opt.dir/adaGrad.cpp.o CMakeFiles/opt.dir/rmsProp.cpp.o CMakeFiles/opt.dir/adam.cpp.o
-/usr/bin/ranlib libopt.a

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libloss.a CMakeFiles/loss.dir/lossFunctionUtils.cpp.o CMakeFiles/loss.dir/binaryCrossentropy.cpp.o CMakeFiles/loss.dir/categoricalCrossentropy.cpp.o CMakeFiles/loss.dir/sparseCategoricalCrossentropy.cpp.o
-/usr/bin/ranlib libloss.a
