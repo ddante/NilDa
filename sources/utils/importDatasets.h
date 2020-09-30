@@ -24,6 +24,11 @@ int importMNISTDatabase(
                         Matrix& Labels
                       );
 
+int readImagedataset(
+                     const std::string& path,
+                     const bool shuffle,
+                     std::vector< std::pair<std::string, int> >& DataSet
+                    );
 
 } // namespace
 

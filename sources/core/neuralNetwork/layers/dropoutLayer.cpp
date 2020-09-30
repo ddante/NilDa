@@ -95,7 +95,8 @@ void dropoutLayer::forwardPropagation(
   {
     mask_.resize(inputData.rows(), inputData.cols());
 
-    // This has to be replace by random Matrix operator
+    // This has to be replaced by random Matrix operator
+    // ..................................................
     std::random_device rand;
     //std::mt19937 genRand(rand());
     std::mt19937 genRand(12);
@@ -137,10 +138,21 @@ void dropoutLayer::backwardPropagation(
 
 void dropoutLayer::saveLayer(std::ofstream& ofs) const
 {
+  const int iType =
+    static_cast<std::underlying_type_t<layerTypes> >(layerTypes::dropout);
+
+  ofs.write((char*) (&iType), sizeof(int));
+
+  ofs.write((char*) (&trainable_), sizeof(bool));
+
+  ofs.write((char*) (&dropProbability_), sizeof(Scalar));
 }
 
 void dropoutLayer::loadLayer(std::ifstream& ifs)
 {
+  ifs.read((char*) (&trainable_), sizeof(bool));
+
+  ifs.read((char*) (&dropProbability_), sizeof(Scalar));
 }
 
 

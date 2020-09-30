@@ -19,7 +19,7 @@ enum class layerTypes {
   dense,
   conv2D,
   maxPool2D,
-  dropout
+  dropout,
 };
 
 struct layerSizes {

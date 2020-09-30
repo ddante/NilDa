@@ -88,8 +88,7 @@ sparseCategoricalCrossentropy::computeDerivative(
   for (int i = 0; i < nObs; ++i)
   {
     const int idx = labels(0, i);
-
-    Scalar eps = 0;
+    
     if(obs(idx, i) == 0)
     {
         std::cout << "\n" << i << ", " << idx << "\n";

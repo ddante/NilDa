@@ -52,10 +52,19 @@ void neuralNetwork::initLayers(const bool resetWeightBiases) const
   if (layers_[inputLayer_]->layerType() != layerTypes::input)
   {
      std::cerr << "First layer is not an input layer.\n";
-     assert(false);
+
+     std::abort();
   }
 
   layers_[inputLayer_]->checkInput();
+
+  // The last layer must be a dense layer for the output
+  if (layers_[lastLayer_]->layerType() != layerTypes::dense)
+  {
+     std::cerr << "Last layer must be a dense layer.\n";
+     
+     std::abort();
+  }
 
   // Initialize the hidden and the output layers
   // in the forward direction
@@ -165,7 +174,7 @@ void neuralNetwork::configure(
   if (numberOfLayers_ <= 0)
   {
     std::cerr << "The neural network has no layer." << std::endl;
-    assert(false);
+    std::abort();
   }
 
   optimizer_ = &opt;
@@ -215,7 +224,7 @@ void neuralNetwork::setLossFunction(const lossFunctions lossCode)
         std::cerr << "Not valid loss function  "
                     << lossFunctionName(lossCode)
                     << " in this context.\n";
-    assert(false);
+    std::abort();
   }
 }
 
@@ -337,7 +346,7 @@ void neuralNetwork::train(
   {
     std::cerr << "The neural network has not been configured." << std::endl;
 
-    assert(false);
+    std::abort();
   }
 
   assert(epochs > 0);
@@ -573,7 +582,7 @@ void neuralNetwork::saveModel(std::string outputFile) const
     std::cerr << "Impossible to save the model to "
               << outputFile << "\n";
 
-    assert(false);
+    std::abort();
   }
 
   ofs.write((char*) (&numberOfLayers_ ), sizeof(int));
@@ -602,7 +611,7 @@ void neuralNetwork::loadModel(std::string inputFile)
     std::cerr << "Impossible to load model from "
               << inputFile << "\n";
 
-    assert(false);
+    std::abort();
   }
 
   ifs.read((char*) (&numberOfLayers_), sizeof(int));

@@ -15,7 +15,6 @@
 #include "core/neuralNetwork/optimizers/rmsProp.h"
 #include "core/neuralNetwork/optimizers/adam.h"
 
-
 int main(int argc, char const *argv[])
 {
    // Training
@@ -79,7 +78,7 @@ int main(int argc, char const *argv[])
   */
   //
 
-	const int epochs = 20;
+	const int epochs = 10;
 	const int batchSize = 32;
 
   nn.train(trainingImages, trainingLabels, epochs, batchSize, 2);
@@ -103,7 +102,18 @@ int main(int argc, char const *argv[])
 			                       predictLabels
                             );
 
-    std::cout << "Prediction Accuracy: "
+   std::cout << "Prediction Accuracy: "
               << nn.getAccuracy(predictImages, predictLabels) << "\n";
 
+   nn.saveModel("MyModel.out");
+
+   // Test laod model
+   {
+     NilDa::neuralNetwork nn2;
+
+     nn2.loadModel("MyModel.out");
+
+     std::cout << "Prediction Accuracy afer load: "
+               << nn2.getAccuracy(predictImages, predictLabels) << "\n";
+   }
 }

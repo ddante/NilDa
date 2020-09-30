@@ -1,0 +1,2 @@
+/usr/bin/ar qc libutils.a CMakeFiles/utils.dir/Random.cpp.o CMakeFiles/utils.dir/importMNISTDatasets.cpp.o CMakeFiles/utils.dir/images.cpp.o
+/usr/bin/ranlib libutils.a

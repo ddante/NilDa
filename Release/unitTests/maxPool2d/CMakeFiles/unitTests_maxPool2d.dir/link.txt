@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall -Wpedantic -march=native CMakeFiles/unitTests_maxPool2d.dir/main.cpp.o -o unitTests_maxPool2d  ../../sources/core/neuralNetwork/libnn.a ../../sources/core/neuralNetwork/layers/liblayers.a ../../sources/core/neuralNetwork/lossFunctions/libloss.a 

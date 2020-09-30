@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall -Wpedantic -march=native CMakeFiles/unitTests_activationFunctions.dir/main.cpp.o -o unitTests_activationFunctions  ../../sources/core/neuralNetwork/lossFunctions/libloss.a ../../sources/core/neuralNetwork/libnn.a ../../sources/core/neuralNetwork/layers/liblayers.a 

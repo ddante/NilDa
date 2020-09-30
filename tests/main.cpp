@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include "utils/importDatasets.h"
 
@@ -13,27 +14,8 @@
 
 int main(int argc, char const *argv[])
 {
-  NilDa::layer* l0 = new NilDa::inputLayer(6);
-  NilDa::layer* l1 = new NilDa::denseLayer(5, "sigmoid");
-  NilDa::layer* l2 = new NilDa::dropoutLayer(0.9);
-  NilDa::layer* l3 = new NilDa::denseLayer(3, "softmax");
+  std::string path = "/home/dante/dev/NilDa/datasets/cats_dogs";
 
-  NilDa::neuralNetwork nn({l0, l1, l2, l3});
-
-  NilDa::Matrix trainingData;
-  trainingData.setRandom(6,4);
-
-  NilDa::Matrix trainingLabels(3, 4);
-  trainingLabels << 1,0,0,0,
-                    0,1,0,1,
-                    0,0,1,0;
-
-  nn.setLossFunction("categorical_crossentropy");
-
-  nn.forwardPropagation(trainingData);
-  nn.backwardPropagation(trainingData, trainingLabels);
-
-  nn.gradientsSanityCheck(trainingData, trainingLabels, true);
-
+  read_dataset
   return 0;
 }
