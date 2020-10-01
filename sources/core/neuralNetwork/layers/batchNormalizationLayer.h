@@ -1,5 +1,5 @@
-#ifndef DENSE_LAYER_H
-#define DENSE_LAYER_H
+#ifndef BATCH_NORMALIZATION_LAYER_H
+#define BATCH_NORMALIZATION_LAYER_H
 
 #include <iostream>
 #include <memory>
@@ -17,13 +17,11 @@
 namespace NilDa
 {
 
-class denseLayer : public layer
+
+class batchNormalizationLayer : public layer
 {
 
 private:
-
-  // Number of neurons of the current layer
-  int layerSize_;
 
   // Pointer to the activation function used in this layer
   std::unique_ptr<activationFunction> activationFunction_;
@@ -36,29 +34,9 @@ private:
   Matrix weights_;
   Matrix dWeights_;
 
-  // Bias and derivative w.r.t. bias vectors
-  Vector biases_;
-  Vector dBiases_;
-
   // Cache matrix to store the data to pass to the layer
   // of the previous level during the back propagation
   Matrix cacheBackProp_;
-
-  // Store if the flattening is needed when
-  // the input comes from a not flat layer
-  bool needFlattening_;
-
-  // Store the size and the number of channels of
-  // the previous not flat layers. Neded to flatten the input.
-  int inputSize_;
-  int inputChannels_;
-
-  // Store if the BN will be applied to this layer
-  bool useBatchNormalization;
-
-  // Store the number of observations seen in the
-  // forward propagation
-  int nObservations_;
 
 private:
 
@@ -68,32 +46,33 @@ public:
 
   // Constructor
 
-  denseLayer();
-
-  denseLayer(
-             const int inSize,
-             const std::string& activationName
-            );
+  batchNormalizationLayer();
 
   // Destructor
 
-  ~denseLayer()  = default;
+  ~batchNormalizationLayer()  = default;
 
   // Member functions
 
-  void checkInput() const override;
+  void checkInput() const
+  {
+    // Nothing to do here
+  }
 
   void init(
             const layer* previousLayer,
             const bool resetWeightBiases
            ) override;
 
-  void setupBackward(const layer* nextLayer) override;
+  void setupBackward(const layer* nextLayer) override
+  {
+    // Nothing to be done here
+  }
 
-  void checkInputSize(const Matrix& inputData) const override;
-
-  void checkInputAndCacheSize(const Matrix& inputData,
-                              const Matrix& cacheBackProp) const;
+  void checkInputSize(const Matrix& inputData) const override
+  {
+    // Nothing to be done here
+  }
 
   void forwardPropagation(
                           const Matrix& inputData,
@@ -110,7 +89,10 @@ public:
 
   const Vector& getBiases() const override
   {
-    return biases_;
+    std::cerr << "Batch normalization layer "
+              << "cannot call getBiases function.\n";
+
+    assert(false);
   }
 
   const Matrix& getWeightsDerivative() const override
@@ -120,7 +102,10 @@ public:
 
   const Vector& getBiasesDerivative() const override
   {
-    return dBiases_;
+    std::cerr << "Batch normalization layer "
+              << "cannot call getBiasesDerivative function.\n";
+
+    assert(false);
   }
 
   void setWeightsAndBiases(
@@ -145,7 +130,8 @@ public:
 
   int inputStride() const override
   {
-    std::cerr << "Dense layer cannot call inputStride function.\n";
+    std::cerr << "Batch normalization layer "
+                 "cannot call inputStride function.\n";
 
     assert(false);
   }
@@ -164,14 +150,13 @@ public:
                          Scalar errTol
                         ) const override
   {
-    std::cerr << "No localChecks for dense layer.\n";
+    std::cerr << "No localChecks for batch normalization layer.\n";
 
     assert(false);
 
     errorCheck output;
     return output;
   }
-
 };
 
 

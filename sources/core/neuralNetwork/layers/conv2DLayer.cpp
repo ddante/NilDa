@@ -20,11 +20,14 @@ conv2DLayer::conv2DLayer() :
   filterStride_{},
   withPadding_(false),
   undoFlattening_(false),
+  useBatchNormalization(false),
   nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
 {
   type_ = layerTypes::conv2D;
+
+  activationType_ = activationFunctions::none;
 
   trainable_ = true;
 }
@@ -41,17 +44,18 @@ conv2DLayer::conv2DLayer(
   filterStride_(filterStride),
   withPadding_(withPadding),
   undoFlattening_(false),
+  useBatchNormalization(false),
   nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
 {
   type_ = layerTypes::conv2D;
 
+  activationType_ = activationFunctionCode(activationName);
+
   trainable_ = true;
 
-  setActivationFunction(
-    activationFunctionCode(activationName)
-  );
+  setActivationFunction(activationType_);
 }
 
 conv2DLayer::conv2DLayer(
@@ -65,17 +69,18 @@ conv2DLayer::conv2DLayer(
   filterStride_(filterStride),
   withPadding_(false),
   undoFlattening_(false),
+  useBatchNormalization(false),
   nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
 {
   type_ = layerTypes::conv2D;
 
+  activationType_ = activationFunctionCode(activationName);
+
   trainable_ = true;
 
-  setActivationFunction(
-    activationFunctionCode(activationName)
-  );
+  setActivationFunction(activationType_);
 }
 
 conv2DLayer::conv2DLayer(
@@ -89,17 +94,18 @@ conv2DLayer::conv2DLayer(
   filterStride_({1,1}),
   withPadding_(withPadding),
   undoFlattening_(false),
+  useBatchNormalization(false),
   nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
 {
   type_ = layerTypes::conv2D;
 
+  activationType_ = activationFunctionCode(activationName);
+
   trainable_ = true;
 
-  setActivationFunction(
-    activationFunctionCode(activationName)
-  );
+  setActivationFunction(activationType_);
 }
 
 conv2DLayer::conv2DLayer(
@@ -112,17 +118,18 @@ conv2DLayer::conv2DLayer(
   filterStride_({1,1}),
   withPadding_(false),
   undoFlattening_(false),
+  useBatchNormalization(false),
   nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
 {
   type_ = layerTypes::conv2D;
 
+  activationType_ = activationFunctionCode(activationName);
+
   trainable_ = true;
 
-  setActivationFunction(
-    activationFunctionCode(activationName)
-  );
+  setActivationFunction(activationType_);
 }
 
 void conv2DLayer::checkInput() const
@@ -162,6 +169,8 @@ void conv2DLayer::init(
   {
     std::cerr << "Previous layer to " << getLayerName(type_)
               << " cannot be flat.\n";
+
+    std::abort();
   }
 
   assert(prevLayer.rows > 0);
@@ -227,6 +236,11 @@ void conv2DLayer::setupBackward(const layer* nextLayer)
   const layerSizes sLayer = nextLayer->size();
 
   undoFlattening_ = (sLayer.isFlat) ? true : false;
+
+  if (nextLayer->layerType() == layerTypes::batchNormalization)
+  {
+    useBatchNormalization = true;
+  }
 }
 
 void conv2DLayer::checkInputSize(const Matrix& inputData) const
@@ -263,7 +277,7 @@ void conv2DLayer::forwardPropagation(
              forwardConvDims_,
              input.data(),
              filterWeights_.data(),
-             linearOutput_
+             logit_
             );
 
   // Add the biases
@@ -274,22 +288,22 @@ void conv2DLayer::forwardPropagation(
        colObs += forwardConvDims_.kernelNumber
       )
   {
-    linearOutput_.block(
-                        0,
-                        colObs,
-                        linearOutput_.rows(),
-                        forwardConvDims_.kernelNumber
-                       ).rowwise() += biases_.transpose();
+    logit_.block(
+                 0,
+                 colObs,
+                 logit_.rows(),
+                 forwardConvDims_.kernelNumber
+                ).rowwise() += biases_.transpose();
   }
 
   // Apply the non-linear activation function
   activation_.resize(
-                     linearOutput_.rows(),
-                     linearOutput_.cols()
+                     logit_.rows(),
+                     logit_.cols()
                      );
 
   activationFunction_->applyForward(
-                                    linearOutput_,
+                                    logit_,
                                     activation_
                                    );
 
@@ -302,9 +316,9 @@ void conv2DLayer::backwardPropagation(
                                       const Matrix& input
                                      )
 {
-  Matrix dLinearOutput(
-                       linearOutput_.rows(),
-                       linearOutput_.cols()
+  Matrix dLogit(
+                       logit_.rows(),
+                       logit_.cols()
                       );
 
   const int nObs = input.cols()
@@ -316,14 +330,14 @@ void conv2DLayer::backwardPropagation(
     // so the cache must be rearranged in a 2D form
     ConstMapMatrix dActivationNextM(
                                     dActivationNext.data(),
-                                    linearOutput_.rows(),
-                                    linearOutput_.cols()
+                                    logit_.rows(),
+                                    logit_.cols()
                                    );
 
    activationFunction_->applyBackward(
-                                      linearOutput_,
+                                      logit_,
                                       dActivationNextM,
-                                      dLinearOutput
+                                      dLogit
                                      );
   }
   else
@@ -331,9 +345,9 @@ void conv2DLayer::backwardPropagation(
      // The next layer is a 2d layer
      // no need to rearrange the cache
      activationFunction_->applyBackward(
-                                        linearOutput_,
+                                        logit_,
                                         dActivationNext,
-                                        dLinearOutput
+                                        dLogit
                                        );
   }
 
@@ -351,7 +365,7 @@ void conv2DLayer::backwardPropagation(
              forwardConvDims_.inputChannels,
              backwardWeightsConvDims_,
              input.data(),
-             dLinearOutput.data(),
+             dLogit.data(),
              dFilterWeights_
             );
 
@@ -366,8 +380,8 @@ void conv2DLayer::backwardPropagation(
   const int mappedOutupCols = forwardConvDims_.outputChannels
                             * nObs;
 
-  assert(linearOutput_.rows() ==  mappedOutupRows);
-  assert(linearOutput_.cols() ==  mappedOutupCols);
+  assert(logit_.rows() ==  mappedOutupRows);
+  assert(logit_.cols() ==  mappedOutupCols);
 #endif
 
   // The dZ  (output derivative) is first summed over the output size
@@ -379,9 +393,9 @@ void conv2DLayer::backwardPropagation(
   // (i.e. the mean). Thus, the resulting vector
   // (i.e the derivative of the biases) has size kernel.numberFilters
   ConstMapMatrix mappedOutput(
-                              dLinearOutput.data(),
-                              linearOutput_.rows(),
-                              linearOutput_.cols()
+                              dLogit.data(),
+                              logit_.rows(),
+                              logit_.cols()
                              );
 
   Vector sumOutputs = mappedOutput.colwise().sum();
@@ -415,7 +429,7 @@ void conv2DLayer::backwardPropagation(
   convolve2D(
              nObs,
              backwardInputConvDims_,
-             dLinearOutput.data(),
+             dLogit.data(),
              rotatedKernels.data(),
              cacheBackProp_
            );

@@ -3,6 +3,7 @@
 #include "maxPool2DLayer.h"
 #include "pool2DUtils.h"
 
+#include "activationFunctions/activationFunctionUtils.h"
 // ---------------------------------------------------------------------------
 
 namespace NilDa
@@ -17,6 +18,8 @@ maxPool2DLayer::maxPool2DLayer() :
 {
   type_ = layerTypes::maxPool2D;
 
+  activationType_ = activationFunctions::none;
+
   trainable_ = false;
 }
 
@@ -30,6 +33,8 @@ maxPool2DLayer::maxPool2DLayer(
   poolDims_{}
 {
   type_ = layerTypes::maxPool2D;
+
+  activationType_ = activationFunctions::none;
 
   trainable_ = false;
 }
@@ -49,7 +54,6 @@ void maxPool2DLayer::init(
                          )
 {
   if (
-      previousLayer->layerType() != layerTypes::input   &&
       previousLayer->layerType() != layerTypes::dropout &&
       previousLayer->layerType() != layerTypes::conv2D
      )
@@ -68,6 +72,8 @@ void maxPool2DLayer::init(
   {
     std::cerr << "Previous layer to " << getLayerName(type_)
               << " cannot be flat.\n";
+
+    assert(false);
   }
 
   assert(prevLayer.rows > 0);
@@ -79,8 +85,7 @@ void maxPool2DLayer::init(
                                          prevLayer.cols,
                                          prevLayer.channels
                                         };
-
-  // This is not OK. Padding here means a different think
+  
   setPool2DDims(
                 prevLayerSize,
                 kernelSize_,
@@ -131,15 +136,15 @@ void maxPool2DLayer::checkInputAndCacheSize(
 {
   checkInputSize(input);
 
-  if (cacheBackProp.rows() != linearOutput_.rows() &&
-      cacheBackProp.cols() != linearOutput_.cols() )
+  if (cacheBackProp.rows() != logit_.rows() &&
+      cacheBackProp.cols() != logit_.cols() )
   {
     std::cerr << "Size of the back propagation cache "
     << "(" << cacheBackProp.rows() << ", "
            << cacheBackProp.cols() << ") "
     << " not consistent with the ouput size "
-    << "(" << linearOutput_.rows() << ", "
-           << linearOutput_.cols() << ").\n";
+    << "(" << logit_.rows() << ", "
+           << logit_.cols() << ").\n";
 
     assert(false);
   }
@@ -154,16 +159,16 @@ void maxPool2DLayer::forwardPropagation(
   checkInputSize(input);
 #endif
 
-  maxPool2D(poolDims_, input, linearOutput_, maxIndices_);
+  maxPool2D(poolDims_, input, logit_, maxIndices_);
 }
 
 void maxPool2DLayer::backwardPropagation(const Matrix& dActivationNext,
                                          const Matrix& input)
 {
-  Matrix dLinearOutput(
-                       linearOutput_.rows(),
-                       linearOutput_.cols()
-                      );
+  Matrix dLogit(
+                logit_.rows(),
+                logit_.cols()
+               );
 
   if (undoFlattening_)
   {
@@ -171,14 +176,14 @@ void maxPool2DLayer::backwardPropagation(const Matrix& dActivationNext,
     // so the cache must be rearranged in a 2D form
     ConstMapMatrix dActivationNextM(
                                     dActivationNext.data(),
-                                    linearOutput_.rows(),
-                                    linearOutput_.cols()
+                                    logit_.rows(),
+                                    logit_.cols()
                                    );
 #ifdef ND_DEBUG_CHECKS
   checkInputAndCacheSize(input, dActivationNextM);
 #endif
 
-    dLinearOutput = dActivationNextM.array();
+    dLogit = dActivationNextM.array();
   }
   else
   {
@@ -188,7 +193,7 @@ void maxPool2DLayer::backwardPropagation(const Matrix& dActivationNext,
 
     // The next layer is a 2d layer
     // no need to rearrange the cache
-    dLinearOutput = dActivationNext.array();
+    dLogit = dActivationNext.array();
   }
 
   const int cacheRows = poolDims_.inputRows
@@ -196,10 +201,10 @@ void maxPool2DLayer::backwardPropagation(const Matrix& dActivationNext,
 
   cacheBackProp_.setZero(
                          cacheRows,
-                         dLinearOutput.cols()
+                         dLogit.cols()
                         );
 
-  const Scalar* dout = dLinearOutput.data();
+  const Scalar* dout = dLogit.data();
 
   const int* id = maxIndices_.data();
 

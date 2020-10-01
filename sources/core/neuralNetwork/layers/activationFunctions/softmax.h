@@ -26,9 +26,7 @@ public:
                      const Matrix& G,
                      Matrix& output
                     ) override;
-
-  ~softmax() = default;
-
+                    
   int type() const override
   {
     return
@@ -36,6 +34,8 @@ public:
         activationFunctions::softmax
       );
   }
+
+  ~softmax() = default;
 };
 
 

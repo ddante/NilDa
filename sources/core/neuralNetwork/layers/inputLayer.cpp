@@ -1,5 +1,7 @@
 #include "inputLayer.h"
 
+#include "activationFunctions/activationFunctionUtils.h"
+
 // ---------------------------------------------------------------------------
 namespace NilDa
 {
@@ -15,6 +17,8 @@ inputLayer::inputLayer():
   size_.cols = 0;
   size_.channels = 0;
 
+  activationType_ = activationFunctions::none;
+
   trainable_ = false;
 }
 
@@ -29,6 +33,8 @@ inputLayer::inputLayer(const int inSize):
   size_.cols = 0;
   size_.channels = 0;
 
+  activationType_ = activationFunctions::none;
+
   trainable_ = false;
 }
 
@@ -42,6 +48,8 @@ inputLayer::inputLayer(const std::array<int,3>& inSize):
   size_.rows = inSize[0];
   size_.cols = inSize[1];
   size_.channels = inSize[2];
+
+  activationType_ = activationFunctions::none;
 
   trainable_ = false;
 }

@@ -8,6 +8,7 @@
 #include "conv2DLayer.h"
 #include "maxPool2DLayer.h"
 #include "dropoutLayer.h"
+#include "batchNormalizationLayer.h"
 
 // ---------------------------------------------------------------------------
 
@@ -37,6 +38,10 @@ std::string getLayerName(const layerTypes inLayerType)
   else if (inLayerType == layerTypes::dropout)
   {
     name = "Dropout";
+  }
+  else if (inLayerType == layerTypes::batchNormalization)
+  {
+    name = "Batch normalization";
   }
   else
   {
@@ -72,6 +77,10 @@ layer* createLayer(const int layerCode)
   else if (type == layerTypes::dropout)
   {
     newLayer = new dropoutLayer();
+  }
+  else if (type == layerTypes::batchNormalization)
+  {
+    newLayer = new batchNormalizationLayer();
   }
   else
   {

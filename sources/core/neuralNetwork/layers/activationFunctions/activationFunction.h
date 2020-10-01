@@ -36,11 +36,11 @@ public:
                              Matrix& output
                             ) = 0;
 
+  virtual int type() const = 0;
+  
   // Destructor
 
   virtual ~activationFunction() = default;
-
-  virtual int type() const = 0;
 };
 
 } // namespace

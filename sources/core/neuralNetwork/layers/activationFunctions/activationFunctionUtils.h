@@ -11,6 +11,7 @@ namespace NilDa
 
 enum class activationFunctions
 {
+  none,
   identity,
   sigmoid,
   relu,

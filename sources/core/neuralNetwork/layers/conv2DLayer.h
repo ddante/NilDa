@@ -42,7 +42,7 @@ private:
   std::unique_ptr<activationFunction> activationFunction_;
 
   // Linear output and activation matrices
-  Matrix linearOutput_;
+  Matrix logit_;
   Matrix activation_;
 
   // Weight and derivative w.r.t. weights matrices
@@ -62,6 +62,9 @@ private:
   // This is necessary if the conv2D layer is connected
   // to a dense layer
   bool undoFlattening_;
+
+  // Store if the BN will be applied to this layer
+  bool useBatchNormalization;
 
   // Store the number of observations seen in the
   // forward propagation

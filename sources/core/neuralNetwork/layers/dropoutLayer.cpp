@@ -26,6 +26,8 @@ dropoutLayer::dropoutLayer():
   size_.cols = 0;
   size_.channels = 0;
 
+  activationType_ = activationFunctions::none;
+
   trainable_ = false;
 }
 
@@ -39,6 +41,8 @@ dropoutLayer::dropoutLayer(const Scalar dropProbability):
   size_.rows = 0;
   size_.cols = 0;
   size_.channels = 0;
+  
+  activationType_ = activationFunctions::none;
 
   trainable_ = false;
 }

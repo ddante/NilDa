@@ -16,6 +16,5 @@ int main(int argc, char const *argv[])
 {
   std::string path = "/home/dante/dev/NilDa/datasets/cats_dogs";
 
-  read_dataset
   return 0;
 }

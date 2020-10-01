@@ -27,8 +27,6 @@ public:
                      Matrix& output
                     ) override;
 
-  ~sigmoid() = default;
-
   int type() const override
   {
     return
@@ -36,6 +34,8 @@ public:
         activationFunctions::sigmoid
       );
   }
+
+  ~sigmoid() = default;
 };
 
 } // namespace

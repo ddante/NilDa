@@ -62,7 +62,7 @@ void neuralNetwork::initLayers(const bool resetWeightBiases) const
   if (layers_[lastLayer_]->layerType() != layerTypes::dense)
   {
      std::cerr << "Last layer must be a dense layer.\n";
-     
+
      std::abort();
   }
 

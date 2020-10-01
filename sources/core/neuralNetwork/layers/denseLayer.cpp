@@ -21,6 +21,7 @@ denseLayer::denseLayer():
     needFlattening_(false),
     inputSize_(0),
     inputChannels_(0),
+    useBatchNormalization(false),
     nObservations_(0)
 {
   type_ = layerTypes::dense;
@@ -30,6 +31,8 @@ denseLayer::denseLayer():
   size_.rows = 0;
   size_.cols = 0;
   size_.channels = 0;
+
+  activationType_ = activationFunctions::none;
 
   trainable_ = true;
 }
@@ -42,6 +45,7 @@ denseLayer::denseLayer(
     needFlattening_(false),
     inputSize_(0),
     inputChannels_(0),
+    useBatchNormalization(false),
     nObservations_(0)
 {
   type_ = layerTypes::dense;
@@ -52,15 +56,14 @@ denseLayer::denseLayer(
   size_.cols = 0;
   size_.channels = 0;
 
+  activationType_ = activationFunctionCode(activationName);
+
   trainable_ = true;
 
-  setActivationFunction(
-    activationFunctionCode(activationName)
-  );
+  setActivationFunction(activationType_);
 
   if (layerSize_ == 1 &&
-      activationFunctionCode(activationName) ==
-      activationFunctions::softmax)
+      activationType_ == activationFunctions::softmax)
   {
     std::cout << "Softmax activation requires layer size > 1.\n";
 
@@ -90,7 +93,8 @@ void denseLayer::init(
       previousLayer->layerType() != layerTypes::dense   &&
       previousLayer->layerType() != layerTypes::dropout &&
       previousLayer->layerType() != layerTypes::conv2D  &&
-      previousLayer->layerType() != layerTypes::maxPool2D
+      previousLayer->layerType() != layerTypes::maxPool2D &&
+      previousLayer->layerType() != layerTypes::batchNormalization
      )
   {
     std::cerr << "Previous layer of type "
@@ -137,6 +141,14 @@ void denseLayer::init(
   dWeights_.setZero(layerSize_, inputSize_);
 
   dBiases_.setZero(layerSize_);
+}
+
+void denseLayer::setupBackward(const layer* nextLayer)
+{
+  if (nextLayer->layerType() == layerTypes::batchNormalization)
+  {
+    useBatchNormalization = true;
+  }
 }
 
 void denseLayer::checkInputSize(const Matrix& inputData) const
@@ -196,13 +208,10 @@ void denseLayer::forwardPropagation(
     checkInputSize(input);
 #endif
 
-    linearOutput_.resize(
-                          weights_.rows(),
-                          input.cols()
-                         );
+     logit_.resize(weights_.rows(), input.cols());
 
      // Apply the weights of the layer to the input
-     linearOutput_.noalias() = weights_ * input;
+     logit_.noalias() = weights_ * input;
   }
   else
   {
@@ -213,26 +222,23 @@ void denseLayer::forwardPropagation(
     // For a flat input layer the number of colums is nObs
     nObservations_ = inputData.cols();
 
-    linearOutput_.resize(
-                         weights_.rows(),
-                         inputData.cols()
-                        );
+    logit_.resize(weights_.rows(), inputData.cols());
 
-     // Apply the weights of the layer to the input
-     linearOutput_.noalias() = weights_ * inputData;
+    // Apply the weights of the layer to the input
+    logit_.noalias() = weights_ * inputData;
   }
 
   // Add the biases
-  linearOutput_.colwise() += biases_;
+  logit_.colwise() += biases_;
 
   // Apply the activation function
   activation_.resize(
-                     linearOutput_.rows(),
-                     linearOutput_.cols()
+                     logit_.rows(),
+                     logit_.cols()
                     );
 
   activationFunction_->applyForward(
-                                    linearOutput_,
+                                    logit_,
                                     activation_
                                    );
 }
@@ -243,12 +249,12 @@ void denseLayer::backwardPropagation(
                                     )
 {
   Matrix dLinearOutput(
-                       linearOutput_.rows(),
-                       linearOutput_.cols()
+                       logit_.rows(),
+                       logit_.cols()
                       );
 
   activationFunction_->applyBackward(
-                                     linearOutput_,
+                                     logit_,
                                      dActivationNext,
                                      dLinearOutput
                                     );

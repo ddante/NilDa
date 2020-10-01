@@ -74,8 +74,8 @@ int main(int argc, char const *argv[])
                           trainingLabels.col(1),
                           true
                          );
-
   */
+
   //
 
 	const int epochs = 10;

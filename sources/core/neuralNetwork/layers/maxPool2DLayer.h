@@ -26,7 +26,7 @@ private:
   std::array<int, 2> kernelStride_;
 
   // Output of the polling and activation
-  Matrix linearOutput_;
+  Matrix logit_;
 
   // Stroe the indices of the max values
   MatrixI maxIndices_;
@@ -138,7 +138,7 @@ public:
 
   const Matrix& output() const override
   {
-    return linearOutput_;
+    return logit_;
   }
 
   const Matrix& backPropCache() const override

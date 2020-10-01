@@ -9,6 +9,8 @@
 #include "primitives/Vector.h"
 #include "primitives/errors.h"
 
+#include "activationFunctions/activationFunctionUtils.h"
+
 // ---------------------------------------------------------------------------
 
 namespace NilDa
@@ -20,6 +22,7 @@ enum class layerTypes {
   conv2D,
   maxPool2D,
   dropout,
+  batchNormalization
 };
 
 struct layerSizes {
@@ -43,6 +46,8 @@ protected:
   layerSizes size_;
 
   layerTypes type_;
+
+  activationFunctions activationType_;
 
   bool trainable_;
 
@@ -145,6 +150,11 @@ public:
   layerSizes size() const
   {
     return size_;
+  }
+
+  activationFunctions activationType() const
+  {
+    return activationType_;
   }
 
   bool isTrainable() const

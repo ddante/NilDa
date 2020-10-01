@@ -25,9 +25,7 @@ public:
                      const Matrix& G,
                      Matrix& output
                     ) override;
-
-  ~relu()  = default;
-
+                    
   int type() const override
   {
     return
@@ -35,6 +33,8 @@ public:
         activationFunctions::relu
       );
   }
+
+  ~relu()  = default;
 };
 
 } // namespace
