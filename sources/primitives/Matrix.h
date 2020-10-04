@@ -12,8 +12,6 @@
 
 namespace NilDa
 {
-
-
 typedef Eigen::Matrix<
                       int,
                       Eigen::Dynamic,

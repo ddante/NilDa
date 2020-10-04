@@ -20,8 +20,6 @@
 #include "lossFunctions/sparseCategoricalCrossentropy.h"
 #include "lossFunctions/binaryCrossentropy.h"
 
-#include "optimizers/sgd.h"
-
 //#include "H5Cpp.h"
 // ---------------------------------------------------------------------------
 

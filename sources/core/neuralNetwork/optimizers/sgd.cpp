@@ -55,10 +55,13 @@ void sgd::init(
                                weightsGradient.cols()
                               );
 
-  Vector& biasesFirstMomentum
-      = biasesHistory_[biasesGradient.data()];
+  if (biasesGradient.size() > 0)
+  {
+    Vector& biasesFirstMomentum
+        = biasesHistory_[biasesGradient.data()];
 
-  biasesFirstMomentum.setZero(biasesGradient.rows());
+    biasesFirstMomentum.setZero(biasesGradient.rows());
+  }
 }
 
 void sgd::update(
@@ -68,27 +71,41 @@ void sgd::update(
                  Vector& deltaBiases
                 ) const
 {
-  // Get the history of the weights and biases
-  // associated with the current layer
   Matrix& weightsFirstMomentum
       = weightsHistory_[weightsGradient.data()];
 
-  Vector& biasesFirstMomentum
-      = biasesHistory_[biasesGradient.data()];
+  computeUpdate(
+                weightsGradient,
+                weightsFirstMomentum,
+                deltaWeights
+               );
 
-  // Update the weights and biases using momentum
-  weightsFirstMomentum =
-             momentum_  * weightsFirstMomentum
-    + (1.0 - momentum_) * weightsGradient;
+  if (biasesGradient.size() > 0)
+  {
+    Vector& biasesFirstMomentum
+        = biasesHistory_[biasesGradient.data()];
 
-  biasesFirstMomentum =
-            momentum_  * biasesFirstMomentum
-   + (1.0 - momentum_) * biasesGradient;
+    computeUpdate(
+                  biasesGradient,
+                  biasesFirstMomentum,
+                  deltaBiases
+                 );
+  }
+}
 
-  // Return the increment of the weights and biases
-  deltaWeights.noalias() = -learningRate_ * weightsFirstMomentum;
+template <class T>
+void sgd::computeUpdate(
+                        const T& gradient,
+                        T& firstMomentum,
+                        T& increment
+                       ) const
+{
+  // Update using momentum
+  firstMomentum = (1.0 - momentum_) * gradient
+                +        momentum_  * firstMomentum;
 
-  deltaBiases.noalias() = -learningRate_ * biasesFirstMomentum;
+  // Return the increment
+  increment = -learningRate_ * firstMomentum;
 }
 
 

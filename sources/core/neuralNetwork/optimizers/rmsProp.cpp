@@ -117,13 +117,16 @@ void rmsProp::init(
                                  initAccumlation_
                                );
 
-  Vector& biasesAccumulator
-      = biasesHistory_[biasesGradient.data()];
+  if (biasesGradient.size() > 0)
+  {
+    Vector& biasesAccumulator
+        = biasesHistory_[biasesGradient.data()];
 
-  biasesAccumulator.setConstant(
-                                biasesGradient.rows(),
-                                initAccumlation_
-                               );
+    biasesAccumulator.setConstant(
+                                  biasesGradient.rows(),
+                                  initAccumlation_
+                                 );
+  }
 }
 
 void rmsProp::update(
@@ -133,41 +136,46 @@ void rmsProp::update(
                      Vector& deltaBiases
                     ) const
 {
-  // Get the history of the weights and biases
-  // associated with the current layer
   Matrix& weightsAccumulator
       = weightsHistory_[weightsGradient.data()];
 
-  Vector& biasesAccumulator
-      = biasesHistory_[biasesGradient.data()];
+  computeUpdate(
+                weightsGradient,
+                weightsAccumulator,
+                deltaWeights
+               );
 
-Matrix tmp = decay_  * weightsAccumulator.array()
-    + (1.0 - decay_) * weightsGradient.array().square();
+  if (biasesGradient.size() > 0)
+  {
+    Vector& biasesAccumulator
+        = biasesHistory_[biasesGradient.data()];
 
-  // Update the weights and biases using momentum
-  weightsAccumulator.array() =
-             decay_  * weightsAccumulator.array()
-    + (1.0 - decay_) * weightsGradient.array().square();
+    computeUpdate(
+                  biasesGradient,
+                  biasesAccumulator,
+                  deltaBiases
+                 );
+  }
+}
 
-  biasesAccumulator.array() =
-             decay_  * biasesAccumulator.array()
-    + (1.0 - decay_) * biasesGradient.array().square();
+template <class T>
+void rmsProp::computeUpdate(
+                            const T& gradient,
+                            T& accumulator,
+                            T& increment
+                           ) const
+{
+  // Exponential weighted sqaure gradient
+  accumulator.array() =
+      (1.0 - decay_) * gradient.array().square()
+           + decay_  * accumulator.array();
 
-  // Return the increment of the weights and biases
-  deltaWeights.array() = -learningRate_
-                       *  weightsGradient.array()
-                       * (
-                          weightsAccumulator.array()
-                          + epsilon_
-                         ).rsqrt();
-
-  deltaBiases.array() = -learningRate_
-                      *  biasesGradient.array()
-                      * (
-                         biasesAccumulator.array()
-                         + epsilon_
-                        ).rsqrt();
-
+  // Increment using the scaled gradient
+  increment.array() = -learningRate_
+                    *  gradient.array()
+                    * (
+                       accumulator.array() + epsilon_
+                      ).rsqrt();
 }
 
 

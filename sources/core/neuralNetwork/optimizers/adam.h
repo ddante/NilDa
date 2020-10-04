@@ -42,6 +42,15 @@ private:
 
   mutable std::map<const Scalar*, Vector> biasesM2History_;
 
+private:
+
+  template <class T>
+  void computeUpdate(
+                     const T& gradient,
+                     T& historyM1,
+                     T& historyM2,
+                     T& increment
+                   ) const;
 public:
 
   // Constructors

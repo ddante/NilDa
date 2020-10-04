@@ -38,6 +38,14 @@ private:
 
   mutable std::map<const Scalar*, Vector> biasesHistory_;
 
+private:
+
+  template <class T>
+  void computeUpdate(
+                     const T& gradient,
+                     T& accumulator,
+                     T& increment
+                    ) const;
 public:
 
   // Constructors
@@ -46,9 +54,18 @@ public:
 
   rmsProp(Scalar alpha, Scalar decay);
 
-  rmsProp(Scalar alpha, Scalar decay, Scalar initAccumlation);
+  rmsProp(
+          Scalar alpha,
+          Scalar decay,
+          Scalar initAccumlation
+         );
 
-  rmsProp(Scalar alpha, Scalar decay, Scalar initAccumlation, Scalar epsilon);
+  rmsProp(
+          Scalar alpha,
+          Scalar decay,
+          Scalar initAccumlation,
+          Scalar epsilon
+         );
 
   // Member functions
 
@@ -66,7 +83,8 @@ public:
            ) const override;
 
 
-  void update(const Matrix& weightsGradient,
+  void update(
+              const Matrix& weightsGradient,
               const Vector& biasesGradient,
               Matrix& deltaWeights,
               Vector& deltaBiases

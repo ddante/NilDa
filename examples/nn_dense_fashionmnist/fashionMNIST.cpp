@@ -64,7 +64,7 @@ int main(int argc, char const *argv[])
 
   //NilDa::sgd opt(learningRate, momentum);
   //NilDa::adaGrad opt(learningRate);
-  //NilDa::rmsProp opt(learningRate, decay);
+  //NilDa::rmsProp opt(learningRate, decay2);
   NilDa::adam opt(learningRate, decay1, decay2);
 
   nn.configure(opt, "sparse_categorical_crossentropy");

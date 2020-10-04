@@ -12,9 +12,9 @@
 
 #include "core/neuralNetwork/neuralNetwork.h"
 #include "core/neuralNetwork/optimizers/sgd.h"
-#include "core/neuralNetwork/optimizers/adaGrad.h"
-#include "core/neuralNetwork/optimizers/rmsProp.h"
-#include "core/neuralNetwork/optimizers/adam.h"
+//#include "core/neuralNetwork/optimizers/adaGrad.h"
+//#include "core/neuralNetwork/optimizers/rmsProp.h"
+//#include "core/neuralNetwork/optimizers/adam.h"
 
 int main(int argc, char const *argv[])
 {
@@ -71,10 +71,10 @@ int main(int argc, char const *argv[])
 
   const NilDa::Scalar decay = 0.99;
 
-  //NilDa::sgd opt(learningRate, momentum);
+  NilDa::sgd opt(learningRate, momentum);
   //NilDa::adaGrad opt(learningRate);
   //NilDa::rsmProp opt(learningRate, decay);
-  NilDa::adam opt(learningRate, decay, decay);
+  //NilDa::adam opt(learningRate, decay, decay);
 
   nn.configure(opt, "sparse_categorical_crossentropy");
 
@@ -87,7 +87,7 @@ int main(int argc, char const *argv[])
 
   nn.saveModel("convNetFashionMnist.out");
 
-  
+
   const std::string mnistImagesPredictFile
     = "/home/dante/dev/NilDa/datasets/fashion_mnist/t10k-images-idx3-ubyte";
 
@@ -149,5 +149,5 @@ int main(int argc, char const *argv[])
 
     NilDa::displayImage(predictImages, {28,28,1}, id, classes[ic]);
   }
-	*/  
+	*/
 }

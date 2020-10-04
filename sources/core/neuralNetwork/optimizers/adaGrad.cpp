@@ -43,7 +43,11 @@ adaGrad::adaGrad(Scalar alpha, Scalar initAccumlation):
   }
 }
 
-adaGrad::adaGrad(Scalar alpha, Scalar initAccumlation, Scalar epsilon):
+adaGrad::adaGrad(
+                 Scalar alpha,
+                 Scalar initAccumlation,
+                 Scalar epsilon
+                ):
   learningRate_(alpha),
   initAccumlation_(initAccumlation),
   epsilon_(epsilon)
@@ -84,13 +88,16 @@ void adaGrad::init(
                                  initAccumlation_
                                 );
 
-  Vector& biasesAccumulator
-      = biasesHistory_[biasesGradient.data()];
+  if (biasesGradient.size() > 0)
+  {
+    Vector& biasesAccumulator
+        = biasesHistory_[biasesGradient.data()];
 
-  biasesAccumulator.setConstant(
-                                biasesGradient.rows(),
-                                initAccumlation_
-                               );
+    biasesAccumulator.setConstant(
+                                  biasesGradient.rows(),
+                                  initAccumlation_
+                                 );
+  }
 }
 
 void adaGrad::update(
@@ -100,35 +107,44 @@ void adaGrad::update(
                      Vector& deltaBiases
                     ) const
 {
-  // Get the history of the weights and biases
-  // associated with the current layer
   Matrix& weightsAccumulator
       = weightsHistory_[weightsGradient.data()];
 
-  Vector& biasesAccumulator
-      = biasesHistory_[biasesGradient.data()];
+  computeUpdate(
+                weightsGradient,
+                weightsAccumulator,
+                deltaWeights
+               );
 
-  // Update the weights and biases using momentum
-  weightsAccumulator.array() +=  weightsGradient.array().square();
+  if (biasesGradient.size() > 0)
+  {
+    Vector& biasesAccumulator
+        = biasesHistory_[biasesGradient.data()];
 
-  biasesAccumulator.array() += biasesGradient.array().square();
+    computeUpdate(
+                  biasesGradient,
+                  biasesAccumulator,
+                  deltaBiases
+                 );
+  }
+}
 
-  // Return the increment of the weights and biases
+template <class T>
+void adaGrad::computeUpdate(
+                            const T& gradient,
+                            T& accumulator,
+                            T& increment
+                          ) const
+{
+  // Accumulate the squared grdient
+  accumulator.array() += gradient.array().square();
 
-  deltaWeights.array() = -learningRate_
-                       *  weightsGradient.array()
-                       * (
-                          weightsAccumulator.array()
-                          + epsilon_
-                         ).rsqrt();
-
-
-  deltaBiases.array() = -learningRate_
-                      *  biasesGradient.array()
-                      * (
-                         biasesAccumulator.array()
-                         + epsilon_
-                        ).rsqrt();
+  // Increment using the scaled gradient
+  increment.array() = -learningRate_
+                    *  gradient.array()
+                    * (
+                       accumulator.array() + epsilon_
+                      ).rsqrt();
 }
 
 
