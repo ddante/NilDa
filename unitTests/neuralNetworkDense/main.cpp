@@ -34,6 +34,7 @@ int main(int argc, char const *argv[])
 
     NilDa::layer* l0 = new NilDa::inputLayer(784);
     NilDa::layer* l1 = new NilDa::denseLayer(28, "relu");
+
     NilDa::layer* l2 = new NilDa::denseLayer(10, "softmax");
 
     NilDa::neuralNetwork nn({l0, l1, l2});

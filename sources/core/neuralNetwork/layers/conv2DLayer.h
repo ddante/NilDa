@@ -64,7 +64,7 @@ private:
   bool undoFlattening_;
 
   // Store if the BN will be applied to this layer
-  bool useBatchNormalization;
+  bool useBatchNormalization_;
 
   // Store the number of observations seen in the
   // forward propagation
@@ -124,12 +124,11 @@ public:
 
   void checkInput() const override;
 
-  void init(
-            const layer* previousLayer,
-            const bool resetWeightBiases
-           ) override;
+  void setupForward(const layer* previousLayer) override;
 
   void setupBackward(const layer* nextLayer) override;
+
+  void init(const bool resetWeightBiases) override;
 
   void checkInputSize(const Matrix& inputData) const override;
 
@@ -173,7 +172,7 @@ public:
 
   const Matrix& output() const override
   {
-    if (useBatchNormalization)
+    if (useBatchNormalization_)
     {
       return logit_;
     }

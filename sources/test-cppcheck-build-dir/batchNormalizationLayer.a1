@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="3847369503">
+        <error id="missingOverride" severity="style" msg="The function &apos;checkInput&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;checkInput&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier.">
+            <location file0="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/batchNormalizationLayer.cpp" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/batchNormalizationLayer.h" line="57" column="8" info="Function in derived class"/>
+            <location file0="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/batchNormalizationLayer.cpp" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/layer.h" line="63" column="16" info="Virtual function in base class"/>
+            <symbol>checkInput</symbol>
+        </error>
+        <error id="shadowFunction" severity="style" msg="Local variable &apos;output&apos; shadows outer function" verbose="Local variable &apos;output&apos; shadows outer function" cwe="398">
+            <location file0="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/batchNormalizationLayer.cpp" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/batchNormalizationLayer.h" line="157" column="16" info="Shadow variable"/>
+            <location file0="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/batchNormalizationLayer.cpp" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/batchNormalizationLayer.h" line="121" column="17" info="Shadowed declaration"/>
+            <symbol>output</symbol>
+        </error>
+  <FileInfo check="Uninitialized variables">
+    <unsafe-usage my-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/batchNormalizationLayer.h:62:8" my-argnr="1" my-argname="previousLayer" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/batchNormalizationLayer.cpp" line="43" col="7" value="0"/>
+  </FileInfo>
+  <FileInfo check="Uninitialized variables">
+    <unsafe-usage my-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/batchNormalizationLayer.h:62:8" my-argnr="1" my-argname="previousLayer" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/batchNormalizationLayer.cpp" line="43" col="7" value="0"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="init" lineNumber="35"/>
+    <functiondecl functionName="forwardPropagation" lineNumber="92"/>
+    <functiondecl functionName="backwardPropagation" lineNumber="99"/>
+    <functiondecl functionName="setWeightsAndBiases" lineNumber="106"/>
+    <functiondecl functionName="incrementWeightsAndBiases" lineNumber="128"/>
+    <functiondecl functionName="saveLayer" lineNumber="151"/>
+    <functiondecl functionName="loadLayer" lineNumber="154"/>
+    <functiondecl functionName="setActivationFunction" lineNumber="158"/>
+    <functiondecl functionName="init" lineNumber="35"/>
+    <functiondecl functionName="forwardPropagation" lineNumber="92"/>
+    <functiondecl functionName="backwardPropagation" lineNumber="99"/>
+    <functiondecl functionName="setWeightsAndBiases" lineNumber="106"/>
+    <functiondecl functionName="incrementWeightsAndBiases" lineNumber="128"/>
+    <functiondecl functionName="saveLayer" lineNumber="151"/>
+    <functiondecl functionName="loadLayer" lineNumber="154"/>
+    <functiondecl functionName="setActivationFunction" lineNumber="158"/>
+    <functioncall functionName="W"/>
+    <functioncall functionName="abort"/>
+    <functioncall functionName="activationType"/>
+    <functioncall functionName="activationType_"/>
+    <functioncall functionName="assert"/>
+    <functioncall functionName="batchNormalization"/>
+    <functioncall functionName="batchNormalizationLayer"/>
+    <functioncall functionName="break"/>
+    <functioncall functionName="channels"/>
+    <functioncall functionName="code"/>
+    <functioncall functionName="cols"/>
+    <functioncall functionName="conv2D"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="dense"/>
+    <functioncall functionName="dropout"/>
+    <functioncall functionName="false"/>
+    <functioncall functionName="getLayerName"/>
+    <functioncall functionName="identity"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="input"/>
+    <functioncall functionName="isFlat"/>
+    <functioncall functionName="layerType"/>
+    <functioncall functionName="make_unique"/>
+    <functioncall functionName="maxPool2D"/>
+    <functioncall functionName="noalias"/>
+    <functioncall functionName="none"/>
+    <functioncall functionName="override"/>
+    <functioncall functionName="relu"/>
+    <functioncall functionName="resetWeightBiases"/>
+    <functioncall functionName="rows"/>
+    <functioncall functionName="setActivationFunction"/>
+    <functioncall functionName="setRandom"/>
+    <functioncall functionName="setZero"/>
+    <functioncall functionName="sigmoid"/>
+    <functioncall functionName="size"/>
+    <functioncall functionName="softmax"/>
+    <functioncall functionName="sqrt"/>
+    <functioncall functionName="static_cast"/>
+    <functioncall functionName="switch"/>
+    <functioncall functionName="tanh"/>
+    <functioncall functionName="true"/>
+    <functioncall functionName="type_"/>
+  </FileInfo>
+</analyzerinfo>

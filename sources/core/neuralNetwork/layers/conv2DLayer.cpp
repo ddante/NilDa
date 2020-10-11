@@ -20,7 +20,7 @@ conv2DLayer::conv2DLayer() :
   filterStride_{},
   withPadding_(false),
   undoFlattening_(false),
-  useBatchNormalization(false),
+  useBatchNormalization_(false),
   nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
@@ -44,7 +44,7 @@ conv2DLayer::conv2DLayer(
   filterStride_(filterStride),
   withPadding_(withPadding),
   undoFlattening_(false),
-  useBatchNormalization(false),
+  useBatchNormalization_(false),
   nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
@@ -69,7 +69,7 @@ conv2DLayer::conv2DLayer(
   filterStride_(filterStride),
   withPadding_(false),
   undoFlattening_(false),
-  useBatchNormalization(false),
+  useBatchNormalization_(false),
   nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
@@ -94,7 +94,7 @@ conv2DLayer::conv2DLayer(
   filterStride_({1,1}),
   withPadding_(withPadding),
   undoFlattening_(false),
-  useBatchNormalization(false),
+  useBatchNormalization_(false),
   nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
@@ -118,7 +118,7 @@ conv2DLayer::conv2DLayer(
   filterStride_({1,1}),
   withPadding_(false),
   undoFlattening_(false),
-  useBatchNormalization(false),
+  useBatchNormalization_(false),
   nObservations_(0),
   forwardConvDims_{},
   backwardWeightsConvDims_{}
@@ -143,10 +143,7 @@ void conv2DLayer::checkInput() const
   assert(filterStride_[1] > 0);
 }
 
-void conv2DLayer::init(
-                       const layer* previousLayer,
-                       const bool resetWeightBiases
-                      )
+void conv2DLayer::setupForward(const layer* previousLayer)
 {
   if (
       previousLayer->layerType() != layerTypes::input     &&
@@ -203,32 +200,6 @@ void conv2DLayer::init(
   size_.rows = forwardConvDims_.outputRows;
   size_.cols = forwardConvDims_.outputCols;
   size_.channels = forwardConvDims_.outputChannels;
-
-  const int kernelDimension = forwardConvDims_.kernelRows
-                            * forwardConvDims_.kernelCols
-                            * forwardConvDims_.kernelChannels;
-
-  const int kernelSize = forwardConvDims_.kernelRows
-                       * forwardConvDims_.kernelCols;
-
-  const int kernelChannels = forwardConvDims_.kernelChannels
-                           * forwardConvDims_.kernelNumber;
-
-  if (resetWeightBiases)
-  {
-    Scalar epsilonInit = sqrt(2.0)/sqrt(kernelDimension);
-
-    filterWeights_.setRandom(kernelSize, kernelChannels);
-
-    filterWeights_ *= epsilonInit;
-
-    biases_.setRandom(forwardConvDims_.kernelNumber);
-    biases_ *= epsilonInit;
-  }
-
-  dFilterWeights_.setZero(kernelSize, kernelChannels);
-
-  dBiases_.setZero(forwardConvDims_.kernelNumber);
 }
 
 void conv2DLayer::setupBackward(const layer* nextLayer)
@@ -239,7 +210,38 @@ void conv2DLayer::setupBackward(const layer* nextLayer)
 
   if (nextLayer->layerType() == layerTypes::batchNormalization)
   {
-    useBatchNormalization = true;
+    useBatchNormalization_ = true;
+  }
+}
+
+void conv2DLayer::init(const bool resetWeightBiases)
+{
+  if (resetWeightBiases)
+  {
+    const int kernelDimension = forwardConvDims_.kernelRows
+                              * forwardConvDims_.kernelCols
+                              * forwardConvDims_.kernelChannels;
+
+    const int kernelSize = forwardConvDims_.kernelRows
+                         * forwardConvDims_.kernelCols;
+
+    const int kernelChannels = forwardConvDims_.kernelChannels
+                             * forwardConvDims_.kernelNumber;
+
+    const Scalar epsilonInit = sqrt(2.0)/sqrt(kernelDimension);
+
+    filterWeights_.setRandom(kernelSize, kernelChannels);
+    filterWeights_ *= epsilonInit;
+
+    dFilterWeights_.setZero(kernelSize, kernelChannels);
+
+    if (!useBatchNormalization_)
+    {
+      biases_.setRandom(forwardConvDims_.kernelNumber);
+      biases_ *= epsilonInit;
+
+      dBiases_.setZero(forwardConvDims_.kernelNumber);
+    }
   }
 }
 

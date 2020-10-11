@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="2724170206">
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="setDimensions" lineNumber="19"/>
+    <functiondecl functionName="setPool2DDims" lineNumber="62"/>
+    <functiondecl functionName="getBlockHead" lineNumber="107"/>
+    <functiondecl functionName="findMax" lineNumber="141"/>
+    <functiondecl functionName="maxPool2D" lineNumber="197"/>
+    <functiondecl functionName="checkPooling" lineNumber="241"/>
+    <functiondecl functionName="setDimensions" lineNumber="19"/>
+    <functiondecl functionName="setPool2DDims" lineNumber="62"/>
+    <functiondecl functionName="getBlockHead" lineNumber="107"/>
+    <functiondecl functionName="findMax" lineNumber="141"/>
+    <functiondecl functionName="maxPool2D" lineNumber="197"/>
+    <functiondecl functionName="checkPooling" lineNumber="241"/>
+    <functioncall functionName="A"/>
+    <functioncall functionName="abs"/>
+    <functioncall functionName="array"/>
+    <functioncall functionName="assert"/>
+    <functioncall functionName="block"/>
+    <functioncall functionName="col"/>
+    <functioncall functionName="cols"/>
+    <functioncall functionName="conv2DDimensions"/>
+    <functioncall functionName="data"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="delete"/>
+    <functioncall functionName="err1"/>
+    <functioncall functionName="err2"/>
+    <functioncall functionName="false"/>
+    <functioncall functionName="findMax"/>
+    <functioncall functionName="floor"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="getBlockHead"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="inC"/>
+    <functioncall functionName="inCh"/>
+    <functioncall functionName="inR"/>
+    <functioncall functionName="infty"/>
+    <functioncall functionName="input"/>
+    <functioncall functionName="inputChannels"/>
+    <functioncall functionName="inputCols"/>
+    <functioncall functionName="inputRows"/>
+    <functioncall functionName="j"/>
+    <functioncall functionName="kC"/>
+    <functioncall functionName="kR"/>
+    <functioncall functionName="kSC"/>
+    <functioncall functionName="kSR"/>
+    <functioncall functionName="kernelCols"/>
+    <functioncall functionName="kernelRows"/>
+    <functioncall functionName="kernelStrideCol"/>
+    <functioncall functionName="kernelStrideRow"/>
+    <functioncall functionName="l"/>
+    <functioncall functionName="loc"/>
+    <functioncall functionName="mId"/>
+    <functioncall functionName="max"/>
+    <functioncall functionName="maxCoeff"/>
+    <functioncall functionName="maxCol"/>
+    <functioncall functionName="maxId"/>
+    <functioncall functionName="maxIds"/>
+    <functioncall functionName="maxIdsCheck"/>
+    <functioncall functionName="maxPool"/>
+    <functioncall functionName="maxPool2D"/>
+    <functioncall functionName="maxPoolCheck"/>
+    <functioncall functionName="maxRow"/>
+    <functioncall functionName="maxVal"/>
+    <functioncall functionName="mean"/>
+    <functioncall functionName="nCols"/>
+    <functioncall functionName="ofset"/>
+    <functioncall functionName="out"/>
+    <functioncall functionName="outC"/>
+    <functioncall functionName="outR"/>
+    <functioncall functionName="outputCols"/>
+    <functioncall functionName="outputRows"/>
+    <functioncall functionName="pool2DDimensions"/>
+    <functioncall functionName="poolDims"/>
+    <functioncall functionName="poolSize"/>
+    <functioncall functionName="resize"/>
+    <functioncall functionName="rows"/>
+    <functioncall functionName="setDimensions"/>
+    <functioncall functionName="setZero"/>
+    <functioncall functionName="shift"/>
+    <functioncall functionName="src"/>
+    <functioncall functionName="static_cast"/>
+    <functioncall functionName="val"/>
+  </FileInfo>
+</analyzerinfo>

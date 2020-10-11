@@ -62,14 +62,14 @@ public:
   // Perform basic checks on the validity of the inputs
   virtual void checkInput() const = 0;
 
-  // Initialize the layer
-  virtual void init(
-                    const layer* previousLayer,
-                    const bool resetWeightBiases
-                   ) = 0;
+  // Initialize the wight and biases of the layer
+  virtual void init(const bool resetWeightBiases) = 0;
 
-  // Setup additional paramters in backward direction
-  // for the hidden layers
+  // Setup the dimension and additional paramters
+  // of the hidden layer in the forward and
+  // backward direction
+  virtual void setupForward(const layer* previousLayer) = 0;
+
   virtual void setupBackward(const layer* nextLayer) = 0;
 
   // Check if the dimensions of input data are consistent with the layer

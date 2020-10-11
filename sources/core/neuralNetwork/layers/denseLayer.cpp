@@ -21,7 +21,7 @@ denseLayer::denseLayer():
     needFlattening_(false),
     inputSize_(0),
     inputChannels_(0),
-    useBatchNormalization(false),
+    useBatchNormalization_(false),
     nObservations_(0)
 {
   type_ = layerTypes::dense;
@@ -45,7 +45,7 @@ denseLayer::denseLayer(
     needFlattening_(false),
     inputSize_(0),
     inputChannels_(0),
-    useBatchNormalization(false),
+    useBatchNormalization_(false),
     nObservations_(0)
 {
   type_ = layerTypes::dense;
@@ -81,10 +81,7 @@ void denseLayer::checkInput() const
   assert(size_.channels == 0);
 }
 
-void denseLayer::init(
-                      const layer* previousLayer,
-                      const bool resetWeightBiases
-                      )
+void denseLayer::setupForward(const layer* previousLayer)
 {
   // Check that the previous layer is compatible
   // with the current layer
@@ -123,7 +120,18 @@ void denseLayer::init(
 
      assert(inputChannels_ > 0);
   }
+}
 
+void denseLayer::setupBackward(const layer* nextLayer)
+{
+  if (nextLayer->layerType() == layerTypes::batchNormalization)
+  {
+    useBatchNormalization_ = true;
+  }
+}
+
+void denseLayer::init(const bool resetWeightBiases)
+{
   if (resetWeightBiases)
   {
     const Scalar epsilonInit = sqrt(6.0)
@@ -131,23 +139,22 @@ void denseLayer::init(
 
     weights_.setRandom(layerSize_, inputSize_);
     weights_ *= epsilonInit;
-    //Random(-epsilonInit, epsilonInit, weights_);
 
-    biases_.setRandom(layerSize_);
-    biases_ *= epsilonInit;
-    //Random(-epsilonInit, epsilonInit, biases_);
-  }
+    // NOTE: Double check the gradient reset
+    // when the restart from a check point is available
+    dWeights_.setZero(layerSize_, inputSize_);
 
-  dWeights_.setZero(layerSize_, inputSize_);
+    // If the layer is followed by a batchNorm
+    // the biases are not needed
+    if (!useBatchNormalization_ )
+    {
+      biases_.setRandom(layerSize_);
+      biases_ *= epsilonInit;
 
-  dBiases_.setZero(layerSize_);
-}
-
-void denseLayer::setupBackward(const layer* nextLayer)
-{
-  if (nextLayer->layerType() == layerTypes::batchNormalization)
-  {
-    useBatchNormalization = true;
+      // NOTE: Double check the gradient reset
+      // when the restart from a check point is available
+      dBiases_.setZero(layerSize_);
+    }
   }
 }
 
@@ -229,7 +236,10 @@ void denseLayer::forwardPropagation(
   }
 
   // Add the biases
-  logit_.colwise() += biases_;
+  if (!useBatchNormalization_ )
+  {
+    logit_.colwise() += biases_;
+  }
 
   // Apply the activation function
   activation_.resize(

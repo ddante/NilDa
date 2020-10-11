@@ -50,12 +50,14 @@ public:
 
   void checkInput() const override;
 
-  void init(
-            const layer* previousLayer,
-            const bool resetWeightBiases
-           ) override;
-
+  void setupForward(const layer* previousLayer) override;
+  
   void setupBackward(const layer* nextLayer) override
+  {
+    // Nothing to be done here
+  }
+
+  void init(const bool resetWeightBiases) override
   {
     // Nothing to be done here
   }

@@ -41,21 +41,25 @@ public:
 
   // Member functions
 
-  void init(
-            const layer* previousLayerconst,
-            const bool resetWeightBiases
-           ) override
+  void checkInput() const override;
+
+  void setupForward(const layer* previousLayer) override
   {
-    std::cerr << "Input layer cannot call the init.\n";
+    std::cerr << "Input layer cannot call setupForward.\n";
 
     assert(false);
   }
 
-  void checkInput() const override;
-
   void setupBackward(const layer* nextLayer) override
   {
     std::cerr << "Input layer cannot call setupBackward.\n";
+
+    assert(false);
+  }
+
+  void init(const bool resetWeightBiases) override
+  {
+    std::cerr << "Input layer cannot call the init.\n";
 
     assert(false);
   }

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="1331300073">
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="sanityCheck" lineNumber="12"/>
+    <functiondecl functionName="compute" lineNumber="46"/>
+    <functiondecl functionName="computeDerivative" lineNumber="68"/>
+    <functiondecl functionName="predict" lineNumber="83"/>
+    <functiondecl functionName="sanityCheck" lineNumber="12"/>
+    <functiondecl functionName="compute" lineNumber="46"/>
+    <functiondecl functionName="computeDerivative" lineNumber="68"/>
+    <functiondecl functionName="predict" lineNumber="83"/>
+    <functioncall functionName="abort"/>
+    <functioncall functionName="array"/>
+    <functioncall functionName="assert"/>
+    <functioncall functionName="binaryCrossentropy"/>
+    <functioncall functionName="categoricalCrossentropy"/>
+    <functioncall functionName="cols"/>
+    <functioncall functionName="cwiseInverse"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="i"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="labels"/>
+    <functioncall functionName="log"/>
+    <functioncall functionName="nObs"/>
+    <functioncall functionName="ones"/>
+    <functioncall functionName="override"/>
+    <functioncall functionName="predictions"/>
+    <functioncall functionName="resize"/>
+    <functioncall functionName="return"/>
+    <functioncall functionName="rows"/>
+    <functioncall functionName="select"/>
+    <functioncall functionName="setOnes"/>
+    <functioncall functionName="setZero"/>
+    <functioncall functionName="sparseCategoricalCrossentropy"/>
+    <functioncall functionName="static_cast"/>
+    <functioncall functionName="sum"/>
+  </FileInfo>
+</analyzerinfo>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="476598537">
+        <error id="syntaxError" severity="error" msg="Unmatched &apos;{&apos;. Configuration: &apos;&apos;." verbose="Unmatched &apos;{&apos;. Configuration: &apos;&apos;.">
+            <location file="/home/dante/dev/NilDa/sources/utils/importImageDatasets.cpp" line="23" column="1"/>
+        </error>
+</analyzerinfo>

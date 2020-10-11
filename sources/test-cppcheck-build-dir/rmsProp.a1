@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="3756538530">
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="init" lineNumber="106"/>
+    <functiondecl functionName="update" lineNumber="132"/>
+    <functioncall functionName="Matrix"/>
+    <functioncall functionName="Vector"/>
+    <functioncall functionName="abort"/>
+    <functioncall functionName="alpha"/>
+    <functioncall functionName="array"/>
+    <functioncall functionName="biasesAccumulator"/>
+    <functioncall functionName="biasesGradient"/>
+    <functioncall functionName="cols"/>
+    <functioncall functionName="computeUpdate"/>
+    <functioncall functionName="const"/>
+    <functioncall functionName="data"/>
+    <functioncall functionName="decay"/>
+    <functioncall functionName="decay_"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="delete"/>
+    <functioncall functionName="deltaBiases"/>
+    <functioncall functionName="deltaWeights"/>
+    <functioncall functionName="epsilon"/>
+    <functioncall functionName="epsilon_"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="initAccumlation"/>
+    <functioncall functionName="initAccumlation_"/>
+    <functioncall functionName="learningRate_"/>
+    <functioncall functionName="rmsProp"/>
+    <functioncall functionName="rows"/>
+    <functioncall functionName="rsqrt"/>
+    <functioncall functionName="setConstant"/>
+    <functioncall functionName="size"/>
+    <functioncall functionName="square"/>
+    <functioncall functionName="weightsAccumulator"/>
+    <functioncall functionName="weightsGradient"/>
+  </FileInfo>
+</analyzerinfo>

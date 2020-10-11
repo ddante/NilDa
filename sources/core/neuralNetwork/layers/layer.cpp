@@ -41,7 +41,7 @@ std::string getLayerName(const layerTypes inLayerType)
   }
   else if (inLayerType == layerTypes::batchNormalization)
   {
-    name = "Batch normalization";
+    name = "Batch norm";
   }
   else
   {

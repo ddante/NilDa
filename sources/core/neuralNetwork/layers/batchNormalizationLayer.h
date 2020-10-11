@@ -34,9 +34,17 @@ private:
   Matrix weights_;
   Matrix dWeights_;
 
+  // Bias and derivative w.r.t. bias vectors
+  Vector biases_;
+  Vector dBiases_;
+
   // Cache matrix to store the data to pass to the layer
   // of the previous level during the back propagation
   Matrix cacheBackProp_;
+
+  // Small constant used for the logit normalization
+  // to avoid division by zero
+  const Scalar epsilon_ = 1e-12;
 
 private:
 
@@ -59,15 +67,14 @@ public:
     // Nothing to do here
   }
 
-  void init(
-            const layer* previousLayer,
-            const bool resetWeightBiases
-           ) override;
+  void setupForward(const layer* previousLayer) override;
 
   void setupBackward(const layer* nextLayer) override
   {
     // Nothing to be done here
   }
+
+  void init(const bool resetWeightBiases) override;
 
   void checkInputSize(const Matrix& inputData) const override
   {
@@ -89,10 +96,7 @@ public:
 
   const Vector& getBiases() const override
   {
-    std::cerr << "Batch normalization layer "
-              << "cannot call getBiases function.\n";
-
-    assert(false);
+    return biases_;
   }
 
   const Matrix& getWeightsDerivative() const override
@@ -102,10 +106,7 @@ public:
 
   const Vector& getBiasesDerivative() const override
   {
-    std::cerr << "Batch normalization layer "
-              << "cannot call getBiasesDerivative function.\n";
-
-    assert(false);
+    return dBiases_;
   }
 
   void setWeightsAndBiases(

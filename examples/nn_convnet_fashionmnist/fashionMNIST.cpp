@@ -12,9 +12,9 @@
 
 #include "core/neuralNetwork/neuralNetwork.h"
 #include "core/neuralNetwork/optimizers/sgd.h"
-//#include "core/neuralNetwork/optimizers/adaGrad.h"
-//#include "core/neuralNetwork/optimizers/rmsProp.h"
-//#include "core/neuralNetwork/optimizers/adam.h"
+#include "core/neuralNetwork/optimizers/adaGrad.h"
+#include "core/neuralNetwork/optimizers/rmsProp.h"
+#include "core/neuralNetwork/optimizers/adam.h"
 
 int main(int argc, char const *argv[])
 {
@@ -65,22 +65,23 @@ int main(int argc, char const *argv[])
 
   //
 
-	const NilDa::Scalar learningRate = 0.001;
+  const NilDa::Scalar learningRate = 0.001;
 
-	const NilDa::Scalar momentum = 0.90;
+  const NilDa::Scalar momentum = 0.90;
 
-  const NilDa::Scalar decay = 0.99;
+  const NilDa::Scalar decay1 = 0.9;
+  const NilDa::Scalar decay2 = 0.99;
 
-  NilDa::sgd opt(learningRate, momentum);
+  //NilDa::sgd opt(learningRate, momentum);
   //NilDa::adaGrad opt(learningRate);
   //NilDa::rsmProp opt(learningRate, decay);
-  //NilDa::adam opt(learningRate, decay, decay);
+  NilDa::adam opt(learningRate, decay1, decay2);
 
   nn.configure(opt, "sparse_categorical_crossentropy");
 
   //
 
-	const int epochs = 20;
+	const int epochs = 10;
 	const int batchSize = 32;
 
   nn.train(trainingImages, trainingLabels, epochs, batchSize);

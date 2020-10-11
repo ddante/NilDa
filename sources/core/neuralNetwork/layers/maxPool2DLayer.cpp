@@ -48,10 +48,7 @@ void maxPool2DLayer::checkInput() const
   assert(kernelStride_[1] > 0);
 }
 
-void maxPool2DLayer::init(
-                          const layer* previousLayer,
-                          const bool resetWeightBiases
-                         )
+void maxPool2DLayer::setupForward(const layer* previousLayer)
 {
   if (
       previousLayer->layerType() != layerTypes::dropout &&
@@ -85,7 +82,7 @@ void maxPool2DLayer::init(
                                          prevLayer.cols,
                                          prevLayer.channels
                                         };
-  
+
   setPool2DDims(
                 prevLayerSize,
                 kernelSize_,

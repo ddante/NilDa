@@ -56,21 +56,13 @@ void neuralNetwork::initLayers(const bool resetWeightBiases) const
 
   layers_[inputLayer_]->checkInput();
 
-  // The last layer must be a dense layer for the output
-  if (layers_[lastLayer_]->layerType() != layerTypes::dense)
-  {
-     std::cerr << "Last layer must be a dense layer.\n";
-
-     std::abort();
-  }
-
   // Initialize the hidden and the output layers
   // in the forward direction
   for (int i = firstLayer_; i < numberOfLayers_; ++i)
   {
     layers_[i]->checkInput();
 
-    layers_[i]->init(layers_[i - 1], resetWeightBiases);
+    layers_[i]->setupForward(layers_[i - 1]);
   }
 
   // Setup additional paramters in backward direction
@@ -79,6 +71,13 @@ void neuralNetwork::initLayers(const bool resetWeightBiases) const
   {
     layers_[i]->setupBackward(layers_[i + 1]);
   }
+
+  // Finally, initialize the weight and biases
+  for (int i = firstLayer_; i < numberOfLayers_; ++i)
+  {
+    layers_[i]->init(resetWeightBiases);
+  }
+
 }
 
 void neuralNetwork::summary() const

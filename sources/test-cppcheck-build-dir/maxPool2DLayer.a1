@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="1660326456">
+  <FileInfo check="ctu">
+<function-call call-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/pool2DUtils.h:53:6" call-funcname="setPool2DDims" call-argnr="1" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.cpp" line="89" col="16" call-argexpr="prevLayerSize" call-argvaluetype="7" call-argvalue="0"/><function-call call-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/pool2DUtils.h:53:6" call-funcname="setPool2DDims" call-argnr="2" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.cpp" line="89" col="16" call-argexpr="kernelSize_" call-argvaluetype="7" call-argvalue="0"/><function-call call-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/pool2DUtils.h:53:6" call-funcname="setPool2DDims" call-argnr="3" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.cpp" line="89" col="16" call-argexpr="kernelStride_" call-argvaluetype="7" call-argvalue="0"/>  </FileInfo>
+  <FileInfo check="Uninitialized variables">
+    <unsafe-usage my-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.h:69:8" my-argnr="1" my-argname="previousLayer" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.cpp" line="57" col="7" value="0"/>
+    <unsafe-usage my-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.h:74:8" my-argnr="1" my-argname="nextLayer" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.cpp" line="109" col="29" value="0"/>
+  </FileInfo>
+  <FileInfo check="ctu">
+<function-call call-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/pool2DUtils.h:53:6" call-funcname="setPool2DDims" call-argnr="1" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.cpp" line="89" col="16" call-argexpr="prevLayerSize" call-argvaluetype="7" call-argvalue="0"/><function-call call-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/pool2DUtils.h:53:6" call-funcname="setPool2DDims" call-argnr="2" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.cpp" line="89" col="16" call-argexpr="kernelSize_" call-argvaluetype="7" call-argvalue="0"/><function-call call-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/pool2DUtils.h:53:6" call-funcname="setPool2DDims" call-argnr="3" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.cpp" line="89" col="16" call-argexpr="kernelStride_" call-argvaluetype="7" call-argvalue="0"/>  </FileInfo>
+  <FileInfo check="Uninitialized variables">
+    <unsafe-usage my-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.h:69:8" my-argnr="1" my-argname="previousLayer" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.cpp" line="57" col="7" value="0"/>
+    <unsafe-usage my-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.h:74:8" my-argnr="1" my-argname="nextLayer" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/maxPool2DLayer.cpp" line="109" col="29" value="0"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="checkInput" lineNumber="42"/>
+    <functiondecl functionName="init" lineNumber="51"/>
+    <functiondecl functionName="setupBackward" lineNumber="107"/>
+    <functiondecl functionName="checkInputSize" lineNumber="114"/>
+    <functiondecl functionName="checkInputAndCacheSize" lineNumber="132"/>
+    <functiondecl functionName="forwardPropagation" lineNumber="153"/>
+    <functiondecl functionName="backwardPropagation" lineNumber="165"/>
+    <functiondecl functionName="saveLayer" lineNumber="219"/>
+    <functiondecl functionName="loadLayer" lineNumber="233"/>
+    <functiondecl functionName="localChecks" lineNumber="244"/>
+    <functiondecl functionName="checkInput" lineNumber="42"/>
+    <functiondecl functionName="init" lineNumber="51"/>
+    <functiondecl functionName="setupBackward" lineNumber="107"/>
+    <functiondecl functionName="checkInputSize" lineNumber="114"/>
+    <functiondecl functionName="checkInputAndCacheSize" lineNumber="132"/>
+    <functiondecl functionName="forwardPropagation" lineNumber="153"/>
+    <functiondecl functionName="backwardPropagation" lineNumber="165"/>
+    <functiondecl functionName="saveLayer" lineNumber="219"/>
+    <functiondecl functionName="loadLayer" lineNumber="233"/>
+    <functiondecl functionName="localChecks" lineNumber="244"/>
+    <functioncall functionName="EXIT_FAIL"/>
+    <functioncall functionName="EXIT_OK"/>
+    <functioncall functionName="abort"/>
+    <functioncall functionName="array"/>
+    <functioncall functionName="assert"/>
+    <functioncall functionName="batchNormalization"/>
+    <functioncall functionName="bool"/>
+    <functioncall functionName="cacheRows"/>
+    <functioncall functionName="channels"/>
+    <functioncall functionName="checkInputAndCacheSize"/>
+    <functioncall functionName="checkInputSize"/>
+    <functioncall functionName="checkPooling"/>
+    <functioncall functionName="cols"/>
+    <functioncall functionName="const"/>
+    <functioncall functionName="conv2D"/>
+    <functioncall functionName="dActivationNext"/>
+    <functioncall functionName="dActivationNextM"/>
+    <functioncall functionName="dLogit"/>
+    <functioncall functionName="data"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="delete"/>
+    <functioncall functionName="dense"/>
+    <functioncall functionName="dropout"/>
+    <functioncall functionName="error"/>
+    <functioncall functionName="false"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="getLayerName"/>
+    <functioncall functionName="i"/>
+    <functioncall functionName="iType"/>
+    <functioncall functionName="identity"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="input"/>
+    <functioncall functionName="inputCols"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="isFlat"/>
+    <functioncall functionName="kernelCols"/>
+    <functioncall functionName="kernelRows"/>
+    <functioncall functionName="kernelSize"/>
+    <functioncall functionName="kernelSize_"/>
+    <functioncall functionName="kernelStride"/>
+    <functioncall functionName="kernelStrideCol"/>
+    <functioncall functionName="kernelStrideRow"/>
+    <functioncall functionName="kernelStride_"/>
+    <functioncall functionName="layerType"/>
+    <functioncall functionName="logit_"/>
+    <functioncall functionName="maxIndices_"/>
+    <functioncall functionName="maxPool2D"/>
+    <functioncall functionName="maxPool2DLayer"/>
+    <functioncall functionName="none"/>
+    <functioncall functionName="outputChannels"/>
+    <functioncall functionName="outputCols"/>
+    <functioncall functionName="outputRows"/>
+    <functioncall functionName="override"/>
+    <functioncall functionName="pool2DDimensions"/>
+    <functioncall functionName="poolDims_"/>
+    <functioncall functionName="prevLayerSize"/>
+    <functioncall functionName="read"/>
+    <functioncall functionName="relu"/>
+    <functioncall functionName="rows"/>
+    <functioncall functionName="setPool2DDims"/>
+    <functioncall functionName="setZero"/>
+    <functioncall functionName="sigmoid"/>
+    <functioncall functionName="size"/>
+    <functioncall functionName="sizeof"/>
+    <functioncall functionName="softmax"/>
+    <functioncall functionName="static_cast"/>
+    <functioncall functionName="tanh"/>
+    <functioncall functionName="trainable_"/>
+    <functioncall functionName="true"/>
+    <functioncall functionName="type_"/>
+    <functioncall functionName="undoFlattening_"/>
+    <functioncall functionName="write"/>
+  </FileInfo>
+</analyzerinfo>

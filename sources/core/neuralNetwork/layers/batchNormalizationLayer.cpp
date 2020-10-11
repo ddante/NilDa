@@ -32,17 +32,11 @@ batchNormalizationLayer::batchNormalizationLayer()
 }
 
 void
-batchNormalizationLayer::init(
-                              const layer* previousLayer,
-                              const bool resetWeightBiases
-                             )
+batchNormalizationLayer::setupForward(const layer* previousLayer)
 {
   // Check that the previous layer is compatible
   // with the current layer
-  if (
-      previousLayer->layerType() != layerTypes::dense  &&
-      previousLayer->layerType() != layerTypes::conv2D
-     )
+  if (previousLayer->layerType() != layerTypes::dense)
   {
     std::cerr << "Previous layer of type "
               <<  getLayerName(previousLayer->layerType())
@@ -67,25 +61,32 @@ batchNormalizationLayer::init(
   size_.rows = prevLayer.rows;
   size_.cols = prevLayer.cols;
   size_.channels = prevLayer.channels;
+}
 
+void
+batchNormalizationLayer::init(const bool resetWeightBiases)
+{
   if (resetWeightBiases)
   {
     const Scalar epsilonInit = sqrt(2.0)
                              / sqrt(size_.size);
 
-    // NOTE: to be fixed for conv2D
-
-    // weights_ = [{gamma}, {beta}]
-    // such that Z = gamma*Z_norm + beta
-    weights_.setRandom(size_.size, 2);
+    // For batch norm: Z = gamma*Z_norm + beta
+    // weights_ = {gamma}, is a vector
+    // biases_  = {beta}
+    weights_.setRandom(size_.size, 1);
     weights_ *= epsilonInit;
-    //Random(-epsilonInit, epsilonInit, weights_);
-  }
 
-  dWeights_.setZero(
-                    weights_.rows(),
-                    weights_.cols()
-                   );
+    biases_.setRandom(size_.size);
+    biases_ *= epsilonInit;
+
+    dWeights_.setZero(
+                      weights_.rows(),
+                      weights_.cols()
+                     );
+
+    dBiases_.setZero(biases_.rows());
+  }
 }
 
 void
@@ -93,7 +94,42 @@ batchNormalizationLayer::forwardPropagation(
                                             const Matrix& inputData,
                                             const bool trainingPhase
                                            )
-{}
+{
+  const Vector batchMean = inputData.rowwise().mean();
+
+  const Matrix diffSquared = (
+                              inputData.colwise() - batchMean
+                             ).array().square();
+
+  const Vector batchVar = (
+                           diffSquared.rowwise().mean().array()
+                           + epsilon_
+                          ).array().sqrt();
+
+  Matrix logitNorm = (inputData.colwise() - batchMean);
+
+  logitNorm.array().colwise() /= batchVar.array();
+
+  // Map the column matrix of the weights into a vector;
+  ConstMapVector gamma(
+                       weights_.data(),
+                       weights_.rows()
+                      );
+
+  logit_ = logitNorm.array().colwise() * gamma.array();
+
+  logit_.colwise() += biases_;
+
+  activation_.resize(
+                     logit_.rows(),
+                     logit_.cols()
+                    );
+
+  activationFunction_->applyForward(
+                                    logit_,
+                                    activation_
+                                   );
+}
 
 void
 batchNormalizationLayer::backwardPropagation(

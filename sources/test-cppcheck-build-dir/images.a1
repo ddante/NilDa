@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="2968823028">
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="displayImage" lineNumber="16"/>
+    <functioncall functionName="Size"/>
+    <functioncall functionName="all"/>
+    <functioncall functionName="assert"/>
+    <functioncall functionName="channels"/>
+    <functioncall functionName="cols"/>
+    <functioncall functionName="cvImg"/>
+    <functioncall functionName="data"/>
+    <functioncall functionName="eigen2cv"/>
+    <functioncall functionName="img"/>
+    <functioncall functionName="imgMap"/>
+    <functioncall functionName="imgStride"/>
+    <functioncall functionName="imshow"/>
+    <functioncall functionName="inputImages"/>
+    <functioncall functionName="resize"/>
+    <functioncall functionName="rows"/>
+    <functioncall functionName="seqN"/>
+    <functioncall functionName="title"/>
+    <functioncall functionName="waitKey"/>
+  </FileInfo>
+</analyzerinfo>

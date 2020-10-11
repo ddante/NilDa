@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="924354217">
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;dropoutLayer&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;dropoutLayer&apos; has a constructor with 1 argument that is not explicit. Such constructors should in general be explicit for type safety reasons. Using the explicit keyword in the constructor means some mistakes when using the class can be avoided." cwe="398">
+            <location file0="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/dropoutLayer.cpp" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/dropoutLayer.h" line="43" column="3"/>
+            <symbol>dropoutLayer</symbol>
+        </error>
+        <error id="shadowFunction" severity="style" msg="Local variable &apos;output&apos; shadows outer function" verbose="Local variable &apos;output&apos; shadows outer function" cwe="398">
+            <location file0="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/dropoutLayer.cpp" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/dropoutLayer.h" line="159" column="16" info="Shadow variable"/>
+            <location file0="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/dropoutLayer.cpp" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/dropoutLayer.h" line="124" column="17" info="Shadowed declaration"/>
+            <symbol>output</symbol>
+        </error>
+        <error id="unusedVariable" severity="style" msg="Unused variable: rand" verbose="Unused variable: rand" cwe="563">
+            <location file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/dropoutLayer.cpp" line="104" column="24"/>
+            <symbol>rand</symbol>
+        </error>
+  <FileInfo check="Uninitialized variables">
+    <unsafe-usage my-id="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/dropoutLayer.h:53:8" my-argnr="1" my-argname="previousLayer" file="/home/dante/dev/NilDa/sources/core/neuralNetwork/layers/dropoutLayer.cpp" line="63" col="7" value="0"/>
+  </FileInfo>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="checkInput" lineNumber="50"/>
+    <functiondecl functionName="init" lineNumber="55"/>
+    <functiondecl functionName="forwardPropagation" lineNumber="87"/>
+    <functiondecl functionName="backwardPropagation" lineNumber="132"/>
+    <functiondecl functionName="saveLayer" lineNumber="143"/>
+    <functiondecl functionName="loadLayer" lineNumber="155"/>
+    <functioncall functionName="Scalar"/>
+    <functioncall functionName="abort"/>
+    <functioncall functionName="array"/>
+    <functioncall functionName="assert"/>
+    <functioncall functionName="batchNormalization"/>
+    <functioncall functionName="bool"/>
+    <functioncall functionName="channels"/>
+    <functioncall functionName="cols"/>
+    <functioncall functionName="conv2D"/>
+    <functioncall functionName="dActivationNext"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="dense"/>
+    <functioncall functionName="distr"/>
+    <functioncall functionName="dropProbability"/>
+    <functioncall functionName="dropProbability_"/>
+    <functioncall functionName="dropout"/>
+    <functioncall functionName="dropoutLayer"/>
+    <functioncall functionName="false"/>
+    <functioncall functionName="genRand"/>
+    <functioncall functionName="getLayerName"/>
+    <functioncall functionName="iType"/>
+    <functioncall functionName="identity"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="input"/>
+    <functioncall functionName="inputData"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="isFlat"/>
+    <functioncall functionName="layerType"/>
+    <functioncall functionName="maxPool2D"/>
+    <functioncall functionName="none"/>
+    <functioncall functionName="override"/>
+    <functioncall functionName="read"/>
+    <functioncall functionName="relu"/>
+    <functioncall functionName="resize"/>
+    <functioncall functionName="rows"/>
+    <functioncall functionName="select"/>
+    <functioncall functionName="sigmoid"/>
+    <functioncall functionName="size"/>
+    <functioncall functionName="sizeof"/>
+    <functioncall functionName="softmax"/>
+    <functioncall functionName="static_cast"/>
+    <functioncall functionName="tanh"/>
+    <functioncall functionName="trainable_"/>
+    <functioncall functionName="trainingPhase"/>
+    <functioncall functionName="true"/>
+    <functioncall functionName="type_"/>
+    <functioncall functionName="unaryExpr"/>
+    <functioncall functionName="write"/>
+  </FileInfo>
+</analyzerinfo>

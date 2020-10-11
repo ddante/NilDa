@@ -41,7 +41,7 @@ dropoutLayer::dropoutLayer(const Scalar dropProbability):
   size_.rows = 0;
   size_.cols = 0;
   size_.channels = 0;
-  
+
   activationType_ = activationFunctions::none;
 
   trainable_ = false;
@@ -52,10 +52,7 @@ void dropoutLayer::checkInput() const
   assert(dropProbability_ > 0 && dropProbability_ < 1);
 }
 
-void dropoutLayer::init(
-                        const layer* previousLayer,
-                        const bool resetWeightBiases
-                       )
+void dropoutLayer::setupForward(const layer* previousLayer)
 {
   // Check that the previous layer is compatible
   // with the current layer
