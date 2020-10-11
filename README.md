@@ -8,7 +8,7 @@ The code started as a small personal project and its objective is not to compete
 artificial intelligence world but, rather, it wants to offer a less intimidating experience for people that want to know
 how machine learning algorithms work under the hood.
 
-## Supported layer types
+## Supported layer
 * `Dense`
 * `2D Convolution with padding`
 * `MaxPooling`
@@ -21,7 +21,7 @@ how machine learning algorithms work under the hood.
 * `Softmax`
 * `Tanh`
 
-## Supported optimization solver
+## Supported optimization solvers
 * `Stochastic and mini-batch gradient descent with momentum`
 * `AdaGrad`
 * `RSMProp`
