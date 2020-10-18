@@ -16,7 +16,8 @@
 namespace NilDa
 {
 
-batchNormalizationLayer::batchNormalizationLayer()
+batchNormalizationLayer::batchNormalizationLayer():
+  nObservations_(0)
 {
   type_ = layerTypes::batchNormalization;
 
@@ -50,22 +51,18 @@ batchNormalizationLayer::setupForward(const layer* previousLayer)
   // previous layer
   activationType_ = previousLayer->activationType();
 
-  setActivationFunction(activationType_);
-
   const layerSizes prevLayer = previousLayer->size();
 
   // Set the size of the BN layer as the one
   // of the previous layer
-  size_.isFlat = prevLayer.isFlat;
   size_.size = prevLayer.size;
-  size_.rows = prevLayer.rows;
-  size_.cols = prevLayer.cols;
-  size_.channels = prevLayer.channels;
 }
 
 void
 batchNormalizationLayer::init(const bool resetWeightBiases)
 {
+  setActivationFunction(activationType_);
+
   if (resetWeightBiases)
   {
     const Scalar epsilonInit = sqrt(2.0)
@@ -90,25 +87,66 @@ batchNormalizationLayer::init(const bool resetWeightBiases)
 }
 
 void
+batchNormalizationLayer::checkInputSize(const Matrix& inputData) const
+{
+  if (weights_.rows() != inputData.rows())
+  {
+    std::cerr << "Size of input data "
+    << "(" << inputData.rows() << ") "
+    << " not consistent with batchNorm layer weights size"
+    << "(" << weights_.rows() << ", "
+    << weights_.rows() << ").\n";
+
+    std::abort();
+  }
+}
+
+void
+batchNormalizationLayer::checkInputAndCacheSize(
+                                                const Matrix& inputData,
+                                                const Matrix& cacheBackProp
+                                               ) const
+{
+  checkInputSize(inputData);
+
+  if (cacheBackProp.rows() != activation_.rows() &&
+      cacheBackProp.cols() != activation_.cols() )
+  {
+    std::cerr << "Size of the back propagation cache "
+    << "(" << cacheBackProp.rows() << ", "
+           << cacheBackProp.cols() << ") "
+    << " not consistent with the activation size "
+    << "(" << activation_.rows() << ", "
+           << activation_.cols() << ").\n";
+
+    std::abort();
+  }
+}
+
+void
 batchNormalizationLayer::forwardPropagation(
                                             const Matrix& inputData,
                                             const bool trainingPhase
                                            )
 {
-  const Vector batchMean = inputData.rowwise().mean();
+#ifdef ND_DEBUG_CHECKS
+    checkInputSize(inputData);
+#endif
+
+  nObservations_ = inputData.cols();
+
+  batchMean_ = inputData.rowwise().mean();
 
   const Matrix diffSquared = (
-                              inputData.colwise() - batchMean
+                              inputData.colwise() - batchMean_
                              ).array().square();
 
-  const Vector batchVar = (
-                           diffSquared.rowwise().mean().array()
-                           + epsilon_
-                          ).array().sqrt();
+  batchStDev_ = diffSquared.rowwise().mean().array()
+              + epsilonTol_;
 
-  Matrix logitNorm = (inputData.colwise() - batchMean);
+  Matrix normLogit = inputData.colwise() - batchMean_;
 
-  logitNorm.array().colwise() /= batchVar.array();
+  normLogit.array().colwise() *= batchStDev_.array().rsqrt();
 
   // Map the column matrix of the weights into a vector;
   ConstMapVector gamma(
@@ -116,7 +154,7 @@ batchNormalizationLayer::forwardPropagation(
                        weights_.rows()
                       );
 
-  logit_ = logitNorm.array().colwise() * gamma.array();
+  logit_= normLogit.array().colwise() * gamma.array();
 
   logit_.colwise() += biases_;
 
@@ -136,7 +174,60 @@ batchNormalizationLayer::backwardPropagation(
                                              const Matrix& dActivationNext,
                                              const Matrix& inputData
                                             )
-{}
+{
+  const int nObs = inputData.cols();
+
+#ifdef ND_DEBUG_CHECKS
+  checkInputAndCacheSize(inputData, dActivationNext);
+
+  assert(nObs == nObservations_);
+#endif
+
+  Matrix dLogit(logit_.rows(), logit_.cols());
+
+  activationFunction_->applyBackward(
+                                     logit_,
+                                     dActivationNext,
+                                     dLogit
+                                    );
+
+  // First comput logit_norm
+  const Matrix zeroMean = inputData.colwise() - batchMean_;
+
+  const Matrix normLogit = zeroMean.array().colwise()
+                         * batchStDev_.array().rsqrt();
+
+  const Matrix prod = dLogit.array() * normLogit.array();
+
+  dWeights_.noalias() = (1.0/nObs)
+                      * prod.rowwise().sum();
+
+  dBiases_.noalias() = (1.0/nObs)
+                     * dLogit.rowwise().sum();
+
+  const Vector prodShift = (
+                            dLogit.array() * zeroMean.array()
+                           ).rowwise().sum();
+
+  cacheBackProp_ = zeroMean.array().colwise()
+                 * (prodShift.array() / batchStDev_.array());
+
+  cacheBackProp_ = cacheBackProp_.colwise()
+                 + dLogit.rowwise().sum();
+
+  cacheBackProp_ -= nObs * dLogit;
+
+  // Map the column matrix of the weights into a vector;
+  ConstMapVector gamma(
+                       weights_.data(),
+                       weights_.rows()
+                      );
+
+  cacheBackProp_ = cacheBackProp_.array().colwise()
+                 * (gamma.array() * batchStDev_.array().rsqrt());
+
+  cacheBackProp_ *= -1.0/nObs;
+}
 
 void
 batchNormalizationLayer::setWeightsAndBiases(
@@ -157,7 +248,19 @@ batchNormalizationLayer::setWeightsAndBiases(
     std::abort();
   }
 
+  if (b.rows() != biases_.rows())
+  {
+    std::cerr << "Size of the input biases vector "
+              << "(" << b.rows() << ") "
+              << " not consistent with the layer biases size "
+              << "(" << biases_.rows() << ").\n";
+
+    std::abort();
+  }
+
   weights_.noalias() = W;
+
+  biases_.noalias() = b;
 }
 
 void
@@ -179,16 +282,94 @@ batchNormalizationLayer::incrementWeightsAndBiases(
 
     std::abort();
   }
+
+  if (deltaB.rows() != biases_.rows())
+  {
+    std::cerr << "Size of the input biases vector "
+              << "(" << deltaB.rows() << ") "
+              << " not consistent with the layer biases size "
+              << "(" << biases_.rows() << ").\n";
+
+    std::abort();
+  }
 #endif
 
   weights_ += deltaW;
+
+  biases_ += deltaB;
 }
 
 void batchNormalizationLayer::saveLayer(std::ofstream& ofs) const
-{}
+{
+  const int iType =
+    static_cast<
+                std::underlying_type_t<layerTypes>
+               >(layerTypes::batchNormalization);
+
+  ofs.write((char*) (&iType), sizeof(int));
+
+  ofs.write((char*) (&trainable_), sizeof(bool));
+
+  ofs.write((char*) (&size_.size), sizeof(int));
+
+  const int activationCode = activationFunction_->type();
+
+  ofs.write((char*) (&activationCode), sizeof(int));
+
+  const int wRows = weights_.rows();
+  const int wCols = weights_.cols();
+
+  const std::size_t weightsBytes = sizeof(Scalar)
+                                 * wRows
+                                 * wCols;
+
+  ofs.write((char*) (&wRows), sizeof(int));
+  ofs.write((char*) (&wCols), sizeof(int));
+  ofs.write((char*) weights_.data(), weightsBytes);
+
+  const int bRows = biases_.rows();
+
+  const std::size_t biasesBytes = sizeof(Scalar) * bRows;
+
+  ofs.write((char*) (&bRows), sizeof(int));
+  ofs.write((char*) biases_.data(), biasesBytes);
+}
 
 void batchNormalizationLayer::loadLayer(std::ifstream& ifs)
-{}
+{
+  ifs.read((char*) (&trainable_), sizeof(bool));
+
+  ifs.read((char*) (&size_.size), sizeof(int));
+
+  size_.rows = 0;
+  size_.cols = 0;
+  size_.channels = 0;
+
+  int code;
+  ifs.read((char*) (&code), sizeof(int));
+
+  activationType_ =
+    static_cast<activationFunctions>(code);
+
+  int wRows, wCols;
+  ifs.read((char*) (&wRows), sizeof(int));
+  ifs.read((char*) (&wCols), sizeof(int));
+
+  weights_.resize(wRows, wCols);
+
+  const std::size_t weightsBytes = sizeof(Scalar) * wRows * wCols;
+
+  ifs.read((char*) weights_.data(), weightsBytes);
+
+  int bRows;
+  ifs.read((char*) (&bRows), sizeof(int));
+
+  biases_.resize(bRows);
+
+  const std::size_t biasesBytes = sizeof(Scalar) * bRows;
+
+  ifs.read((char*) biases_.data(), biasesBytes);
+}
 
 void
 batchNormalizationLayer::setActivationFunction(const activationFunctions code)

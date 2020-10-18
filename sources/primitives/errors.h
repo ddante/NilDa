@@ -17,6 +17,18 @@ struct errorCheck
 {
   int code;
   Scalar error;
+
+  void setOK()
+  {
+    code = EXIT_OK;
+    error = 0;
+  }
+
+  void setFail()
+  {
+    code = EXIT_FAIL;
+    error = 1;
+  }
 };
 
 

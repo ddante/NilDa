@@ -804,13 +804,33 @@ int neuralNetwork::gradientsSanityCheck(
   {
     if (layers_[i]->numberOfParameters() > 0)
     {
-      const errorCheck outputW =
-        checkWeightsGradients(i, obs, labels, eps, errorLimit);
+      const Matrix weights = layers_[i]->getWeights();
 
-      const errorCheck outputB =
-        checkBiasesGradients(i, obs, labels, eps, errorLimit);
+      errorCheck outputW, outputB;
 
-      if(outputW.code == EXIT_FAIL || outputW.code == EXIT_FAIL)
+      if (weights.size() > 0)
+      {
+        outputW =
+          checkWeightsGradients(i, obs, labels, eps, errorLimit);
+      }
+      else
+      {
+        outputW.setOK();
+      }
+
+      const Vector biases = layers_[i]->getBiases();
+
+      if (biases.size() > 0)
+      {
+        outputB =
+          checkBiasesGradients(i, obs, labels, eps, errorLimit);
+      }
+      else
+      {
+        outputB.setOK();
+      }
+
+      if(outputW.code == EXIT_FAIL || outputB.code == EXIT_FAIL)
       {
         code = EXIT_FAIL;
       }

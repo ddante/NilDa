@@ -99,8 +99,8 @@ void dropoutLayer::forwardPropagation(
     // This has to be replaced by random Matrix operator
     // ..................................................
     std::random_device rand;
-    //std::mt19937 genRand(rand());
-    std::mt19937 genRand(12);
+    std::mt19937 genRand(rand());
+    //std::mt19937 genRand(12);
 
     std::uniform_real_distribution<Scalar> distr(0, 1);
 

@@ -26,11 +26,15 @@ private:
   // Pointer to the activation function used in this layer
   std::unique_ptr<activationFunction> activationFunction_;
 
-  // Linear output and activation matrices
+  // Linear output and activation
   Matrix logit_;
   Matrix activation_;
 
-  // Weight and derivative w.r.t. weights matrices
+  // Batch mean and standard deviation
+  Vector batchMean_;
+  Vector batchStDev_;
+
+  // Weight and derivative w.r.t. weights
   Matrix weights_;
   Matrix dWeights_;
 
@@ -42,11 +46,20 @@ private:
   // of the previous level during the back propagation
   Matrix cacheBackProp_;
 
+  // Store the number of observations seen in the
+  // forward propagation
+  int nObservations_;
+
   // Small constant used for the logit normalization
   // to avoid division by zero
-  const Scalar epsilon_ = 1e-12;
+  const Scalar epsilonTol_ = 1e-12;
 
 private:
+
+  void checkInputAndCacheSize(
+                              const Matrix& inputData,
+                              const Matrix& cacheBackProp
+                             ) const;
 
   void setActivationFunction(const activationFunctions code);
 
@@ -62,7 +75,7 @@ public:
 
   // Member functions
 
-  void checkInput() const
+  void checkInput() const override
   {
     // Nothing to do here
   }
@@ -76,10 +89,7 @@ public:
 
   void init(const bool resetWeightBiases) override;
 
-  void checkInputSize(const Matrix& inputData) const override
-  {
-    // Nothing to be done here
-  }
+  void checkInputSize(const Matrix& inputData) const override;
 
   void forwardPropagation(
                           const Matrix& inputData,

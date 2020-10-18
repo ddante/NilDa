@@ -98,7 +98,7 @@ public:
 
   neuralNetwork();
 
-  neuralNetwork(const std::vector<layer*>& vectorLayer);
+  explicit neuralNetwork(const std::vector<layer*>& vectorLayer);
 
   // Member functions
 

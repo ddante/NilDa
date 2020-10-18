@@ -27,14 +27,20 @@ int main(int argc, char const *argv[])
   NilDa::Matrix X(3, 5);
   X.setRandom();
 
-  nn.setLossFunction("sparse_categorical_crossentropy");
+  NilDa::Matrix Y(3, 5);
+  Y << 1,0,0,0,1,
+       0,1,0,1,0,
+       0,0,1,0,0;
 
   const NilDa::Scalar learningRate = 0.01;
   const NilDa::Scalar momentum = 0.90;
 
   NilDa::sgd opt(learningRate, momentum);
 
-  nn.configure(opt, "sparse_categorical_crossentropy");
+  nn.configure(opt, "categorical_crossentropy");
 
   nn.forwardPropagation(X);
+  nn.backwardPropagation(X, Y);
+
+  nn.gradientsSanityCheck(X, Y, true);
 }

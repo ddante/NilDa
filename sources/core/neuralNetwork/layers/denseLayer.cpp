@@ -60,8 +60,6 @@ denseLayer::denseLayer(
 
   trainable_ = true;
 
-  setActivationFunction(activationType_);
-
   if (layerSize_ == 1 &&
       activationType_ == activationFunctions::softmax)
   {
@@ -127,11 +125,18 @@ void denseLayer::setupBackward(const layer* nextLayer)
   if (nextLayer->layerType() == layerTypes::batchNormalization)
   {
     useBatchNormalization_ = true;
+
+    // If batchNorm is used, the activation function
+    // must not be applied, therefore it is set
+    // as the identity
+    activationType_ = activationFunctions::identity;
   }
 }
 
 void denseLayer::init(const bool resetWeightBiases)
 {
+  setActivationFunction(activationType_);
+
   if (resetWeightBiases)
   {
     const Scalar epsilonInit = sqrt(6.0)
@@ -389,7 +394,9 @@ void denseLayer::incrementWeightsAndBiases(
 void denseLayer::saveLayer(std::ofstream& ofs) const
 {
   const int iType =
-    static_cast<std::underlying_type_t<layerTypes> >(layerTypes::dense);
+    static_cast<
+                std::underlying_type_t<layerTypes>
+               >(layerTypes::dense);
 
   ofs.write((char*) (&iType), sizeof(int));
 
@@ -397,7 +404,10 @@ void denseLayer::saveLayer(std::ofstream& ofs) const
 
   ofs.write((char*) (&size_.size), sizeof(int));
 
+  ofs.write((char*) (&useBatchNormalization_), sizeof(bool));
+
   const int activationCode = activationFunction_->type();
+
   ofs.write((char*) (&activationCode), sizeof(int));
 
   const int wRows = weights_.rows();
@@ -413,10 +423,14 @@ void denseLayer::saveLayer(std::ofstream& ofs) const
 
   const int bRows = biases_.rows();
 
-  const std::size_t biasesBytes = sizeof(Scalar) * bRows;
-
   ofs.write((char*) (&bRows), sizeof(int));
-  ofs.write((char*) biases_.data(), biasesBytes);
+
+  if (bRows > 0)
+  {
+    const std::size_t biasesBytes = sizeof(Scalar) * bRows;
+
+    ofs.write((char*) biases_.data(), biasesBytes);
+  }
 }
 
 void denseLayer::loadLayer(std::ifstream& ifs)
@@ -424,6 +438,8 @@ void denseLayer::loadLayer(std::ifstream& ifs)
   ifs.read((char*) (&trainable_), sizeof(bool));
 
   ifs.read((char*) (&size_.size), sizeof(int));
+
+  ifs.read((char*) (&useBatchNormalization_), sizeof(bool));
 
   layerSize_ = size_.size;
 
@@ -434,10 +450,8 @@ void denseLayer::loadLayer(std::ifstream& ifs)
   int code;
   ifs.read((char*) (&code), sizeof(int));
 
-  activationFunctions aType =
+  activationType_ =
     static_cast<activationFunctions>(code);
-
-  setActivationFunction(aType);
 
   int wRows, wCols;
   ifs.read((char*) (&wRows), sizeof(int));
@@ -452,11 +466,14 @@ void denseLayer::loadLayer(std::ifstream& ifs)
   int bRows;
   ifs.read((char*) (&bRows), sizeof(int));
 
-  biases_.resize(bRows);
+  if (bRows > 0)
+  {
+    biases_.resize(bRows);
 
-  const std::size_t biasesBytes = sizeof(Scalar) * bRows;
+    const std::size_t biasesBytes = sizeof(Scalar) * bRows;
 
-  ifs.read((char*) biases_.data(), biasesBytes);
+    ifs.read((char*) biases_.data(), biasesBytes);
+  }
 }
 
 void denseLayer::setActivationFunction(const activationFunctions code)

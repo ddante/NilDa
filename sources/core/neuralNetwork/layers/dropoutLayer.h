@@ -40,7 +40,7 @@ public:
 
   dropoutLayer();
 
-  dropoutLayer(const Scalar keepProbability);
+  explicit dropoutLayer(const Scalar keepProbability);
 
   // Destructor
 
@@ -51,7 +51,7 @@ public:
   void checkInput() const override;
 
   void setupForward(const layer* previousLayer) override;
-  
+
   void setupBackward(const layer* nextLayer) override
   {
     // Nothing to be done here

@@ -134,14 +134,7 @@ public:
 
   const Matrix& output() const override
   {
-    if (useBatchNormalization_)
-    {
-      return logit_;
-    }
-    else
-    {
-      return activation_;
-    }
+    return activation_;
   }
 
   const Matrix& backPropCache() const override
