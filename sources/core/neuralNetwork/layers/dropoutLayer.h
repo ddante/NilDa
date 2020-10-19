@@ -145,6 +145,16 @@ public:
     return 0;
   }
 
+  int numberOfWeights() const override
+  {
+    return 0;
+  }
+
+  int numberOfBiases() const override
+  {
+    return 0;
+  }
+
   void saveLayer(std::ofstream& ofs) const override;
 
   void loadLayer(std::ifstream& ifs) override;

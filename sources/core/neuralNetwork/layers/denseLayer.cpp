@@ -18,10 +18,11 @@ namespace NilDa
 
 denseLayer::denseLayer():
     layerSize_(0),
+    activationTypeBK_(activationFunctions::none),
     needFlattening_(false),
     inputSize_(0),
     inputChannels_(0),
-    useBatchNormalization_(false),
+    useBiases_(true),
     nObservations_(0)
 {
   type_ = layerTypes::dense;
@@ -42,10 +43,11 @@ denseLayer::denseLayer(
                        const std::string& activationName
                       ):
     layerSize_(inSize),
+    activationTypeBK_(activationFunctions::none),
     needFlattening_(false),
     inputSize_(0),
     inputChannels_(0),
-    useBatchNormalization_(false),
+    useBiases_(true),
     nObservations_(0)
 {
   type_ = layerTypes::dense;
@@ -57,6 +59,8 @@ denseLayer::denseLayer(
   size_.channels = 0;
 
   activationType_ = activationFunctionCode(activationName);
+
+  activationTypeBK_ = activationType_;
 
   trainable_ = true;
 
@@ -124,7 +128,7 @@ void denseLayer::setupBackward(const layer* nextLayer)
 {
   if (nextLayer->layerType() == layerTypes::batchNormalization)
   {
-    useBatchNormalization_ = true;
+    useBiases_ = false;
 
     // If batchNorm is used, the activation function
     // must not be applied, therefore it is set
@@ -151,7 +155,7 @@ void denseLayer::init(const bool resetWeightBiases)
 
     // If the layer is followed by a batchNorm
     // the biases are not needed
-    if (!useBatchNormalization_ )
+    if (useBiases_)
     {
       biases_.setRandom(layerSize_);
       biases_ *= epsilonInit;
@@ -241,7 +245,7 @@ void denseLayer::forwardPropagation(
   }
 
   // Add the biases
-  if (!useBatchNormalization_ )
+  if (useBiases_)
   {
     logit_.colwise() += biases_;
   }
@@ -311,8 +315,11 @@ void denseLayer::backwardPropagation(
                         * inputData.transpose();
   }
 
-  dBiases_.noalias() = (1.0/nObs)
-                     * dLinearOutput.rowwise().sum();
+  if (useBiases_)
+  {
+    dBiases_.noalias() = (1.0/nObs)
+                       * dLinearOutput.rowwise().sum();
+  }
 
   cacheBackProp_.resize(
                         dWeights_.cols(),
@@ -341,19 +348,22 @@ void denseLayer::setWeightsAndBiases(
     std::abort();
   }
 
-  if (b.rows() != biases_.rows())
-  {
-    std::cerr << "Size of the input biases vector "
-              << "(" << b.rows() << ") "
-              << " not consistent with the layer biases size "
-              << "(" << biases_.rows() << ").\n";
-
-    std::abort();
-  }
-
   weights_.noalias() = W;
 
-  biases_.noalias() = b;
+  if (useBiases_)
+  {
+    if (b.rows() != biases_.rows())
+    {
+      std::cerr << "Size of the input biases vector "
+                << "(" << b.rows() << ") "
+                << " not consistent with the layer biases size "
+                << "(" << biases_.rows() << ").\n";
+
+      std::abort();
+    }
+
+    biases_.noalias() = b;
+  }
 }
 
 void denseLayer::incrementWeightsAndBiases(
@@ -374,21 +384,29 @@ void denseLayer::incrementWeightsAndBiases(
 
     std::abort();
   }
-
-  if (deltaB.rows() != biases_.rows())
-  {
-    std::cerr << "Size of the input biases vector "
-              << "(" << deltaB.rows() << ") "
-              << " not consistent with the layer biases size "
-              << "(" << biases_.rows() << ").\n";
-
-    std::abort();
-  }
 #endif
 
   weights_ += deltaW;
 
-  biases_ += deltaB;
+#ifdef ND_DEBUG_CHECKS
+  if (useBiases_)
+  {
+    if (deltaB.rows() != biases_.rows())
+    {
+      std::cerr << "Size of the input biases vector "
+                << "(" << deltaB.rows() << ") "
+                << " not consistent with the layer biases size "
+                << "(" << biases_.rows() << ").\n";
+
+      std::abort();
+    }
+  }
+#endif
+
+  if (useBiases_)
+  {
+    biases_ += deltaB;
+  }
 }
 
 void denseLayer::saveLayer(std::ofstream& ofs) const
@@ -404,9 +422,13 @@ void denseLayer::saveLayer(std::ofstream& ofs) const
 
   ofs.write((char*) (&size_.size), sizeof(int));
 
-  ofs.write((char*) (&useBatchNormalization_), sizeof(bool));
+  ofs.write((char*) (&useBiases_), sizeof(bool));
 
-  const int activationCode = activationFunction_->type();
+  // Save the backup copy of the activation function type
+  const int activationCode =
+    static_cast<
+                std::underlying_type_t<activationFunctions>
+               >(activationTypeBK_);
 
   ofs.write((char*) (&activationCode), sizeof(int));
 
@@ -439,7 +461,7 @@ void denseLayer::loadLayer(std::ifstream& ifs)
 
   ifs.read((char*) (&size_.size), sizeof(int));
 
-  ifs.read((char*) (&useBatchNormalization_), sizeof(bool));
+  ifs.read((char*) (&useBiases_), sizeof(bool));
 
   layerSize_ = size_.size;
 

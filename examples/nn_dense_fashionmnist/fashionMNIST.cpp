@@ -7,6 +7,7 @@
 #include "core/neuralNetwork/layers/inputLayer.h"
 #include "core/neuralNetwork/layers/denseLayer.h"
 #include "core/neuralNetwork/layers/dropoutLayer.h"
+#include "core/neuralNetwork/layers/batchNormalizationLayer.h"
 
 #include "core/neuralNetwork/neuralNetwork.h"
 
@@ -18,20 +19,13 @@
 int main(int argc, char const *argv[])
 {
   // Training
-  /*
+
   const std::string mnistImagesTrainFile
     = "/home/dante/dev/NilDa/datasets/fashion_mnist/train-images-idx3-ubyte";
 
   const std::string mnistLabelsTrainFile
     = "/home/dante/dev/NilDa/datasets/fashion_mnist/train-labels-idx1-ubyte";
-  */
 
-    const std::string  mnistImagesTrainFile
-    = "/home/dante/dev/NilDa/datasets/fashion_mnist/t10k-images-idx3-ubyte";
-
-  const std::string mnistLabelsTrainFile
-    = "/home/dante/dev/NilDa/datasets/fashion_mnist/t10k-labels-idx1-ubyte";
-  
 	NilDa::Matrix trainingImages;
 	NilDa::Matrix trainingLabels;
 
@@ -53,7 +47,8 @@ int main(int argc, char const *argv[])
 
   NilDa::layer* l0 = new NilDa::inputLayer(784);
   NilDa::layer* l1 = new NilDa::denseLayer(128,  "relu");
-  NilDa::layer* l2 = new NilDa::dropoutLayer(0.5);
+  NilDa::layer* l2 = new NilDa::batchNormalizationLayer();
+  //NilDa::layer* l2 = new NilDa::dropoutLayer(0.5);
   NilDa::layer* l3 = new NilDa::denseLayer(10, "softmax");
 
   NilDa::neuralNetwork nn({l0, l1, l2, l3});
@@ -86,7 +81,7 @@ int main(int argc, char const *argv[])
 
   //
 
-	const int epochs = 1;
+	const int epochs = 10;
 	const int batchSize = 32;
 
   nn.train(trainingImages, trainingLabels, epochs, batchSize, 2);

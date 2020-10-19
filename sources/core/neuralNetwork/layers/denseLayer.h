@@ -28,6 +28,11 @@ private:
   // Pointer to the activation function used in this layer
   std::unique_ptr<activationFunction> activationFunction_;
 
+  // Store the original type of the activation function (AF)
+  // in the case the specified AF is overwritten by the
+  // neighbor layer
+  activationFunctions activationTypeBK_;
+
   // Linear output and activation matrices
   Matrix logit_;
   Matrix activation_;
@@ -53,8 +58,8 @@ private:
   int inputSize_;
   int inputChannels_;
 
-  // Store if the BN will be applied to this layer
-  bool useBatchNormalization_;
+  // Store if the layer use the bias vector
+  bool useBiases_;
 
   // Store the number of observations seen in the
   // forward propagation
@@ -151,7 +156,17 @@ public:
 
   int numberOfParameters() const override
   {
+    return numberOfWeights() + numberOfBiases();
+  }
+
+  int numberOfWeights() const override
+  {
     return weights_.size();
+  }
+
+  int numberOfBiases() const override
+  {
+    return biases_.size();
   }
 
   void saveLayer(std::ofstream& ofs) const override;

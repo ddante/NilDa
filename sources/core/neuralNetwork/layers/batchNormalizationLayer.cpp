@@ -17,7 +17,8 @@ namespace NilDa
 {
 
 batchNormalizationLayer::batchNormalizationLayer():
-  nObservations_(0)
+  nObservations_(0),
+  counterCMA_(0)
 {
   type_ = layerTypes::batchNormalization;
 
@@ -83,6 +84,10 @@ batchNormalizationLayer::init(const bool resetWeightBiases)
                      );
 
     dBiases_.setZero(biases_.rows());
+
+    // Reset also the dataset mean and variacne
+    dataSetMean_.setZero(size_.size);
+    dataSetMean2_.setZero(size_.size);
   }
 }
 
@@ -141,12 +146,26 @@ batchNormalizationLayer::forwardPropagation(
                               inputData.colwise() - batchMean_
                              ).array().square();
 
-  batchStDev_ = diffSquared.rowwise().mean().array()
-              + epsilonTol_;
+  batchVariance_ = diffSquared.rowwise().mean().array();
+                 + epsilonTol_;
 
-  Matrix normLogit = inputData.colwise() - batchMean_;
+  Matrix normLogit;
 
-  normLogit.array().colwise() *= batchStDev_.array().rsqrt();
+  if (trainingPhase)
+  {
+    normLogit = inputData.colwise() - batchMean_;
+
+    normLogit.array().colwise() *= batchVariance_.array().rsqrt();
+  }
+  else
+  {
+    Vector dataSetVariance = dataSetMean2_;
+    dataSetVariance.array() -= dataSetMean_.array().square();
+
+    normLogit = inputData.colwise() - dataSetMean_;
+
+    normLogit.array().colwise() *= dataSetVariance.array().rsqrt();
+  }
 
   // Map the column matrix of the weights into a vector;
   ConstMapVector gamma(
@@ -167,6 +186,20 @@ batchNormalizationLayer::forwardPropagation(
                                     logit_,
                                     activation_
                                    );
+  if (trainingPhase)
+  {
+    // Comulative moving averages to compute
+    // the dataset average from the batch averages
+    dataSetMean_ = (batchMean_ + (counterCMA_ * dataSetMean_))
+                 / (counterCMA_ + 1);
+
+    Vector batchMean2 = (inputData.array().square()).rowwise().mean();
+
+    dataSetMean2_ = (batchMean2 + (counterCMA_ * dataSetMean2_))
+                  / (counterCMA_ + 1);
+
+    counterCMA_++;
+  }
 }
 
 void
@@ -195,7 +228,7 @@ batchNormalizationLayer::backwardPropagation(
   const Matrix zeroMean = inputData.colwise() - batchMean_;
 
   const Matrix normLogit = zeroMean.array().colwise()
-                         * batchStDev_.array().rsqrt();
+                         * batchVariance_.array().rsqrt();
 
   const Matrix prod = dLogit.array() * normLogit.array();
 
@@ -210,7 +243,7 @@ batchNormalizationLayer::backwardPropagation(
                            ).rowwise().sum();
 
   cacheBackProp_ = zeroMean.array().colwise()
-                 * (prodShift.array() / batchStDev_.array());
+                 * (prodShift.array() / batchVariance_.array());
 
   cacheBackProp_ = cacheBackProp_.colwise()
                  + dLogit.rowwise().sum();
@@ -224,7 +257,7 @@ batchNormalizationLayer::backwardPropagation(
                       );
 
   cacheBackProp_ = cacheBackProp_.array().colwise()
-                 * (gamma.array() * batchStDev_.array().rsqrt());
+                 * (gamma.array() * batchVariance_.array().rsqrt());
 
   cacheBackProp_ *= -1.0/nObs;
 }
@@ -333,6 +366,16 @@ void batchNormalizationLayer::saveLayer(std::ofstream& ofs) const
 
   ofs.write((char*) (&bRows), sizeof(int));
   ofs.write((char*) biases_.data(), biasesBytes);
+
+  ofs.write((char*) (&counterCMA_), sizeof(int));
+
+  const int meanRows = dataSetMean_.rows();
+
+  const std::size_t meanBytes = sizeof(Scalar) * meanRows;
+
+  ofs.write((char*) (&meanRows), sizeof(int));
+  ofs.write((char*) dataSetMean_.data(), meanBytes);
+  ofs.write((char*) dataSetMean2_.data(), meanBytes);
 }
 
 void batchNormalizationLayer::loadLayer(std::ifstream& ifs)
@@ -369,6 +412,19 @@ void batchNormalizationLayer::loadLayer(std::ifstream& ifs)
   const std::size_t biasesBytes = sizeof(Scalar) * bRows;
 
   ifs.read((char*) biases_.data(), biasesBytes);
+
+  ifs.read((char*) (&counterCMA_), sizeof(int));
+
+  int meanRows;
+  ifs.read((char*) (&meanRows), sizeof(int));
+
+  dataSetMean_.resize(meanRows);
+  dataSetMean2_.resize(meanRows);
+
+  const std::size_t meanBytes = sizeof(Scalar) * meanRows;
+
+  ifs.read((char*) dataSetMean_.data(), meanBytes);
+  ifs.read((char*) dataSetMean2_.data(), meanBytes);
 }
 
 void

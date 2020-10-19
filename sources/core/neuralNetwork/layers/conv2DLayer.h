@@ -172,14 +172,7 @@ public:
 
   const Matrix& output() const override
   {
-    if (useBatchNormalization_)
-    {
-      return logit_;
-    }
-    else
-    {
-      return activation_;
-    }
+    return activation_;
   }
 
   const Matrix& backPropCache() const override
@@ -196,7 +189,17 @@ public:
 
   int numberOfParameters() const override
   {
+    return numberOfWeights() + numberOfBiases();
+  }
+
+  int numberOfWeights() const override
+  {
     return filterWeights_.size();
+  }
+
+  int numberOfBiases() const override
+  {
+    return biases_.size();
   }
 
   void saveLayer(std::ofstream& ofs) const override;

@@ -20,7 +20,7 @@ int main(int argc, char const *argv[])
   NilDa::layer* l2 = new NilDa::batchNormalizationLayer();
   NilDa::layer* l3 = new NilDa::denseLayer(3, "softmax");
 
-  NilDa::neuralNetwork nn({l0, l1, l2, l3});
+  NilDa::neuralNetwork nn({l0, l1, l2});
 
   nn.summary();
 
@@ -39,8 +39,13 @@ int main(int argc, char const *argv[])
 
   nn.configure(opt, "categorical_crossentropy");
 
-  nn.forwardPropagation(X);
-  nn.backwardPropagation(X, Y);
+  for (int i = 0; i < 50; ++i)
+  {
+    nn.forwardPropagation(X, true);
+  }
 
-  nn.gradientsSanityCheck(X, Y, true);
+  nn.forwardPropagation(X, false);
+
+  //nn.backwardPropagation(X, Y);
+  //nn.gradientsSanityCheck(X, Y, true);
 }

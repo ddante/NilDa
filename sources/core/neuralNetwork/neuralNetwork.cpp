@@ -623,8 +623,6 @@ void neuralNetwork::loadModel(std::string inputFile)
     layers_.push_back(createLayer(layerType));
 
     layers_[i]->loadLayer(ifs);
-
-    layers_[i]->checkInput();
   }
 
   initLayers(/*resetWeights= */ false);

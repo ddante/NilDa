@@ -32,7 +32,11 @@ private:
 
   // Batch mean and standard deviation
   Vector batchMean_;
-  Vector batchStDev_;
+  Vector batchVariance_;
+
+  // Mean of the dataset
+  Vector dataSetMean_;
+  Vector dataSetMean2_; // mean of the square
 
   // Weight and derivative w.r.t. weights
   Matrix weights_;
@@ -49,6 +53,9 @@ private:
   // Store the number of observations seen in the
   // forward propagation
   int nObservations_;
+
+  // Counter to compute the comulative moving average
+  int counterCMA_;
 
   // Small constant used for the logit normalization
   // to avoid division by zero
@@ -149,7 +156,17 @@ public:
 
   int numberOfParameters() const override
   {
+    return numberOfWeights() + numberOfBiases();
+  }
+
+  int numberOfWeights() const override
+  {
     return weights_.size();
+  }
+
+  int numberOfBiases() const override
+  {
+    return biases_.size();
   }
 
   void saveLayer(std::ofstream& ofs) const override;

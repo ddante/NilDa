@@ -170,6 +170,10 @@ public:
 
   virtual int numberOfParameters() const = 0;
 
+  virtual int numberOfWeights() const = 0;
+
+  virtual int numberOfBiases() const = 0;
+
   // Destructor
   virtual ~layer()  = default;
 };

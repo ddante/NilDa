@@ -118,7 +118,7 @@ void adam::update(
                   Matrix& deltaWeights,
                   Vector& deltaBiases
                  ) const
-{
+{        
   Matrix& weightsMomentum1
       = weightsM1History_[weightsGradient.data()];
 
