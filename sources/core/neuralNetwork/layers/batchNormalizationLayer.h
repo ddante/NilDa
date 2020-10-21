@@ -34,9 +34,10 @@ private:
   Vector batchMean_;
   Vector batchVariance_;
 
-  // Mean of the dataset
-  Vector dataSetMean_;
-  Vector dataSetMean2_; // mean of the square
+  // Running averages for mean and variance
+  // using exponential decay
+  Vector runningMean_;
+  Vector runningVariance_;
 
   // Weight and derivative w.r.t. weights
   Matrix weights_;
@@ -50,17 +51,16 @@ private:
   // of the previous level during the back propagation
   Matrix cacheBackProp_;
 
-  // Store the number of observations seen in the
-  // forward propagation
-  int nObservations_;
-
-  // Counter to compute the comulative moving average
-  int counterCMA_;
+  // Momentum for the exponential decay running statistics
+  Scalar momentum_;
 
   // Small constant used for the logit normalization
   // to avoid division by zero
-  const Scalar epsilonTol_ = 1e-12;
+  Scalar epsilonTol_;
 
+  // Store the number of observations seen in the
+  // forward propagation
+  int nObservations_;
 private:
 
   void checkInputAndCacheSize(
@@ -75,6 +75,10 @@ public:
   // Constructor
 
   batchNormalizationLayer();
+
+  batchNormalizationLayer(const Scalar momentum);
+
+  batchNormalizationLayer(const Scalar momentum, const Scalar tol);
 
   // Destructor
 

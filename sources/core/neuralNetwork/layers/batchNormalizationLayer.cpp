@@ -17,8 +17,48 @@ namespace NilDa
 {
 
 batchNormalizationLayer::batchNormalizationLayer():
-  nObservations_(0),
-  counterCMA_(0)
+  momentum_(0.9),
+  epsilonTol_(1e-10),
+  nObservations_(0)
+{
+  type_ = layerTypes::batchNormalization;
+
+  size_.isFlat = true;
+  size_.size = 0;
+  size_.rows = 0;
+  size_.cols = 0;
+  size_.channels = 0;
+
+  activationType_ = activationFunctions::none;
+
+  trainable_ = true;
+}
+
+batchNormalizationLayer::batchNormalizationLayer(const Scalar momentum):
+  momentum_(momentum),
+  epsilonTol_(1e-10),
+  nObservations_(0)
+{
+  type_ = layerTypes::batchNormalization;
+
+  size_.isFlat = true;
+  size_.size = 0;
+  size_.rows = 0;
+  size_.cols = 0;
+  size_.channels = 0;
+
+  activationType_ = activationFunctions::none;
+
+  trainable_ = true;
+}
+
+batchNormalizationLayer::batchNormalizationLayer(
+                                                 const Scalar momentum,
+                                                 const Scalar tol
+                                               ):
+  momentum_(momentum),
+  epsilonTol_(tol),
+  nObservations_(0)
 {
   type_ = layerTypes::batchNormalization;
 
@@ -85,9 +125,9 @@ batchNormalizationLayer::init(const bool resetWeightBiases)
 
     dBiases_.setZero(biases_.rows());
 
-    // Reset also the dataset mean and variacne
-    dataSetMean_.setZero(size_.size);
-    dataSetMean2_.setZero(size_.size);
+    // Reset also the drunning mean and variacne
+    runningMean_.setZero(size_.size);
+    runningVariance_.setZero(size_.size);
   }
 }
 
@@ -159,12 +199,9 @@ batchNormalizationLayer::forwardPropagation(
   }
   else
   {
-    Vector dataSetVariance = dataSetMean2_;
-    dataSetVariance.array() -= dataSetMean_.array().square();
+    normLogit = inputData.colwise() - runningMean_;
 
-    normLogit = inputData.colwise() - dataSetMean_;
-
-    normLogit.array().colwise() *= dataSetVariance.array().rsqrt();
+    normLogit.array().colwise() *= runningVariance_.array().rsqrt();
   }
 
   // Map the column matrix of the weights into a vector;
@@ -188,17 +225,11 @@ batchNormalizationLayer::forwardPropagation(
                                    );
   if (trainingPhase)
   {
-    // Comulative moving averages to compute
-    // the dataset average from the batch averages
-    dataSetMean_ = (batchMean_ + (counterCMA_ * dataSetMean_))
-                 / (counterCMA_ + 1);
+    runningMean_ =      momentum_  * runningMean_
+                 + (1 - momentum_) * batchMean_;
 
-    Vector batchMean2 = (inputData.array().square()).rowwise().mean();
-
-    dataSetMean2_ = (batchMean2 + (counterCMA_ * dataSetMean2_))
-                  / (counterCMA_ + 1);
-
-    counterCMA_++;
+    runningVariance_ =      momentum_  * runningVariance_
+                     + (1 - momentum_) * batchVariance_;
   }
 }
 
@@ -345,6 +376,10 @@ void batchNormalizationLayer::saveLayer(std::ofstream& ofs) const
 
   ofs.write((char*) (&size_.size), sizeof(int));
 
+  ofs.write((char*) (&momentum_), sizeof(Scalar));
+
+  ofs.write((char*) (&epsilonTol_), sizeof(Scalar));
+
   const int activationCode = activationFunction_->type();
 
   ofs.write((char*) (&activationCode), sizeof(int));
@@ -367,15 +402,13 @@ void batchNormalizationLayer::saveLayer(std::ofstream& ofs) const
   ofs.write((char*) (&bRows), sizeof(int));
   ofs.write((char*) biases_.data(), biasesBytes);
 
-  ofs.write((char*) (&counterCMA_), sizeof(int));
-
-  const int meanRows = dataSetMean_.rows();
+  const int meanRows = runningMean_.rows();
 
   const std::size_t meanBytes = sizeof(Scalar) * meanRows;
 
   ofs.write((char*) (&meanRows), sizeof(int));
-  ofs.write((char*) dataSetMean_.data(), meanBytes);
-  ofs.write((char*) dataSetMean2_.data(), meanBytes);
+  ofs.write((char*) runningMean_.data(), meanBytes);
+  ofs.write((char*) runningVariance_.data(), meanBytes);
 }
 
 void batchNormalizationLayer::loadLayer(std::ifstream& ifs)
@@ -383,6 +416,10 @@ void batchNormalizationLayer::loadLayer(std::ifstream& ifs)
   ifs.read((char*) (&trainable_), sizeof(bool));
 
   ifs.read((char*) (&size_.size), sizeof(int));
+
+  ifs.read((char*) (&momentum_), sizeof(Scalar));
+
+  ifs.read((char*) (&epsilonTol_), sizeof(Scalar));
 
   size_.rows = 0;
   size_.cols = 0;
@@ -413,18 +450,16 @@ void batchNormalizationLayer::loadLayer(std::ifstream& ifs)
 
   ifs.read((char*) biases_.data(), biasesBytes);
 
-  ifs.read((char*) (&counterCMA_), sizeof(int));
-
   int meanRows;
   ifs.read((char*) (&meanRows), sizeof(int));
 
-  dataSetMean_.resize(meanRows);
-  dataSetMean2_.resize(meanRows);
+  runningMean_.resize(meanRows);
+  runningVariance_.resize(meanRows);
 
   const std::size_t meanBytes = sizeof(Scalar) * meanRows;
 
-  ifs.read((char*) dataSetMean_.data(), meanBytes);
-  ifs.read((char*) dataSetMean2_.data(), meanBytes);
+  ifs.read((char*) runningMean_.data(), meanBytes);
+  ifs.read((char*) runningVariance_.data(), meanBytes);
 }
 
 void

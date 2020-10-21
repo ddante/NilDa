@@ -46,18 +46,21 @@ int main(int argc, char const *argv[])
                             );
 
   NilDa::layer* l0 = new NilDa::inputLayer(784);
-  NilDa::layer* l1 = new NilDa::denseLayer(128,  "relu");
+  NilDa::layer* l1 = new NilDa::denseLayer(256,  "relu");
   NilDa::layer* l2 = new NilDa::batchNormalizationLayer();
-  //NilDa::layer* l2 = new NilDa::dropoutLayer(0.5);
-  NilDa::layer* l3 = new NilDa::denseLayer(10, "softmax");
+  //NilDa::layer* l3 = new NilDa::dropoutLayer(0.5);
+  NilDa::layer* l4 = new NilDa::denseLayer(128,  "relu");
+  NilDa::layer* l5 = new NilDa::batchNormalizationLayer();
+  //NilDa::layer* l6 = new NilDa::dropoutLayer(0.5);
+  NilDa::layer* l7 = new NilDa::denseLayer(10, "softmax");
 
-  NilDa::neuralNetwork nn({l0, l1, l2, l3});
+  NilDa::neuralNetwork nn({l0, l1, l2, l4, l5, l7});
 
   nn.summary();
 
   //
 
-	const NilDa::Scalar learningRate = 0.001;
+	const NilDa::Scalar learningRate = 0.005;
 
 	const NilDa::Scalar momentum = 0.90;
 
@@ -81,7 +84,7 @@ int main(int argc, char const *argv[])
 
   //
 
-	const int epochs = 10;
+	const int epochs = 20;
 	const int batchSize = 32;
 
   nn.train(trainingImages, trainingLabels, epochs, batchSize, 2);
